@@ -32,6 +32,16 @@ python scripts/aggregate_results.py --input artifacts/raw_runs/classical_pilot.j
 
 The committed pilot contains five synthetic scenarios, five classical policies, and ten paired environment seeds. Raw daily records are ignored by Git; aggregate CSV results remain trackable.
 
+## Offline Agent pipeline
+
+Validate the structured Agent, retry/fallback, decision logging, and a selected memory baseline without a model or network connection:
+
+```powershell
+python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --seed 42 --output artifacts/raw_runs/vector_agent.json
+```
+
+Available offline memory baselines are `none`, `full_history`, `summary`, `vector`, and `time_decay`. The deterministic provider validates interfaces only; its output is not a model-performance result.
+
 ## License
 
 No license has been selected yet.

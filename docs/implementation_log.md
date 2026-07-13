@@ -30,3 +30,13 @@ Implementation decisions and deviations from the specification will be recorded 
 - Used sample standard deviation and a normal-approximation 95% confidence interval for pilot summaries. Formal analysis may replace the approximation after power and distribution checks.
 - Calculated total-cost regret by pairing each policy with Oracle on the same scenario and master seed.
 - Classified all current pilot scenarios as development data; validation, Test-ID, and Test-OOD remain unfrozen.
+
+## 2026-07-13 — Phase 2 offline Agent foundation
+
+- Added Pydantic-validated Agent decisions and provider request/response schemas.
+- Standardized provider parsing to one initial attempt, one correction retry, then a classical safe fallback.
+- Logged raw outputs, token counts, latency, parse failures, supplied memory IDs, final decisions, and fallback use.
+- Added NoMemory, bounded FullHistory, deterministic Summary, lexical Vector, and lexical-plus-time-decay memory baselines behind one interface.
+- Rejected any decision that cites a memory ID not supplied in its retrieval context.
+- Added a deterministic provider and baseline-switching CLI for offline integration only. It deliberately ignores memory content, so these runs must not be interpreted as memory-method comparisons.
+- Deferred a real local instruction model and compatible API integration until hardware, model license, and model selection are explicitly decided.
