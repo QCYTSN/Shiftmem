@@ -145,3 +145,25 @@ def test_uncertain_fill_is_not_revealed_before_arrival() -> None:
         {"order_quantity": 0, "supplier_id": "standard"}
     )
     assert 0 <= arrival_day["arrivals"] <= 10
+
+
+def test_policy_actions_do_not_change_demand_trajectory() -> None:
+    scenario = Scenario(
+        name="stream-isolation",
+        episode_length=20,
+        initial_inventory=1000,
+        demand_model="poisson",
+        demand=DemandParameters(base_level=10),
+        supply=SupplyParameters(lead_time=1, fill_rate=0.5),
+        costs=CostParameters(purchase=0, holding=0, stockout=0),
+    )
+    ordering = InventoryEnv(scenario)
+    idle = InventoryEnv(scenario)
+    ordering.reset(seed=123)
+    idle.reset(seed=123)
+    for _ in range(20):
+        ordering.step({"order_quantity": 10, "supplier_id": "standard"})
+        idle.step({"order_quantity": 0, "supplier_id": "standard"})
+    assert [record["demand"] for record in ordering.records] == [
+        record["demand"] for record in idle.records
+    ]

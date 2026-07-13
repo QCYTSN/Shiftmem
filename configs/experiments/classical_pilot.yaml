@@ -1,0 +1,20 @@
+name: classical_development_pilot
+split: development
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+scenarios:
+  - configs/environments/stable.yaml
+  - configs/environments/demand_jump.yaml
+  - configs/environments/gradual_demand.yaml
+  - configs/environments/periodic_combined.yaml
+  - configs/environments/supply_delay.yaml
+policies:
+  - name: fixed
+    order_quantity: 20
+  - name: random
+    order_quantity: 20
+  - name: moving_average
+    order_quantity: 20
+  - name: exponential
+    order_quantity: 20
+  - name: oracle
+    order_quantity: 20

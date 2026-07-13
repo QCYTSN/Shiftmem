@@ -21,6 +21,17 @@ The authoritative project scope, research questions, experimental design, and ph
 
 Copy `.env.example` to `.env` for local configuration. Keep `.env` local and never commit API keys or other credentials. The repository template contains variable names only and no secret values.
 
+## Classical pilot
+
+Run the network-free development pilot and aggregate its results with:
+
+```powershell
+python scripts/run_experiment.py --config configs/experiments/classical_pilot.yaml --output artifacts/raw_runs/classical_pilot.jsonl
+python scripts/aggregate_results.py --input artifacts/raw_runs/classical_pilot.jsonl --output artifacts/aggregated/classical_pilot_summary.csv
+```
+
+The committed pilot contains five synthetic scenarios, five classical policies, and ten paired environment seeds. Raw daily records are ignored by Git; aggregate CSV results remain trackable.
+
 ## License
 
 No license has been selected yet.

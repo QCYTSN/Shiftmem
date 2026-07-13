@@ -20,3 +20,13 @@ Implementation decisions and deviations from the specification will be recorded 
 - Derived independent reproducible environment and policy RNG seeds from the CLI master seed.
 - Added regime-shift markers to generated diagnostic figures.
 - Retained fixed-order policy as an intentionally weak sanity baseline; multi-seed aggregation remains a separate evaluation task.
+
+## 2026-07-13 — Classical development pilot
+
+- Added separate demand and supply RNG streams inside each environment so policy-dependent supply sampling cannot alter paired demand trajectories.
+- Fixed the development pilot at five scenarios, five classical policies, ten paired seeds, and 150-day episodes.
+- Added average inventory, stockout-day rate, fill rate, and pre/post-shift 7/14/30-day metrics.
+- Stored raw run records as ignored JSONL under `artifacts/raw_runs/` and committed aggregate CSV outputs under `artifacts/aggregated/`.
+- Used sample standard deviation and a normal-approximation 95% confidence interval for pilot summaries. Formal analysis may replace the approximation after power and distribution checks.
+- Calculated total-cost regret by pairing each policy with Oracle on the same scenario and master seed.
+- Classified all current pilot scenarios as development data; validation, Test-ID, and Test-OOD remain unfrozen.

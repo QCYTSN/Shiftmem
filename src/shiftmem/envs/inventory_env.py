@@ -25,12 +25,15 @@ class InventoryEnv:
             else NegativeBinomialDemand()
         )
         self.supplier = supplier or SingleSupplier()
-        self._rng = np.random.default_rng()
+        self._demand_rng = np.random.default_rng()
+        self._supply_rng = np.random.default_rng()
         self._terminated = True
         self.records: list[dict[str, Any]] = []
 
     def reset(self, seed: int | None = None) -> tuple[dict[str, int], dict[str, str]]:
-        self._rng = np.random.default_rng(seed)
+        demand_seed, supply_seed = np.random.SeedSequence(seed).spawn(2)
+        self._demand_rng = np.random.default_rng(demand_seed)
+        self._supply_rng = np.random.default_rng(supply_seed)
         self.day = 0
         self.inventory = self.scenario.initial_inventory
         self.pending_orders: dict[int, list[tuple[int, Any]]] = {}
@@ -50,11 +53,13 @@ class InventoryEnv:
 
         starting_inventory = self.inventory
         arrivals = sum(
-            self.supplier.arrival_quantity(quantity, self._rng, supply_parameters)
+            self.supplier.arrival_quantity(
+                quantity, self._supply_rng, supply_parameters
+            )
             for quantity, supply_parameters in self.pending_orders.pop(self.day, [])
         )
         self.inventory += arrivals
-        demand = self.demand_model.sample(self._rng, parameters.demand)
+        demand = self.demand_model.sample(self._demand_rng, parameters.demand)
         sales = min(self.inventory, demand)
         lost_sales = demand - sales
         self.inventory -= sales
