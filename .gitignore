@@ -179,3 +179,58 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# ShiftMem project rules
+
+# Environments and local secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Model and cache
+.cache/
+models/
+checkpoints/
+huggingface_cache/
+
+# Experiment outputs
+artifacts/raw_runs/*
+!artifacts/raw_runs/.gitkeep
+outputs/
+runs/
+logs/
+
+# Large data
+data/raw/
+data/processed/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Reproducibility assets remain trackable
+!data/sample/
+!data/sample/**
+!artifacts/aggregated/
+!artifacts/aggregated/**
+!artifacts/figures/
+!artifacts/figures/**
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Paper build files
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz

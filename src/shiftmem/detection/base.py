@@ -1,0 +1,1 @@
+"""Shared change-detector interface."""

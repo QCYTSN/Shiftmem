@@ -1,0 +1,1 @@
+"""ADWIN change detector."""

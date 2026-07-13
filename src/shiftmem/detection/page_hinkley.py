@@ -1,0 +1,1 @@
+"""Page-Hinkley change detector."""
