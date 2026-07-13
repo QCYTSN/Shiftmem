@@ -88,10 +88,16 @@ class OraclePolicy:
     def act(
         self,
         observation: Mapping[str, int],
-        oracle_context: Mapping[str, float | int],
+        oracle_context: Mapping[str, float | int | str],
     ) -> dict[str, int | str]:
         _validate_observation(observation)
-        required = {"demand_mean", "lead_time", "fill_rate"}
+        required = {
+            "demand_model",
+            "demand_mean",
+            "dispersion",
+            "lead_time",
+            "fill_rate",
+        }
         if not required.issubset(oracle_context):
             raise ValueError("oracle context is incomplete")
         fill_rate = float(oracle_context["fill_rate"])
@@ -100,7 +106,18 @@ class OraclePolicy:
         protection_mean = float(oracle_context["demand_mean"]) * (
             int(oracle_context["lead_time"]) + 1
         )
-        safety_stock = 2.0 * sqrt(protection_mean)
+        daily_variance = float(oracle_context["demand_mean"])
+        if oracle_context["demand_model"] == "negative_binomial":
+            dispersion = float(oracle_context["dispersion"])
+            if dispersion <= 0:
+                raise ValueError("oracle requires positive dispersion")
+            daily_variance += float(oracle_context["demand_mean"]) ** 2 / dispersion
+        elif oracle_context["demand_model"] != "poisson":
+            raise ValueError("oracle received an unsupported demand model")
+        protection_variance = daily_variance * (
+            int(oracle_context["lead_time"]) + 1
+        )
+        safety_stock = 2.0 * sqrt(protection_variance)
         target = (protection_mean + safety_stock) / fill_rate
         position = observation["inventory"] + observation["pipeline_inventory"]
         return _action(round(target - position))

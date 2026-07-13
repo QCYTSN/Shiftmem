@@ -33,7 +33,7 @@ class InventoryEnv:
         self._rng = np.random.default_rng(seed)
         self.day = 0
         self.inventory = self.scenario.initial_inventory
-        self.pending_orders: dict[int, list[int]] = {}
+        self.pending_orders: dict[int, list[tuple[int, Any]]] = {}
         self.last_demand = 0
         self.last_sales = 0
         self.records = []
@@ -49,19 +49,21 @@ class InventoryEnv:
         parameters = self.scenario.parameters_at(self.day)
 
         starting_inventory = self.inventory
-        arrivals = sum(self.pending_orders.pop(self.day, []))
+        arrivals = sum(
+            self.supplier.arrival_quantity(quantity, self._rng, supply_parameters)
+            for quantity, supply_parameters in self.pending_orders.pop(self.day, [])
+        )
         self.inventory += arrivals
         demand = self.demand_model.sample(self._rng, parameters.demand)
         sales = min(self.inventory, demand)
         lost_sales = demand - sales
         self.inventory -= sales
 
-        arrival_quantity = self.supplier.arrival_quantity(
-            quantity, self._rng, parameters.supply
-        )
-        if arrival_quantity:
+        if quantity:
             due_day = self.day + parameters.supply.lead_time
-            self.pending_orders.setdefault(due_day, []).append(arrival_quantity)
+            self.pending_orders.setdefault(due_day, []).append(
+                (quantity, parameters.supply)
+            )
 
         costs = self.scenario.costs
         purchase_cost = quantity * costs.purchase
@@ -93,11 +95,13 @@ class InventoryEnv:
         self._terminated = self.day >= self.scenario.episode_length
         return self._observation(), -float(total_cost), self._terminated, False, record.copy()
 
-    def oracle_context(self) -> dict[str, float | int]:
+    def oracle_context(self) -> dict[str, float | int | str]:
         day = min(self.day, self.scenario.episode_length - 1)
         parameters = self.scenario.parameters_at(day)
         return {
+            "demand_model": self.scenario.demand_model,
             "demand_mean": parameters.demand.mean,
+            "dispersion": parameters.demand.dispersion,
             "lead_time": parameters.supply.lead_time,
             "fill_rate": parameters.supply.fill_rate,
         }
@@ -112,7 +116,11 @@ class InventoryEnv:
         }
 
     def _pipeline_inventory(self) -> int:
-        return sum(sum(quantities) for quantities in self.pending_orders.values())
+        return sum(
+            quantity
+            for orders in self.pending_orders.values()
+            for quantity, _ in orders
+        )
 
     @staticmethod
     def _validate_action(action: Mapping[str, Any]) -> int:

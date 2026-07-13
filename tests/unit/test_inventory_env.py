@@ -113,5 +113,35 @@ def test_seed_reproduces_complete_records() -> None:
 def test_oracle_context_is_separate_from_observation() -> None:
     env = InventoryEnv(make_scenario(), ConstantDemand(1))
     observation, _ = env.reset(seed=1)
-    assert env.oracle_context() == {"demand_mean": 3, "lead_time": 2, "fill_rate": 1.0}
+    assert env.oracle_context() == {
+        "demand_model": "poisson",
+        "demand_mean": 3,
+        "dispersion": 10.0,
+        "lead_time": 2,
+        "fill_rate": 1.0,
+    }
     assert set(env.oracle_context()).isdisjoint(observation)
+
+
+def test_uncertain_fill_is_not_revealed_before_arrival() -> None:
+    scenario = Scenario(
+        name="uncertain-fill",
+        episode_length=3,
+        initial_inventory=0,
+        demand_model="poisson",
+        demand=DemandParameters(base_level=1),
+        supply=SupplyParameters(lead_time=2, fill_rate=0.5),
+        costs=CostParameters(purchase=0, holding=0, stockout=0),
+    )
+    env = InventoryEnv(scenario, ConstantDemand(0))
+    env.reset(seed=4)
+    observation, _, _, _, first = env.step(
+        {"order_quantity": 10, "supplier_id": "standard"}
+    )
+    assert observation["pipeline_inventory"] == 10
+    assert first["pipeline_inventory"] == 10
+    env.step({"order_quantity": 0, "supplier_id": "standard"})
+    _, _, _, _, arrival_day = env.step(
+        {"order_quantity": 0, "supplier_id": "standard"}
+    )
+    assert 0 <= arrival_day["arrivals"] <= 10

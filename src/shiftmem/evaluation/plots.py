@@ -10,7 +10,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
-def plot_episode(records: Sequence[dict[str, Any]], output_path: str | Path) -> Path:
+def plot_episode(
+    records: Sequence[dict[str, Any]],
+    output_path: str | Path,
+    shift_days: Sequence[int] = (),
+) -> Path:
     """Save a four-panel diagnostic plot for one inventory episode."""
     if not records:
         raise ValueError("cannot plot an empty episode")
@@ -34,6 +38,15 @@ def plot_episode(records: Sequence[dict[str, Any]], output_path: str | Path) -> 
     axes[3].legend()
     axes[3].set_ylabel("Cost")
     axes[3].set_xlabel("Day")
+    for axis in axes:
+        for index, shift_day in enumerate(shift_days):
+            axis.axvline(
+                shift_day,
+                color="black",
+                linestyle="--",
+                alpha=0.55,
+                label="Regime shift" if index == 0 else None,
+            )
     figure.tight_layout()
     figure.savefig(path, dpi=150)
     plt.close(figure)

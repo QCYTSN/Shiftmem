@@ -87,3 +87,28 @@ def test_oracle_mean_cost_is_below_random_policy() -> None:
     oracle_costs = [run_cost(OraclePolicy(), seed, oracle=True) for seed in range(10)]
     random_costs = [run_cost(RandomOrderPolicy(0, 20, seed=seed), seed) for seed in range(10)]
     assert np.mean(oracle_costs) < np.mean(random_costs)
+
+
+def test_oracle_accounts_for_negative_binomial_overdispersion() -> None:
+    policy = OraclePolicy()
+    poisson = policy.act(
+        OBSERVATION,
+        {
+            "demand_model": "poisson",
+            "demand_mean": 10,
+            "dispersion": 4,
+            "lead_time": 2,
+            "fill_rate": 1.0,
+        },
+    )
+    negative_binomial = policy.act(
+        OBSERVATION,
+        {
+            "demand_model": "negative_binomial",
+            "demand_mean": 10,
+            "dispersion": 4,
+            "lead_time": 2,
+            "fill_rate": 1.0,
+        },
+    )
+    assert negative_binomial["order_quantity"] > poisson["order_quantity"]

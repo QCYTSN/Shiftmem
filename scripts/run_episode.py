@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from shiftmem.agents.classical import (
     ExponentialSmoothingPolicy,
     FixedOrderPolicy,
@@ -44,12 +46,23 @@ def make_policy(name: str, order_quantity: int, seed: int, lead_time: int) -> An
     return OraclePolicy()
 
 
+def derive_seeds(seed: int) -> tuple[int, int]:
+    """Derive independent reproducible environment and policy seeds."""
+    environment_sequence, policy_sequence = np.random.SeedSequence(seed).spawn(2)
+    environment_seed = int(environment_sequence.generate_state(1)[0])
+    policy_seed = int(policy_sequence.generate_state(1)[0])
+    return environment_seed, policy_seed
+
+
 def main() -> int:
     args = build_parser().parse_args()
     scenario = load_scenario(args.config)
     env = InventoryEnv(scenario)
-    policy = make_policy(args.policy, args.order_quantity, args.seed, scenario.supply.lead_time)
-    observation, _ = env.reset(seed=args.seed)
+    environment_seed, policy_seed = derive_seeds(args.seed)
+    policy = make_policy(
+        args.policy, args.order_quantity, policy_seed, scenario.supply.lead_time
+    )
+    observation, _ = env.reset(seed=environment_seed)
     terminated = False
     while not terminated:
         if args.policy == "oracle":
@@ -59,7 +72,11 @@ def main() -> int:
         observation, _, terminated, _, _ = env.step(action)
     summary = summarize_episode(env.records)
     if args.figure:
-        plot_episode(env.records, args.figure)
+        plot_episode(
+            env.records,
+            args.figure,
+            shift_days=[shift.start_day for shift in scenario.shifts],
+        )
     print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
     return 0
 
