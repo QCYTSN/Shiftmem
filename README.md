@@ -42,6 +42,15 @@ python scripts/run_agent_episode.py --config configs/environments/stable.yaml --
 
 Available offline memory baselines are `none`, `full_history`, `summary`, `vector`, and `time_decay`. The deterministic provider validates interfaces only; its output is not a model-performance result.
 
+The local `.env` is preconfigured for Alibaba Cloud Model Studio (Bailian) and SiliconFlow. Fill only the matching blank API key, then select the provider explicitly. The CLI remains deterministic by default so an ordinary offline command cannot spend API credit accidentally.
+
+```powershell
+python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider bailian --max-days 10 --output artifacts/raw_runs/bailian_smoke.json
+python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-4.7 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
+```
+
+The configured defaults are the version-pinned `qwen3.5-flash-2026-02-23` for low-cost Bailian smoke tests and `deepseek-ai/DeepSeek-V3.2` for SiliconFlow comparisons. Use `--model-name qwen3.7-plus-2026-05-26` for a formal Qwen run. Never commit `.env`, and do not make a live call until the selected key is filled and the account's billing and quota settings have been checked.
+
 ## License
 
 No license has been selected yet.

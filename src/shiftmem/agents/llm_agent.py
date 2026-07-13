@@ -48,7 +48,20 @@ class StructuredAgent:
                 memory=[record.model_dump() for record in records],
                 correction=correction,
             )
-            response = self.provider.generate(request)
+            try:
+                response = self.provider.generate(request)
+            except Exception as error:
+                correction = "The provider failed. Retry the same structured decision request."
+                attempts.append(
+                    ProviderAttemptLog(
+                        raw_output="",
+                        input_tokens=0,
+                        output_tokens=0,
+                        latency_ms=0,
+                        parse_error=f"provider failure: {type(error).__name__}: {error}",
+                    )
+                )
+                continue
             parse_error: str | None = None
             try:
                 candidate = AgentDecision.model_validate_json(response.text)

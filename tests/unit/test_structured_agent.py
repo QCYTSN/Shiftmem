@@ -91,3 +91,22 @@ def test_observe_adds_auditable_memory_record() -> None:
     )
     assert memory.records[0].memory_id == "observation-2"
     assert memory.records[0].payload["lost_sales"] == 2
+
+
+def test_provider_failures_retry_then_fallback() -> None:
+    class FailingProvider:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def generate(self, request):
+            self.calls += 1
+            raise RuntimeError("transport failed")
+
+    provider = FailingProvider()
+    agent = StructuredAgent(provider, NoMemory(), FixedOrderPolicy(6))
+    decision = agent.act(OBSERVATION)
+    assert decision.order_quantity == 6
+    assert provider.calls == 2
+    assert agent.logs[-1].fallback_used is True
+    assert agent.logs[-1].parse_failure_count == 2
+    assert "transport failed" in agent.logs[-1].attempts[0].parse_error

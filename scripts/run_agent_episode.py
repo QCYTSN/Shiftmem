@@ -11,6 +11,21 @@ from shiftmem.envs.shifts import load_scenario
 from shiftmem.evaluation.metrics import summarize_episode
 from shiftmem.memory.store import make_memory
 from shiftmem.providers.local import DeterministicProvider
+from shiftmem.providers.compatible_api import CompatibleAPIProvider, ProviderConfig
+
+
+def make_provider(
+    name: str,
+    target_inventory: int,
+    model_name: str | None = None,
+):
+    if name == "deterministic":
+        return DeterministicProvider(target_inventory)
+    if name in {"compatible", "bailian", "siliconflow"}:
+        return CompatibleAPIProvider(
+            ProviderConfig.from_env(name, model_override=model_name)
+        )
+    raise ValueError(f"unknown provider: {name}")
 
 
 def main() -> int:
@@ -25,6 +40,12 @@ def main() -> int:
     parser.add_argument("--max-days", type=int, default=150)
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--target-inventory", type=int, default=60)
+    parser.add_argument(
+        "--provider",
+        choices=("deterministic", "compatible", "bailian", "siliconflow"),
+        default="deterministic",
+    )
+    parser.add_argument("--model-name")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.max_days < 1:
@@ -33,7 +54,7 @@ def main() -> int:
     scenario = load_scenario(args.config)
     env = InventoryEnv(scenario)
     agent = StructuredAgent(
-        provider=DeterministicProvider(args.target_inventory),
+        provider=make_provider(args.provider, args.target_inventory, args.model_name),
         memory=make_memory(args.memory),
         fallback=FixedOrderPolicy(20),
         top_k=args.top_k,

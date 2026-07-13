@@ -40,3 +40,20 @@ Implementation decisions and deviations from the specification will be recorded 
 - Rejected any decision that cites a memory ID not supplied in its retrieval context.
 - Added a deterministic provider and baseline-switching CLI for offline integration only. It deliberately ignores memory content, so these runs must not be interpreted as memory-method comparisons.
 - Deferred a real local instruction model and compatible API integration until hardware, model license, and model selection are explicitly decided.
+
+## 2026-07-13 — CPU-only compatible provider
+
+- Detected an Intel Core Ultra 5 125H and 31.5 GB system memory with no Ollama, llama.cpp, or GPU runtime installed.
+- Kept deterministic mode as the offline default and added an opt-in OpenAI-compatible chat-completions provider.
+- Loaded endpoint, model name, and API key only from the process environment or ignored local `.env`; credentials are represented as secret values and omitted from errors and logs.
+- Injected the HTTP transport so all automated tests remain offline and deterministic.
+- Added sanitized handling for HTTP status, connection, timeout, malformed envelope, provider exception, JSON parse, and decision validation failures.
+- Deferred the first real model smoke test until the user configures a compatible endpoint. No model choice or provider-specific result has been recorded.
+
+## 2026-07-13 — Named remote model profiles
+
+- Added independent Bailian and SiliconFlow profiles over the same OpenAI-compatible transport; only the selected profile's key is required.
+- Fixed non-thinking JSON generation defaults at temperature 0, 512 maximum output tokens, and a 60-second timeout.
+- Selected `qwen3.5-flash-2026-02-23` as the low-cost pinned Bailian smoke model and `deepseek-ai/DeepSeek-V3.2` as the default SiliconFlow cross-family model.
+- Kept `qwen3.7-plus-2026-05-26`, `Pro/zai-org/GLM-4.7`, and `Pro/zai-org/GLM-5.1` as explicit per-run overrides.
+- Kept deterministic mode as the CLI default and did not perform a live request before the user supplied a key and reviewed provider billing and quotas.
