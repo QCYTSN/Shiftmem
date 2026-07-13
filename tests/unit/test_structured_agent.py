@@ -110,3 +110,36 @@ def test_provider_failures_retry_then_fallback() -> None:
     assert agent.logs[-1].fallback_used is True
     assert agent.logs[-1].parse_failure_count == 2
     assert "transport failed" in agent.logs[-1].attempts[0].parse_error
+
+
+def test_agent_registration_hook_receives_used_memory_ids() -> None:
+    class HookMemory:
+        def __init__(self) -> None:
+            self.registration = None
+
+        def retrieve(self, query, step, top_k):
+            return [MemoryRecord(memory_id="m1", step=1, text="demand high")]
+
+        def add(self, record):
+            raise AssertionError("add should not be used by registration hook")
+
+        def register_decision(
+            self, episode_id, step, observation, action, used_memory_ids
+        ):
+            self.registration = (episode_id, step, action, used_memory_ids)
+
+    memory = HookMemory()
+    agent = StructuredAgent(
+        ScriptedProvider([raw_decision(9, ["m1"])]),
+        memory,
+        FixedOrderPolicy(3),
+    )
+
+    agent.act(OBSERVATION)
+
+    assert memory.registration == (
+        "episode",
+        2,
+        {"order_quantity": 9, "supplier_id": "standard"},
+        ["m1"],
+    )

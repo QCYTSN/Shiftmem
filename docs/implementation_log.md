@@ -67,3 +67,13 @@ Implementation decisions and deviations from the specification will be recorded 
 - The first live pass exposed output truncation in both Qwen models because unconstrained reasons exhausted the shared 512-token cap. Applied one model-independent correction: `reason` is now one sentence with at most 200 characters, enforced by both prompt and schema, then reran all four candidates from scratch.
 - On the corrected run, all four candidates had zero parse failures, zero fallbacks, and passed all six monotonicity comparisons. DeepSeek-V3.2 and GLM-5.1 passed every hard gate. Qwen Flash and Qwen3.5-35B-A3B each cited the explicitly dormant, mismatched memory in both repetitions, so both failed the predeclared applicability gate.
 - Selected DeepSeek-V3.2 as the current core candidate and retained GLM-5.1 only as a supplementary candidate. The intended two-model formal design remains unfrozen until a second eligible core model qualifies.
+
+## 2026-07-13 - Phase 3 deterministic ShiftMem core
+
+- Added structured experiences with public applicability predicates, lifecycle status, Beta-Bernoulli evidence, stable Agent conversion, replay-safe storage, and append-only audit events.
+- Implemented a resettable two-sided Page-Hinkley detector over realized public signals. A detected variable only places overlapping active experiences into probation; it never invalidates the entire store.
+- Implemented explicit probation, active, dormant, and invalid transitions, configurable post-change failure weighting, and deterministic delayed validation after lead time plus a service window.
+- Added template-based experience extraction from public observations, actions, and realized service/cost metrics. Hidden demand parameters, future information, shift schedules, regime IDs, and Oracle context are rejected at the extraction boundary.
+- Added two-stage retrieval: hard lifecycle/applicability filtering followed by transparent lexical relevance, confidence, recency, utility, and shift-penalty scoring with deterministic ties.
+- Integrated `ShiftMemory` through optional structured-Agent hooks without changing the behavior of the five existing memory baselines. Raw audit output remains under ignored experiment-output paths.
+- Deferred ADWIN, remote embeddings, persistence, and all detector/retrieval hyperparameter selection to Pilot/design-freeze work. The deterministic provider remains an interface check and cannot support a performance conclusion.

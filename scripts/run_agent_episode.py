@@ -33,7 +33,7 @@ def main() -> int:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument(
         "--memory",
-        choices=("none", "full_history", "summary", "vector", "time_decay"),
+        choices=("none", "full_history", "summary", "vector", "time_decay", "shiftmem"),
         required=True,
     )
     parser.add_argument("--seed", type=int, default=42)
@@ -81,6 +81,9 @@ def main() -> int:
         "decision_logs": [log.model_dump(mode="json") for log in agent.logs],
         "environment_records": env.records,
     }
+    audit_summary = getattr(agent.memory, "audit_summary", None)
+    if callable(audit_summary):
+        detail["memory_audit"] = audit_summary()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(detail, ensure_ascii=False, indent=2, sort_keys=True),

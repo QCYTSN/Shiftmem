@@ -109,9 +109,22 @@ class StructuredAgent:
                 total_latency_ms=sum(attempt.latency_ms for attempt in attempts),
             )
         )
+        register = getattr(self.memory, "register_decision", None)
+        if callable(register):
+            register(
+                "episode",
+                int(observation["day"]),
+                observation,
+                decision.to_action(),
+                list(decision.used_memory_ids),
+            )
         return decision
 
     def observe(self, record: dict[str, Any]) -> None:
+        observe_outcome = getattr(self.memory, "observe_outcome", None)
+        if callable(observe_outcome):
+            observe_outcome(record)
+            return
         step = int(record["day"])
         text = (
             f"Day {step}: demand {record['demand']}, sales {record['sales']}, "

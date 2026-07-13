@@ -42,6 +42,14 @@ python scripts/run_agent_episode.py --config configs/environments/stable.yaml --
 
 Available offline memory baselines are `none`, `full_history`, `summary`, `vector`, and `time_decay`. The deterministic provider validates interfaces only; its output is not a model-performance result.
 
+The Phase 3 deterministic ShiftMem loop is also available offline:
+
+```powershell
+.venv\Scripts\python.exe scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory shiftmem --provider deterministic --max-days 30 --output artifacts/raw_runs/shiftmem_offline.json
+```
+
+This path extracts delayed decision experiences, monitors public demand and lost-sales signals with Page-Hinkley, updates Beta-Bernoulli confidence and lifecycle state, and performs condition-aware retrieval. Its default semantic component is lexical cosine so development and tests require neither a GPU nor an embedding API. The current detector thresholds, lifecycle thresholds, and retrieval weights are development defaults that must be selected on validation scenarios before formal tests. A deterministic-provider run verifies integration and auditability only; it is not evidence that ShiftMem improves inventory performance.
+
 The local `.env` is preconfigured for Alibaba Cloud Model Studio (Bailian) and SiliconFlow. Fill only the matching blank API key, then select the provider explicitly. The CLI remains deterministic by default so an ordinary offline command cannot spend API credit accidentally.
 
 ```powershell

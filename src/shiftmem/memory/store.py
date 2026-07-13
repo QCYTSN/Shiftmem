@@ -5,13 +5,42 @@ from math import sqrt
 import re
 from typing import Protocol
 
-from .schemas import MemoryRecord
+from .schemas import ExperienceRecord, MemoryRecord
 
 
 class MemoryStore(Protocol):
     def add(self, record: MemoryRecord) -> None: ...
 
     def retrieve(self, query: str, step: int, top_k: int) -> list[MemoryRecord]: ...
+
+
+class ExperienceStore:
+    """Replay-safe in-memory storage with defensive reads."""
+
+    def __init__(self) -> None:
+        self._records: dict[str, ExperienceRecord] = {}
+
+    def add(self, record: ExperienceRecord) -> None:
+        stored = self._records.get(record.memory_id)
+        if stored is not None:
+            if stored != record:
+                raise ValueError(f"duplicate memory_id: {record.memory_id}")
+            return
+        self._records[record.memory_id] = record.model_copy(deep=True)
+
+    def get(self, memory_id: str) -> ExperienceRecord:
+        try:
+            return self._records[memory_id].model_copy(deep=True)
+        except KeyError as error:
+            raise KeyError(f"unknown memory_id: {memory_id}") from error
+
+    def replace(self, record: ExperienceRecord) -> None:
+        if record.memory_id not in self._records:
+            raise KeyError(f"unknown memory_id: {record.memory_id}")
+        self._records[record.memory_id] = record.model_copy(deep=True)
+
+    def all(self) -> list[ExperienceRecord]:
+        return [record.model_copy(deep=True) for record in self._records.values()]
 
 
 def _validate_top_k(top_k: int) -> None:
@@ -64,7 +93,7 @@ def _tokens(text: str) -> Counter[str]:
     return Counter(re.findall(r"[a-z0-9_]+", text.lower()))
 
 
-def _cosine(left: str, right: str) -> float:
+def lexical_cosine(left: str, right: str) -> float:
     left_tokens = _tokens(left)
     right_tokens = _tokens(right)
     numerator = sum(value * right_tokens[token] for token, value in left_tokens.items())
@@ -78,7 +107,11 @@ class VectorMemory(FullHistoryMemory):
         _validate_top_k(top_k)
         ranked = sorted(
             self.records,
-            key=lambda record: (_cosine(query, record.text), record.step, record.memory_id),
+            key=lambda record: (
+                lexical_cosine(query, record.text),
+                record.step,
+                record.memory_id,
+            ),
             reverse=True,
         )
         return ranked[:top_k]
@@ -96,7 +129,7 @@ class TimeDecayMemory(VectorMemory):
         ranked = sorted(
             self.records,
             key=lambda record: (
-                _cosine(query, record.text)
+                lexical_cosine(query, record.text)
                 * 0.5 ** (max(0, step - record.step) / self.half_life),
                 record.step,
                 record.memory_id,
@@ -107,6 +140,10 @@ class TimeDecayMemory(VectorMemory):
 
 
 def make_memory(name: str) -> MemoryStore:
+    if name == "shiftmem":
+        from .shiftmem import ShiftMemory
+
+        return ShiftMemory()
     factories = {
         "none": NoMemory,
         "full_history": FullHistoryMemory,
