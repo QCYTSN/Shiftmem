@@ -8,7 +8,18 @@ version = "0.1.0"
 description = "Change-aware conditional memory for inventory agents under regime shifts"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "numpy>=1.26,<3",
+    "PyYAML>=6,<7",
+    "matplotlib>=3.8,<4",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<9"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
