@@ -2,7 +2,7 @@
 
 Change-aware conditional memory for inventory agents under regime shifts.
 
-ShiftMem is a research project investigating whether condition-aware memory can help inventory agents adapt when demand or supply regimes change. The repository is currently at the scaffold stage: its package boundaries and research artifacts are defined, but the environment, agents, memory system, experiments, and demo are not yet implemented.
+ShiftMem is a research project investigating whether condition-aware memory can help inventory agents adapt when demand or supply regimes change. The repository currently includes the synthetic inventory environment, classical policies, structured model-agent pipeline, memory baselines, compatible API providers, and a bounded model-qualification suite.
 
 The authoritative project scope, research questions, experimental design, and phased implementation requirements are documented in [ShiftMem_Implementation_Spec.md](ShiftMem_Implementation_Spec.md).
 
@@ -46,10 +46,20 @@ The local `.env` is preconfigured for Alibaba Cloud Model Studio (Bailian) and S
 
 ```powershell
 python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider bailian --max-days 10 --output artifacts/raw_runs/bailian_smoke.json
-python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-4.7 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
+python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-5.1 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
 ```
 
-The configured defaults are the version-pinned `qwen3.5-flash-2026-02-23` for low-cost Bailian smoke tests and `deepseek-ai/DeepSeek-V3.2` for SiliconFlow comparisons. Use `--model-name qwen3.7-plus-2026-05-26` for a formal Qwen run. Never commit `.env`, and do not make a live call until the selected key is filled and the account's billing and quota settings have been checked.
+The configured defaults are the version-pinned `qwen3.5-flash-2026-02-23` for low-cost Bailian smoke tests and `deepseek-ai/DeepSeek-V3.2` for SiliconFlow comparisons. Use `--model-name qwen3.7-plus-2026-05-26` only for an explicitly designed commercial upper-bound run. Never commit `.env`, and do not make a live call until the selected key is filled and the account's billing and quota settings have been checked.
+
+## Inventory model qualification
+
+Run the fixed eight-case, two-repetition qualification matrix with:
+
+```powershell
+.venv\Scripts\python.exe scripts/qualify_models.py --config configs/experiments/model_qualification.yaml --raw-output artifacts/raw_runs/model_qualification.jsonl --summary-output artifacts/aggregated/model_qualification_summary.json
+```
+
+The 2026-07-13 qualification found that `deepseek-ai/DeepSeek-V3.2` and `Pro/zai-org/GLM-5.1` passed every hard gate. Both tested Qwen models produced valid, monotonic decisions but cited an explicitly dormant, mismatched memory in both repetitions and therefore did not qualify. DeepSeek is the current core candidate and GLM-5.1 remains supplementary; the planned two-model formal design is not yet frozen. See [the qualification report](docs/model_qualification.md) and the trackable [aggregate JSON](artifacts/aggregated/model_qualification_summary.json).
 
 ## License
 

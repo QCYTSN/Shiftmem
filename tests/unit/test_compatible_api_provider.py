@@ -123,10 +123,10 @@ def test_named_profile_loads_shared_settings_and_model_override(monkeypatch) -> 
     config = ProviderConfig.from_env(
         "siliconflow",
         load_file=False,
-        model_override="Pro/zai-org/GLM-4.7",
+        model_override="Pro/zai-org/GLM-5.1",
     )
 
-    assert config.model_name == "Pro/zai-org/GLM-4.7"
+    assert config.model_name == "Pro/zai-org/GLM-5.1"
     assert config.timeout_seconds == 30
     assert config.max_tokens == 256
     assert config.temperature == 0.1
@@ -170,6 +170,39 @@ def test_provider_builds_request_and_extracts_usage() -> None:
     assert payload["response_format"] == {"type": "json_object"}
     assert "enable_thinking" not in payload
     assert "m1" in payload["messages"][1]["content"]
+
+
+def test_inventory_prompt_defines_objective_and_public_information_rules() -> None:
+    envelope = {
+        "choices": [{"message": {"content": '{"order_quantity": 0}'}}],
+        "usage": {},
+    }
+    transport = FakeTransport(HttpResponse(200, json.dumps(envelope).encode()))
+    provider = CompatibleAPIProvider(
+        ProviderConfig(
+            api_key="key",
+            base_url="https://example.test/v1",
+            model_name="model",
+        ),
+        transport=transport,
+    )
+
+    provider.generate(request())
+
+    payload = json.loads(transport.calls[0]["body"])
+    system_prompt = payload["messages"][0]["content"]
+    for required in (
+        "purchase",
+        "holding",
+        "stockout",
+        "pipeline",
+        "recent_history",
+        "fallible evidence",
+        "hidden",
+        "200 characters",
+        "JSON",
+    ):
+        assert required in system_prompt
 
 
 def test_named_provider_sends_non_thinking_generation_settings() -> None:

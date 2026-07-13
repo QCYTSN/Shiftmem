@@ -12,7 +12,7 @@ class AgentDecision(BaseModel):
     supplier_id: str = Field(default="standard", pattern="^standard$")
     used_memory_ids: list[str] = Field(default_factory=list)
     confidence: float = Field(ge=0, le=1)
-    reason: str = Field(min_length=1)
+    reason: str = Field(min_length=1, max_length=200)
 
     def to_action(self) -> dict[str, int | str]:
         return {

@@ -1,0 +1,18 @@
+repetitions: 2
+models:
+  - label: qwen_flash_development
+    profile: bailian
+    model_id: qwen3.5-flash-2026-02-23
+    role: development_control
+  - label: qwen_open_35b_a3b
+    profile: siliconflow
+    model_id: Qwen/Qwen3.5-35B-A3B
+    role: formal_candidate
+  - label: deepseek_v3_2
+    profile: siliconflow
+    model_id: deepseek-ai/DeepSeek-V3.2
+    role: formal_candidate
+  - label: glm_5_1
+    profile: siliconflow
+    model_id: Pro/zai-org/GLM-5.1
+    role: supplementary_candidate

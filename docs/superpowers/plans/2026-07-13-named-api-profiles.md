@@ -84,10 +84,10 @@ def test_model_override_wins_over_profile_default(monkeypatch) -> None:
     monkeypatch.setenv("SILICONFLOW_MODEL_NAME", "deepseek-ai/DeepSeek-V3.2")
 
     config = ProviderConfig.from_env(
-        "siliconflow", load_file=False, model_override="Pro/zai-org/GLM-4.7"
+        "siliconflow", load_file=False, model_override="Pro/zai-org/GLM-5.1"
     )
 
-    assert config.model_name == "Pro/zai-org/GLM-4.7"
+    assert config.model_name == "Pro/zai-org/GLM-5.1"
 ```
 
 - [ ] **Step 5: Run new setting tests and verify RED**
@@ -163,7 +163,7 @@ Expected: all selected tests PASS.
 
 - [ ] **Step 1: Replace the environment template and create ignored local configuration**
 
-Write the exact non-secret settings from the approved design into both files, with blank API key values. Add comments listing `qwen3.7-plus-2026-05-26`, `Pro/zai-org/GLM-4.7`, and `Pro/zai-org/GLM-5.1` as optional overrides without activating them.
+Write the exact non-secret settings from the approved design into both files, with blank API key values. Add comments listing `qwen3.7-plus-2026-05-26` and `Pro/zai-org/GLM-5.1` as optional overrides without activating them.
 
 - [ ] **Step 2: Document safe smoke commands**
 
@@ -171,7 +171,7 @@ Add one ten-day command for each provider:
 
 ```powershell
 python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider bailian --max-days 10 --output artifacts/raw_runs/bailian_smoke.json
-python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-4.7 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
+python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-5.1 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
 ```
 
 State explicitly that no live call should be made until the matching key has been filled and account billing/quotas are understood.

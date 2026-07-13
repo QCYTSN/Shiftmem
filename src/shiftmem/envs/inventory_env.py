@@ -30,7 +30,7 @@ class InventoryEnv:
         self._terminated = True
         self.records: list[dict[str, Any]] = []
 
-    def reset(self, seed: int | None = None) -> tuple[dict[str, int], dict[str, str]]:
+    def reset(self, seed: int | None = None) -> tuple[dict[str, Any], dict[str, str]]:
         demand_seed, supply_seed = np.random.SeedSequence(seed).spawn(2)
         self._demand_rng = np.random.default_rng(demand_seed)
         self._supply_rng = np.random.default_rng(supply_seed)
@@ -111,14 +111,47 @@ class InventoryEnv:
             "fill_rate": parameters.supply.fill_rate,
         }
 
-    def _observation(self) -> dict[str, int]:
+    def _observation(self) -> dict[str, Any]:
+        public_history_keys = (
+            "day",
+            "demand",
+            "sales",
+            "lost_sales",
+            "ending_inventory",
+            "order_quantity",
+            "arrivals",
+            "total_cost",
+        )
+        parameter_day = min(self.day, self.scenario.episode_length - 1)
+        costs = self.scenario.costs
         return {
             "day": self.day,
             "inventory": self.inventory,
             "pipeline_inventory": self._pipeline_inventory(),
+            "pipeline_orders": self._pipeline_orders(),
+            "quoted_lead_time": self.scenario.parameters_at(
+                parameter_day
+            ).supply.lead_time,
             "last_demand": self.last_demand,
             "last_sales": self.last_sales,
+            "costs": {
+                "purchase": costs.purchase,
+                "holding": costs.holding,
+                "stockout": costs.stockout,
+                "fixed_order": costs.fixed_order,
+            },
+            "recent_history": [
+                {key: record[key] for key in public_history_keys}
+                for record in self.records[-14:]
+            ],
         }
+
+    def _pipeline_orders(self) -> list[dict[str, int]]:
+        return [
+            {"due_day": due_day, "quantity": quantity}
+            for due_day in sorted(self.pending_orders)
+            for quantity, _ in self.pending_orders[due_day]
+        ]
 
     def _pipeline_inventory(self) -> int:
         return sum(

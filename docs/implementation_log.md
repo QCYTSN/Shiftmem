@@ -55,5 +55,15 @@ Implementation decisions and deviations from the specification will be recorded 
 - Added independent Bailian and SiliconFlow profiles over the same OpenAI-compatible transport; only the selected profile's key is required.
 - Fixed non-thinking JSON generation defaults at temperature 0, 512 maximum output tokens, and a 60-second timeout.
 - Selected `qwen3.5-flash-2026-02-23` as the low-cost pinned Bailian smoke model and `deepseek-ai/DeepSeek-V3.2` as the default SiliconFlow cross-family model.
-- Kept `qwen3.7-plus-2026-05-26`, `Pro/zai-org/GLM-4.7`, and `Pro/zai-org/GLM-5.1` as explicit per-run overrides.
+- Kept `qwen3.7-plus-2026-05-26` and `Pro/zai-org/GLM-5.1` as explicit per-run overrides.
 - Kept deterministic mode as the CLI default and did not perform a live request before the user supplied a key and reviewed provider billing and quotas.
+- After credentials were supplied, the live model list showed that SiliconFlow no longer offered `Pro/zai-org/GLM-4.7`. The available `zai-org/GLM-4.5-Air` rejected JSON mode, while `Pro/zai-org/GLM-5.1` passed the structured decision smoke test.
+
+## 2026-07-13 - Inventory prompt and model qualification
+
+- Expanded the public Agent observation with scheduled pipeline orders, quoted lead time, public costs, and a chronological 14-day realized-history window without exposing Oracle or future information.
+- Added one provider-independent inventory objective and memory-applicability instruction for every compatible API model.
+- Added eight fixed behavioral cases, two repetitions, paired monotonicity gates, citation checks, ignored raw JSONL output, and a trackable aggregate result.
+- The first live pass exposed output truncation in both Qwen models because unconstrained reasons exhausted the shared 512-token cap. Applied one model-independent correction: `reason` is now one sentence with at most 200 characters, enforced by both prompt and schema, then reran all four candidates from scratch.
+- On the corrected run, all four candidates had zero parse failures, zero fallbacks, and passed all six monotonicity comparisons. DeepSeek-V3.2 and GLM-5.1 passed every hard gate. Qwen Flash and Qwen3.5-35B-A3B each cited the explicitly dormant, mismatched memory in both repetitions, so both failed the predeclared applicability gate.
+- Selected DeepSeek-V3.2 as the current core candidate and retained GLM-5.1 only as a supplementary candidate. The intended two-model formal design remains unfrozen until a second eligible core model qualifies.

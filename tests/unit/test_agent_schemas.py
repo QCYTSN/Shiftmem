@@ -15,6 +15,17 @@ def test_agent_decision_validates_action_and_confidence() -> None:
         AgentDecision(order_quantity=1, confidence=1.2, reason="bad")
 
 
+def test_agent_decision_rejects_overlong_reason() -> None:
+    with pytest.raises(ValidationError):
+        AgentDecision(
+            order_quantity=1,
+            supplier_id="standard",
+            used_memory_ids=[],
+            confidence=0.5,
+            reason="x" * 201,
+        )
+
+
 def test_provider_response_rejects_negative_usage() -> None:
     with pytest.raises(ValidationError):
         ProviderResponse(text="{}", input_tokens=-1, output_tokens=0, latency_ms=0)

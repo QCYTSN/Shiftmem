@@ -12,6 +12,10 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator
 
 from .base import ProviderRequest, ProviderResponse
+from .inventory_prompt import (
+    INVENTORY_DECISION_SYSTEM_PROMPT,
+    build_inventory_user_message,
+)
 
 
 class ProviderError(RuntimeError):
@@ -142,12 +146,6 @@ class ProviderConfig(BaseModel):
             raise ProviderConfigurationError("provider environment is invalid") from error
 
 
-SYSTEM_INSTRUCTION = """Return only one JSON object with this exact schema:
-{"order_quantity": non-negative integer, "supplier_id": "standard",
- "used_memory_ids": array of supplied memory IDs, "confidence": number from 0 to 1,
- "reason": non-empty string}. Do not invent memory IDs or add fields."""
-
-
 class CompatibleAPIProvider:
     def __init__(
         self,
@@ -164,10 +162,10 @@ class CompatibleAPIProvider:
             "max_tokens": self.config.max_tokens,
             "response_format": {"type": "json_object"},
             "messages": [
-                {"role": "system", "content": SYSTEM_INSTRUCTION},
+                {"role": "system", "content": INVENTORY_DECISION_SYSTEM_PROMPT},
                 {
                     "role": "user",
-                    "content": json.dumps(request.model_dump(), ensure_ascii=False, sort_keys=True),
+                    "content": build_inventory_user_message(request),
                 },
             ],
         }

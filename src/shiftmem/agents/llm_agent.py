@@ -13,7 +13,7 @@ from .base import AgentDecision, DecisionLog, ProviderAttemptLog
 
 
 class FallbackPolicy(Protocol):
-    def act(self, observation: dict[str, int]) -> dict[str, int | str]: ...
+    def act(self, observation: dict[str, Any]) -> dict[str, int | str]: ...
 
 
 class StructuredAgent:
@@ -34,7 +34,7 @@ class StructuredAgent:
         self.top_k = top_k
         self.logs: list[DecisionLog] = []
 
-    def act(self, observation: dict[str, int]) -> AgentDecision:
+    def act(self, observation: dict[str, Any]) -> AgentDecision:
         query = json.dumps(observation, sort_keys=True)
         records = self.memory.retrieve(query, observation["day"], self.top_k)
         supplied_ids = [record.memory_id for record in records]

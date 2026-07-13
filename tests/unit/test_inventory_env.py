@@ -32,11 +32,58 @@ def test_reset_exposes_only_agent_visible_state() -> None:
         "day": 0,
         "inventory": 10,
         "pipeline_inventory": 0,
+        "pipeline_orders": [],
+        "quoted_lead_time": 2,
         "last_demand": 0,
         "last_sales": 0,
+        "costs": {
+            "purchase": 1,
+            "holding": 0.5,
+            "stockout": 4,
+            "fixed_order": 2,
+        },
+        "recent_history": [],
     }
     assert info == {"scenario": "unit"}
     assert "demand_mean" not in observation
+    assert set(observation).isdisjoint(
+        {"dispersion", "fill_rate", "regime_id", "shift_day", "future_demand"}
+    )
+
+
+def test_observation_exposes_due_orders_and_completed_history() -> None:
+    env = InventoryEnv(make_scenario(), ConstantDemand(3))
+    env.reset(seed=1)
+
+    observation, *_ = env.step({"order_quantity": 5, "supplier_id": "standard"})
+
+    assert observation["pipeline_orders"] == [{"due_day": 2, "quantity": 5}]
+    assert observation["recent_history"] == [
+        {
+            "day": 0,
+            "demand": 3,
+            "sales": 3,
+            "lost_sales": 0,
+            "ending_inventory": 7,
+            "order_quantity": 5,
+            "arrivals": 0,
+            "total_cost": 10.5,
+        }
+    ]
+
+
+def test_recent_history_is_chronological_and_bounded_to_fourteen_days() -> None:
+    env = InventoryEnv(make_scenario(length=16), ConstantDemand(0))
+    env.reset(seed=1)
+    observation = None
+    for _ in range(15):
+        observation, *_ = env.step(
+            {"order_quantity": 0, "supplier_id": "standard"}
+        )
+
+    history = observation["recent_history"]
+    assert len(history) == 14
+    assert [row["day"] for row in history] == list(range(1, 15))
 
 
 def test_step_conserves_inventory_and_costs() -> None:

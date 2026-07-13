@@ -24,7 +24,7 @@ SILICONFLOW_BASE_URL=https://api.siliconflow.cn/v1
 SILICONFLOW_MODEL_NAME=deepseek-ai/DeepSeek-V3.2
 ```
 
-The default Bailian model is a low-cost, version-pinned smoke-test model. Formal Qwen experiments can override it with `qwen3.7-plus-2026-05-26`. The default SiliconFlow model is the economical cross-family comparison. Additional controlled comparisons can override it with `Pro/zai-org/GLM-4.7`; the more expensive `Pro/zai-org/GLM-5.1` is reserved for small confirmatory runs.
+The default Bailian model is a low-cost, version-pinned smoke-test model. Formal Qwen experiments can override it with `qwen3.7-plus-2026-05-26`. The default SiliconFlow model is the economical cross-family comparison. Additional controlled comparisons can override it with the more expensive `Pro/zai-org/GLM-5.1`, reserved for small confirmatory runs.
 
 Secrets stay only in `.env`. Model identifiers, endpoints, and non-secret generation settings are duplicated in `.env.example` so repository users can reproduce the configuration shape without receiving credentials.
 
