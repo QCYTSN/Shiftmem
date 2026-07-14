@@ -1,0 +1,36 @@
+{
+  "completed_runs": 2500,
+  "expected_runs": 2500,
+  "failures": {},
+  "gates": {
+    "complete_matrix": true,
+    "expected_horizon": true,
+    "finite_metrics": true,
+    "oracle_beats_random": true,
+    "paired_demand": true,
+    "valid_shift_markers": true
+  },
+  "oracle_random_mean_costs": {
+    "demand_jump": {
+      "oracle": 4898.848,
+      "random": 7942.652
+    },
+    "gradual_demand": {
+      "oracle": 4879.41,
+      "random": 7902.274
+    },
+    "periodic_combined": {
+      "oracle": 4328.95,
+      "random": 6098.904
+    },
+    "stable": {
+      "oracle": 3921.47,
+      "random": 6276.7080000000005
+    },
+    "supply_delay": {
+      "oracle": 4265.706,
+      "random": 6015.76
+    }
+  },
+  "passed": true
+}

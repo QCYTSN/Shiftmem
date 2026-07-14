@@ -1,0 +1,29 @@
+manifests:
+  development: configs/splits/development.yaml
+  validation: configs/splits/validation.yaml
+scenario: configs/environments/validation_demand_jump.yaml
+seeds: [1000, 1001]
+post_shift_days: 30
+max_calls: 240
+minimum_relevant_effect: 100.0
+operational_notes:
+  - "Validation selected Page-Hinkley threshold 48 by the frozen misses/false-positives/delay ordering: 0 misses but 283 repeated false-positive signals across 80 episodes. Formal interpretation must treat this alert rate as a material detector limitation."
+  - "An outer command timeout left the original provider process running while a resume began, producing duplicate completed MiniMax cells and some extra billed calls. Final evidence retains the first complete result for each model/method/seed key; duplicate results were discarded without outcome-based selection."
+  - "The retained eight-cell matrix contains one fallback decision; matrix and metric completeness remain intact, but model reliability is not perfect."
+models:
+  - {label: deepseek_v3_2, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2}
+  - {label: minimax_m2_5, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5}
+methods:
+  - {config_id: vector}
+  - config_id: shiftmem
+    dormancy_patience: 3
+    detector_min_samples: 10
+    detector_delta: 0.1
+    detector_threshold: 48.0
+    weights:
+      semantic: 0.75
+      confidence: 0.5
+      recency: 1.0
+      utility: 0.25
+      probation_penalty: 0.25
+      changed_variable_penalty: 0.5

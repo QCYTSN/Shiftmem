@@ -100,6 +100,8 @@ class ExperienceRecord(BaseModel):
     failure_count: int = Field(default=0, ge=0)
     last_validation_step: int | None = Field(default=None, ge=0)
     last_applicable_step: int | None = Field(default=None, ge=0)
+    last_condition_check_step: int | None = Field(default=None, ge=0)
+    consecutive_mismatches: int = Field(default=0, ge=0)
     dormant_reason: str | None = None
     utility: float = Field(default=0.0, ge=0, le=1, allow_inf_nan=False)
     payload: dict[str, Any] = Field(default_factory=dict)

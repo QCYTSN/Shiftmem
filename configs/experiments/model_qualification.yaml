@@ -16,3 +16,8 @@ models:
     profile: siliconflow
     model_id: Pro/zai-org/GLM-5.1
     role: supplementary_candidate
+  - label: minimax_m2_5
+    profile: siliconflow
+    model_id: MiniMaxAI/MiniMax-M2.5
+    role: second_core_candidate
+    license: MiniMax Model License (Modified MIT)

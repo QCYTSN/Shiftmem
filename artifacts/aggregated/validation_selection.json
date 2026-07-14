@@ -1,0 +1,337 @@
+{
+  "detector_rows": [
+    {
+      "config_id": "adwin-d0002-w5",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d0002-w5",
+        "delta": 0.002,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 5
+      },
+      "episodes": 80,
+      "false_positives": 23,
+      "mean_delay": 9.475,
+      "misses": 20
+    },
+    {
+      "config_id": "adwin-d001-w5",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d001-w5",
+        "delta": 0.01,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 5
+      },
+      "episodes": 80,
+      "false_positives": 18,
+      "mean_delay": 10.433962264150944,
+      "misses": 7
+    },
+    {
+      "config_id": "adwin-d001-w10",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d001-w10",
+        "delta": 0.01,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 10
+      },
+      "episodes": 80,
+      "false_positives": 40,
+      "mean_delay": 10.88,
+      "misses": 10
+    },
+    {
+      "config_id": "adwin-d005-w5",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d005-w5",
+        "delta": 0.05,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 5
+      },
+      "episodes": 80,
+      "false_positives": 97,
+      "mean_delay": 7.5,
+      "misses": 4
+    },
+    {
+      "config_id": "adwin-d01-w5",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d01-w5",
+        "delta": 0.1,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 5
+      },
+      "episodes": 80,
+      "false_positives": 154,
+      "mean_delay": 6.649122807017544,
+      "misses": 3
+    },
+    {
+      "config_id": "adwin-d02-w5",
+      "detector": {
+        "clock": 1,
+        "config_id": "adwin-d02-w5",
+        "delta": 0.2,
+        "kind": "adwin",
+        "max_window": 150,
+        "min_window": 5
+      },
+      "episodes": 80,
+      "false_positives": 278,
+      "mean_delay": 5.711864406779661,
+      "misses": 1
+    },
+    {
+      "config_id": "ph-d005-t5",
+      "detector": {
+        "config_id": "ph-d005-t5",
+        "delta": 0.05,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 5.0
+      },
+      "episodes": 80,
+      "false_positives": 859,
+      "mean_delay": 5,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t10",
+      "detector": {
+        "config_id": "ph-d01-t10",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 10.0
+      },
+      "episodes": 80,
+      "false_positives": 816,
+      "mean_delay": 4.55,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t20",
+      "detector": {
+        "config_id": "ph-d01-t20",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 20.0
+      },
+      "episodes": 80,
+      "false_positives": 711,
+      "mean_delay": 6.65,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t30",
+      "detector": {
+        "config_id": "ph-d01-t30",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 30.0
+      },
+      "episodes": 80,
+      "false_positives": 518,
+      "mean_delay": 10.333333333333334,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t35",
+      "detector": {
+        "config_id": "ph-d01-t35",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 35.0
+      },
+      "episodes": 80,
+      "false_positives": 434,
+      "mean_delay": 11.5,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t40",
+      "detector": {
+        "config_id": "ph-d01-t40",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 40.0
+      },
+      "episodes": 80,
+      "false_positives": 377,
+      "mean_delay": 11.65,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t45",
+      "detector": {
+        "config_id": "ph-d01-t45",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 45.0
+      },
+      "episodes": 80,
+      "false_positives": 320,
+      "mean_delay": 14.683333333333334,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t46",
+      "detector": {
+        "config_id": "ph-d01-t46",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 46.0
+      },
+      "episodes": 80,
+      "false_positives": 313,
+      "mean_delay": 15.5,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t47",
+      "detector": {
+        "config_id": "ph-d01-t47",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 47.0
+      },
+      "episodes": 80,
+      "false_positives": 301,
+      "mean_delay": 15.433333333333334,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t48",
+      "detector": {
+        "config_id": "ph-d01-t48",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 48.0
+      },
+      "episodes": 80,
+      "false_positives": 283,
+      "mean_delay": 15.916666666666666,
+      "misses": 0
+    },
+    {
+      "config_id": "ph-d01-t49",
+      "detector": {
+        "config_id": "ph-d01-t49",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 49.0
+      },
+      "episodes": 80,
+      "false_positives": 276,
+      "mean_delay": 16.440677966101696,
+      "misses": 1
+    },
+    {
+      "config_id": "ph-d01-t50",
+      "detector": {
+        "config_id": "ph-d01-t50",
+        "delta": 0.1,
+        "kind": "page_hinkley",
+        "min_samples": 10,
+        "threshold": 50.0
+      },
+      "episodes": 80,
+      "false_positives": 288,
+      "mean_delay": 9.846153846153847,
+      "misses": 21
+    }
+  ],
+  "dormancy_rows": [
+    {
+      "false_dormancies": 0,
+      "invalid_reuse": 2,
+      "patience": 3,
+      "reactivation_delay": 0
+    },
+    {
+      "false_dormancies": 0,
+      "invalid_reuse": 6,
+      "patience": 7,
+      "reactivation_delay": 0
+    },
+    {
+      "false_dormancies": 0,
+      "invalid_reuse": 13,
+      "patience": 14,
+      "reactivation_delay": 0
+    }
+  ],
+  "retrieval_rows": [
+    {
+      "completed_runs": 1,
+      "config_id": "balanced",
+      "invalid_reuse": 0,
+      "post_shift_cumulative_regret_30": 50.200000000000045,
+      "tokens": 86070
+    },
+    {
+      "completed_runs": 1,
+      "config_id": "confidence-heavy",
+      "invalid_reuse": 0,
+      "post_shift_cumulative_regret_30": -24.199999999999818,
+      "tokens": 78735
+    },
+    {
+      "completed_runs": 1,
+      "config_id": "recency-heavy",
+      "invalid_reuse": 0,
+      "post_shift_cumulative_regret_30": -156.39999999999964,
+      "tokens": 94767
+    }
+  ],
+  "selected_detector": {
+    "config_id": "ph-d01-t48",
+    "detector": {
+      "config_id": "ph-d01-t48",
+      "delta": 0.1,
+      "kind": "page_hinkley",
+      "min_samples": 10,
+      "threshold": 48.0
+    },
+    "episodes": 80,
+    "false_positives": 283,
+    "mean_delay": 15.916666666666666,
+    "misses": 0
+  },
+  "selected_dormancy": {
+    "false_dormancies": 0,
+    "invalid_reuse": 2,
+    "patience": 3,
+    "reactivation_delay": 0
+  },
+  "selected_retrieval": {
+    "completed_runs": 1,
+    "config_id": "recency-heavy",
+    "invalid_reuse": 0,
+    "post_shift_cumulative_regret_30": -156.39999999999964,
+    "tokens": 94767
+  },
+  "selection_scope": [
+    "Development",
+    "Validation"
+  ],
+  "test_outcomes_accessed": false
+}

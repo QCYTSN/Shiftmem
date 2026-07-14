@@ -40,3 +40,15 @@ One provider-independent correction was therefore applied equally to all candida
 ```
 
 Raw per-request records remain ignored. The committed aggregate is `artifacts/aggregated/model_qualification_summary.json`; it records model IDs, date, gates, token counts, and measured latency without credentials.
+
+## Second-core amendment (predeclared 2026-07-13)
+
+The live SiliconFlow `/models` endpoint was queried without logging credentials. It listed `MiniMaxAI/MiniMax-M2.5`, `Pro/moonshotai/Kimi-K2.6`, `zai-org/GLM-5.2`, and newer Qwen/DeepSeek variants among the available chat models. Exactly one new candidate is predeclared for the unchanged qualification gate: `MiniMaxAI/MiniMax-M2.5` as `second_core_candidate`.
+
+This choice adds a model family independent of DeepSeek and the supplementary GLM model. MiniMax publishes the weights and inference instructions, while the weights are governed by the MiniMax Model License (described by the publisher as Modified MIT), not the repository's MIT code license. The fixed qualification temperature remains zero for equal-condition comparison even though the publisher recommends different general-purpose inference settings. No substitute will be tried if this candidate fails; a failure requires a new documented amendment.
+
+The bounded run is 16 cases (eight cases twice), with at most 32 provider requests if every case needs its one permitted correction retry. Based on previous qualification token counts, expected usage is roughly 14,000 input and 1,200 output tokens.
+
+### Second-core result
+
+`MiniMaxAI/MiniMax-M2.5` passed the unchanged suite: 16/16 results were parseable, all 6/6 monotonicity checks passed, no fallback occurred, and it cited neither invalid nor explicitly inapplicable memory. It is therefore qualified as Core B alongside DeepSeek-V3.2 (Core A). Measured usage was 12,974 input tokens and 11,021 output tokens with 252.9 seconds aggregate latency. The output usage was substantially above the pre-run estimate and must be used in Pilot cost planning.

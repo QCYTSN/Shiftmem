@@ -1,0 +1,31 @@
+{
+  "complete": true,
+  "completed_runs": 8,
+  "estimated_calls": 240,
+  "expected_runs": 8,
+  "metric_completeness": true,
+  "models": [
+    {
+      "mean_regret": -54.80000000000007,
+      "model": "deepseek_v3_2",
+      "paired_seeds": 2,
+      "regret_sd": 213.5462479183372
+    },
+    {
+      "mean_regret": -56.60000000000059,
+      "model": "minimax_m2_5",
+      "paired_seeds": 2,
+      "regret_sd": 256.53834021447926
+    }
+  ],
+  "operational_notes": [
+    "Validation selected Page-Hinkley threshold 48 by the frozen misses/false-positives/delay ordering: 0 misses but 283 repeated false-positive signals across 80 episodes. Formal interpretation must treat this alert rate as a material detector limitation.",
+    "An outer command timeout left the original provider process running while a resume began, producing duplicate completed MiniMax cells and some extra billed calls. Final evidence retains the first complete result for each model/method/seed key; duplicate results were discarded without outcome-based selection.",
+    "The retained eight-cell matrix contains one fallback decision; matrix and metric completeness remain intact, but model reliability is not perfect."
+  ],
+  "test_outcomes_accessed": false,
+  "total_calls": 241,
+  "total_fallbacks": 1,
+  "total_latency_ms": 3017726.504598744,
+  "total_tokens": 638629
+}

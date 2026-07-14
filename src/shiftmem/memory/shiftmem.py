@@ -34,6 +34,7 @@ class ShiftMemoryConfig(BaseModel):
     failure_lost_sales: float = Field(default=1.0, ge=0, allow_inf_nan=False)
     max_average_cost: float = Field(default=100.0, gt=0, allow_inf_nan=False)
     change_penalty_window: int = Field(default=14, ge=0)
+    dormancy_patience: int = Field(default=7, ge=1)
 
 
 class ShiftMemory:
@@ -236,6 +237,7 @@ class ShiftMemory:
             observation = parsed if isinstance(parsed, dict) else {}
         except json.JSONDecodeError:
             observation = {}
+        self._update_applicability(observation, step)
         recent_changes = {
             variable
             for variable, changed_step in self._changed_at.items()
@@ -250,6 +252,35 @@ class ShiftMemory:
             recently_changed_variables=recent_changes,
         )
         return [item.record.to_memory_record() for item in results]
+
+    def _update_applicability(
+        self, observation: dict[str, Any], step: int
+    ) -> None:
+        """Advance condition lifecycle at most once per environment step."""
+
+        for record in self.store.all():
+            if (
+                not record.conditions
+                or record.status == MemoryStatus.INVALID
+                or record.last_condition_check_step == step
+            ):
+                continue
+            matched = record.is_applicable(observation)
+            record.last_condition_check_step = step
+            if matched:
+                record.last_applicable_step = step
+                record.consecutive_mismatches = 0
+                if record.status == MemoryStatus.DORMANT:
+                    self.lifecycle.reactivate(
+                        record, step=step, reason="context_returned"
+                    )
+            elif record.status in {MemoryStatus.ACTIVE, MemoryStatus.PROBATION}:
+                record.consecutive_mismatches += 1
+                if record.consecutive_mismatches >= self.config.dormancy_patience:
+                    self.lifecycle.mark_dormant(
+                        record, step=step, reason="context_absent"
+                    )
+            self.store.replace(record)
 
     def audit_summary(self) -> dict[str, Any]:
         return {

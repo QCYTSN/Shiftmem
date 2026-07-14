@@ -75,6 +75,25 @@
       "total_input_tokens": 12560,
       "total_latency_ms": 37105.07899988443,
       "total_output_tokens": 879
+    },
+    {
+      "applicable_memory_citation_count": 2,
+      "exact_repeat_agreement_count": 8,
+      "fallback_count": 0,
+      "inapplicable_memory_citation_count": 0,
+      "invalid_memory_citation_count": 0,
+      "label": "minimax_m2_5",
+      "model_id": "MiniMaxAI/MiniMax-M2.5",
+      "monotonicity_checks": 6,
+      "monotonicity_passes": 6,
+      "parse_failure_count": 0,
+      "profile": "siliconflow",
+      "qualifies": true,
+      "result_count": 16,
+      "role": "second_core_candidate",
+      "total_input_tokens": 12974,
+      "total_latency_ms": 252906.62659914233,
+      "total_output_tokens": 11021
     }
   ],
   "qualification_date": "2026-07-13"

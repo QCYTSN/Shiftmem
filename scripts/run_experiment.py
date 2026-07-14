@@ -10,7 +10,10 @@ import yaml
 from shiftmem.envs.inventory_env import InventoryEnv
 from shiftmem.envs.shifts import load_scenario
 from shiftmem.evaluation.metrics import summarize_episode
-from run_episode import derive_seeds, make_policy
+try:
+    from scripts.run_episode import derive_seeds, make_policy
+except ModuleNotFoundError:  # Support direct execution from the scripts directory.
+    from run_episode import derive_seeds, make_policy
 
 
 def load_experiment(path: str | Path) -> dict[str, Any]:

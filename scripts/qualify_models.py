@@ -86,6 +86,7 @@ def execute_qualification(
     raw_output: Path,
     summary_output: Path,
     provider_factory: ProviderFactory = _default_provider_factory,
+    merge_existing: bool = False,
 ) -> list[dict[str, Any]]:
     repetitions = int(config.get("repetitions", 2))
     if repetitions != 2:
@@ -128,9 +129,17 @@ def execute_qualification(
             }
         )
     raw_output.write_text("\n".join(raw_lines) + "\n", encoding="utf-8")
+    merged = summaries
+    if merge_existing and summary_output.exists():
+        previous = json.loads(summary_output.read_text(encoding="utf-8"))
+        replacement_labels = {row["label"] for row in summaries}
+        merged = [
+            row for row in previous.get("models", [])
+            if row.get("label") not in replacement_labels
+        ] + summaries
     summary_output.write_text(
         json.dumps(
-            {"qualification_date": date.today().isoformat(), "models": summaries},
+            {"qualification_date": date.today().isoformat(), "models": merged},
             ensure_ascii=False,
             indent=2,
             sort_keys=True,
@@ -145,9 +154,19 @@ def main() -> int:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--raw-output", type=Path, required=True)
     parser.add_argument("--summary-output", type=Path, required=True)
+    parser.add_argument("--label", action="append")
+    parser.add_argument("--merge-summary", action="store_true")
     args = parser.parse_args()
     config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
-    summaries = execute_qualification(config, args.raw_output, args.summary_output)
+    if args.label:
+        selected = set(args.label)
+        config["models"] = [row for row in config["models"] if row["label"] in selected]
+        missing = selected - {row["label"] for row in config["models"]}
+        if missing:
+            raise ValueError(f"unknown qualification labels: {sorted(missing)}")
+    summaries = execute_qualification(
+        config, args.raw_output, args.summary_output, merge_existing=args.merge_summary
+    )
     print(json.dumps(summaries, ensure_ascii=False, sort_keys=True))
     return 0
 

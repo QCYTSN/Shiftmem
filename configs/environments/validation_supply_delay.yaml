@@ -1,0 +1,11 @@
+name: validation_supply_delay
+episode_length: 150
+initial_inventory: 60
+demand_model: negative_binomial
+demand: {base_level: 20, dispersion: 11}
+supply: {lead_time: 2, fill_rate: 1.0}
+costs: {purchase: 1.0, holding: 0.2, stockout: 5.0, fixed_order: 0.0}
+shifts:
+  - type: sudden_supply
+    start_day: 80
+    changes: {lead_time: 4, fill_rate: 0.9}

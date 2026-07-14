@@ -1,0 +1,11 @@
+{
+  "estimated_calls": 120,
+  "estimated_input_tokens": 108000,
+  "estimated_output_tokens": 8400,
+  "estimated_usd_at_list_price": 0.032688,
+  "input_usd_per_million_tokens": 0.27,
+  "model_id": "deepseek-ai/DeepSeek-V3.2",
+  "output_usd_per_million_tokens": 0.42,
+  "pricing_checked_on": "2026-07-13",
+  "scope": "one Validation seed; one VectorMemory baseline plus three ShiftMem retrieval settings; 30 post-shift decisions each"
+}

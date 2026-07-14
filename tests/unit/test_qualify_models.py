@@ -64,3 +64,24 @@ def test_execute_qualification_writes_safe_raw_and_aggregate_outputs(tmp_path) -
     combined = raw.read_text(encoding="utf-8") + summary.read_text(encoding="utf-8")
     assert "API_KEY" not in combined
     assert "api_key" not in combined
+
+
+def test_execute_qualification_can_merge_one_new_candidate(tmp_path) -> None:
+    summary = tmp_path / "summary.json"
+    summary.write_text(
+        json.dumps({"qualification_date": "2026-01-01", "models": [{"label": "existing", "qualifies": True}]}),
+        encoding="utf-8",
+    )
+    config = {
+        "repetitions": 2,
+        "models": [{"label": "new", "profile": "siliconflow", "model_id": "new/model", "role": "second_core_candidate"}],
+    }
+    execute_qualification(
+        config,
+        tmp_path / "raw.jsonl",
+        summary,
+        provider_factory=lambda profile, model_id: RuleProvider(),
+        merge_existing=True,
+    )
+    labels = [row["label"] for row in json.loads(summary.read_text(encoding="utf-8"))["models"]]
+    assert labels == ["existing", "new"]

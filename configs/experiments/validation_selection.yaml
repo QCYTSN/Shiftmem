@@ -1,0 +1,38 @@
+manifests:
+  development: configs/splits/development.yaml
+  validation: configs/splits/validation.yaml
+detector_grid:
+  - {config_id: adwin-d0002-w5, kind: adwin, delta: 0.002, min_window: 5, clock: 1, max_window: 150}
+  - {config_id: adwin-d001-w5, kind: adwin, delta: 0.01, min_window: 5, clock: 1, max_window: 150}
+  - {config_id: adwin-d001-w10, kind: adwin, delta: 0.01, min_window: 10, clock: 1, max_window: 150}
+  - {config_id: adwin-d005-w5, kind: adwin, delta: 0.05, min_window: 5, clock: 1, max_window: 150}
+  - {config_id: adwin-d01-w5, kind: adwin, delta: 0.1, min_window: 5, clock: 1, max_window: 150}
+  - {config_id: adwin-d02-w5, kind: adwin, delta: 0.2, min_window: 5, clock: 1, max_window: 150}
+  - {config_id: ph-d005-t5, kind: page_hinkley, min_samples: 10, delta: 0.05, threshold: 5.0}
+  - {config_id: ph-d01-t10, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 10.0}
+  - {config_id: ph-d01-t20, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 20.0}
+  - {config_id: ph-d01-t30, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 30.0}
+  - {config_id: ph-d01-t35, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 35.0}
+  - {config_id: ph-d01-t40, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 40.0}
+  - {config_id: ph-d01-t45, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 45.0}
+  - {config_id: ph-d01-t46, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 46.0}
+  - {config_id: ph-d01-t47, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 47.0}
+  - {config_id: ph-d01-t48, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 48.0}
+  - {config_id: ph-d01-t49, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 49.0}
+  - {config_id: ph-d01-t50, kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 50.0}
+dormancy_grid: [3, 7, 14]
+retrieval_grid:
+  - config_id: balanced
+    weights: {semantic: 1.0, confidence: 0.5, recency: 0.25, utility: 0.25, probation_penalty: 0.25, changed_variable_penalty: 0.5}
+  - config_id: confidence-heavy
+    weights: {semantic: 0.75, confidence: 1.0, recency: 0.25, utility: 0.5, probation_penalty: 0.5, changed_variable_penalty: 0.75}
+  - config_id: recency-heavy
+    weights: {semantic: 0.75, confidence: 0.5, recency: 1.0, utility: 0.25, probation_penalty: 0.25, changed_variable_penalty: 0.5}
+model:
+  profile: siliconflow
+  model_id: deepseek-ai/DeepSeek-V3.2
+live_pilot:
+  scenario: configs/environments/validation_demand_jump.yaml
+  seeds: [1000]
+  post_shift_days: 30
+  selected_dormancy_patience: 3
