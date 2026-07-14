@@ -105,3 +105,12 @@ Implementation decisions and deviations from the specification will be recorded 
 - Confirmed that formal statistics, machine-readable result schemas, the six-method runner, per-decision idempotent recovery, and budget gates are not yet complete.
 - Clarified that the Pilot used fixed-policy warm-up and pre-seeded memories, and that 52 seeds is a provisional planning estimate based on two paired observations per model.
 - Classified v1 as a valid immutable audit snapshot but blocked it from formal Test execution. Corrections must use Development/Validation only, be recorded in protocol v1.1, and culminate in a verified replacement freeze before any Test outcome is generated or read.
+
+## 2026-07-14 - Protocol v1.1 implementation and live Validation gate
+
+- Unified runtime and Validation selection on public detector signals `demand`, `lost_sales`, and `quoted_lead_time`; the affected offline selection rerun retained Page-Hinkley threshold 48.
+- Added held-out stable Test-ID and periodic Test-OOD definitions without executing either split.
+- Implemented recovery/regret endpoints, paired inference, Wilcoxon fallback, Holm correction, a six-method matrix, and freeze-bound dry-run validation.
+- Added fsynced per-decision response replay and CNY budgets. A CNY 30 Validation-only live run completed all 12 model/method cells for CNY 3.2184 with zero fallbacks.
+- Found that the initial journal omitted six failed provider attempts even though cell logs counted them. Preserved the deviation, then changed the journal to persist and replay sanitized failures and count them against budgets.
+- Corrected the formal matrix arithmetic to 5,616 cells and 168,480 planned decisions. The measured projection is CNY 1,506.22; the proposed 20% safety cap is CNY 1,810 and remains subject to explicit approval before replacement freeze.

@@ -33,11 +33,20 @@ def _cell_id(model: str, method: str, seed: int) -> str:
 
 def _write_aggregate(path: Path, runs: list[dict[str, Any]], journal: JsonlRunJournal, expected: int) -> None:
     totals = journal.totals()
+    provider_attempts = sum(int(run["calls"]) for run in runs)
+    historical_gap = max(0, provider_attempts - int(totals["calls"]))
     result = {
         "complete": len(runs) == expected,
         "expected_cells": expected,
         "completed_cells": len(runs),
-        "provider_calls": totals["calls"],
+        "provider_attempts": provider_attempts,
+        "journaled_attempts": totals["calls"],
+        "successful_responses": totals["successful_responses"],
+        "journaled_failed_attempts": totals["failed_attempts"],
+        "historical_unjournaled_failed_attempts": historical_gap,
+        "call_cap_deviation": max(
+            0, provider_attempts - int(journal.limits.max_calls)
+        ),
         "input_tokens": totals["input_tokens"],
         "output_tokens": totals["output_tokens"],
         "estimated_cost_cny": totals["cost_cny"],

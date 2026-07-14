@@ -74,3 +74,20 @@ def test_live_research_docs_report_post_freeze_status() -> None:
     assert "Test-ID and Test-OOD outcomes must not be generated or read" in audit
     assert "Post-freeze readiness audit" in implementation_log
     assert "the planned two-model formal design is not yet frozen" not in readme
+
+
+def test_v1_1_docs_preserve_live_validation_limit_and_budget_blocker() -> None:
+    report_path = ROOT / "docs/v1_1_live_validation_report.md"
+    assert report_path.exists(), "v1.1 live Validation report is missing"
+    protocol = (ROOT / "docs/experiment_protocol.md").read_text(encoding="utf-8")
+    report = report_path.read_text(encoding="utf-8")
+    audit = (ROOT / "docs/formal_experiment_readiness_audit.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "Protocol version: 1.1" in protocol
+    assert "quoted_lead_time" in protocol
+    assert "168,480" in protocol
+    assert "historical unjournaled failed attempts: 6" in report.lower()
+    assert "CNY 1,506.22" in report
+    assert "formal API budget approval" in audit

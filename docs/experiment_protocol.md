@@ -1,12 +1,15 @@
 # Experiment Protocol
 
-Protocol version: 1.0
-Freeze date: 2026-07-13
+Protocol version: 1.1
+Preparation date: 2026-07-14
+Replacement freeze: pending formal API budget approval
 Scope: ShiftMem single-item lost-sales inventory experiments
 
 ## Status and amendment policy
 
-This protocol is frozen before any Test-ID or Test-OOD outcome is generated. A later amendment must be committed as a new numbered version before affected runs, identify the reason, list every changed field, and state whether any Development or Validation result was already observed. Test outcomes can never justify an amendment to the primary endpoint, primary comparison, exclusion rules, or statistical decision tree.
+Version 1.0 remains archived in freeze `phase4-20260713-b99c0d3e4d27`. Version 1.1 is a pre-Test amendment prepared after a repository audit and Development/Validation-only dry-run; no Test-ID or Test-OOD outcome was generated or read. Changed fields are the detector signal contract, Core B identity, held-out H3/H4 coverage, formal statistics implementation, decision journaling, six-method runner, and budget gates. The primary endpoint, primary comparison, exclusion rules, and statistical decision tree are unchanged.
+
+Version 1.1 is not frozen and does not authorize Test execution until the formal API budget is explicitly approved and a replacement freeze verifies from a clean commit.
 
 Implementation bug fixes are permitted after freeze only with a failing regression test and a rerun of every affected configuration. Provider retirement or model unavailability may trigger a model amendment, but the unavailable model and failed attempt remain documented.
 
@@ -47,17 +50,19 @@ Recovery is the first post-shift day after which the rolling seven-day regret ra
 - **Test-ID:** held-out configurations from the declared in-domain ranges and held-out seeds.
 - **Test-OOD:** held-out magnitudes, timings, periods, or combined structures outside Validation and Test-ID values.
 
+Test-ID includes a held-out stable configuration for H3. Test-OOD includes a held-out periodic-demand configuration for H4. Their definitions and hashes may be validated before freeze, but their environments must not be executed before the replacement freeze.
+
 Test-ID and Test-OOD are not used for tuning. Scenario identity is the full generating configuration rather than the seed alone. Split validation rejects duplicate scenario IDs, identical configuration hashes across prohibited splits, and prohibited seed overlap. Phase 4 may create and hash test manifests but must not create or inspect test outcome files.
 
 ## Models and method matrix
 
-Core model A is `deepseek-ai/DeepSeek-V3.2`. Core model B must be a second qualified open model from another declared model family. `Pro/zai-org/GLM-5.1` remains supplementary unless a versioned amendment changes its role before Pilot. Commercial models may be reported as optional upper bounds but cannot replace the second open core model.
+Core model A is `deepseek-ai/DeepSeek-V3.2`. Core model B is `MiniMaxAI/MiniMax-M2.5`, which passed the unchanged qualification gate. `Pro/zai-org/GLM-5.1` remains supplementary. Commercial models may be reported as optional upper bounds but cannot replace either open core model.
 
 The six main memory methods are NoMemory, FullHistory, Summary, VectorMemory, TimeDecay, and ShiftMem. They use the same model, public observation, prompt objective, structured action schema, top-k budget, retry/fallback policy, and paired scenario/seed trajectory. Classical policies and Oracle are contextual baselines, not members of the six-method model comparison.
 
 ## Seeds, pairing, and failed runs
 
-Every method comparison is paired by scenario, model, and master seed. Demand and supply random streams use the repository's deterministic derivation and remain independent of policy/provider calls. Formal configurations use at least five seeds; the final count is selected from Pilot variance for target power 0.80 and then frozen.
+Every method comparison is paired by scenario, model, and master seed. Demand and supply random streams use the repository's deterministic derivation and remain independent of policy/provider calls. Formal configurations use 52 seeds per cell, the conservative Pilot planning value for target power 0.80. The complete matrix has 9 scenarios, 52 seeds, 2 core models, 6 methods, and 30 scored model decisions per cell: 5,616 cells and 168,480 planned decisions.
 
 Failed provider runs are retained. A transport or parsing failure follows the declared single retry and safe fallback. Its operational outcome remains in cost metrics, and the failure contributes to reliability metrics. Runs are excluded only for a reproducible infrastructure failure that prevents the environment from completing and affects all compared methods for the paired unit; exclusions are listed with reason and rerun status.
 
@@ -75,10 +80,14 @@ No failed run, fallback action, high-cost episode, or unfavorable model/method r
 
 Live execution stops before additional calls when the estimated remaining cost exceeds the recorded Pilot budget, provider quota prevents paired completion, credentials become invalid, or the repository/configuration hash differs from the frozen package. Partial batches remain archived and are marked incomplete.
 
+The v1.1 Validation live dry-run used a user-approved CNY 30 cap and cost CNY 3.2184. Its 366 provider attempts included six failed attempts that the initial journal counted only at cell level. The corrected journal now persists both successful and failed attempts. Extrapolation gives 171,288 expected formal attempts, 289,375,164 input tokens, 74,781,252 output tokens, and estimated cost CNY 1,506.22. The proposed 20% safety cap is CNY 1,810 and remains unapproved.
+
 The following are valid negative findings: ShiftMem adds stable-environment cost, classical policies outperform all LLM agents, detector false alarms cause churn, gains occur for only one model, or inference cost dominates the benefit.
 
 ## Reproducibility and freeze
 
 Every aggregate records the Git commit, dirty state, Python and dependency versions, provider and model ID, device class, scenario ID, master seed, configuration copy, and configuration hash. Raw records are immutable inputs to aggregation; tables and figures are generated by scripts.
+
+Runtime detectors consume the canonical public daily fields `demand`, `lost_sales`, and `quoted_lead_time`; Validation selection uses `quoted_lead_time` for supply-only shifts. Every live provider attempt is identified by freeze, commit, configuration hash, cell, day, and attempt number. Completed responses and sanitized failures are appended and fsynced before execution continues, allowing deterministic replay without a second call.
 
 The Phase 4 freeze requires a clean repository, passing tests, a complete protocol, passing split validation, selected Validation settings, and two qualified open core models. Canonical formal configurations and split manifests are copied into a versioned freeze directory. A sorted `SHA-256` manifest covers every frozen file and is verified before formal execution.

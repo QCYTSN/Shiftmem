@@ -2,10 +2,19 @@ seeds_per_cell: 52
 post_shift_days: 30
 budget_approved: false
 budgets:
-  max_calls: 842400
-  max_input_tokens: 2500000000
-  max_output_tokens: 250000000
+  max_calls: 206000
+  max_input_tokens: 348000000
+  max_output_tokens: 90000000
   max_cost_cny: 0.0
+estimated_requirements_from_live_validation:
+  cells: 5616
+  decisions: 168480
+  provider_attempts: 171288
+  input_tokens: 289375164
+  output_tokens: 74781252
+  estimated_cost_cny: 1506.22
+  safety_factor: 1.2
+  proposed_cost_cap_cny: 1810.0
 models:
   - {label: deepseek_v3_2, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2}
   - {label: minimax_m2_5, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5}

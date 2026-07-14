@@ -82,6 +82,8 @@ The v1 snapshot is verified but is **not ready for formal Test execution**. A po
 
 Formal execution is blocked until those items are corrected using Development/Validation data, protocol v1.1 is committed, the full API budget is explicitly approved, and a replacement freeze verifies from a clean commit. Do not edit the archived v1 freeze and do not generate or inspect Test-ID/Test-OOD outcomes before that replacement freeze. See the live [Phase 4 Pilot report](docs/phase4_pilot_report.md) and [formal experiment readiness audit](docs/formal_experiment_readiness_audit.md).
 
+Protocol v1.1 implementation has now closed the code and configuration blockers and completed a 12-cell Validation live dry-run for CNY 3.2184. The full 5,616-cell matrix is projected at CNY 1,506.22, with a proposed CNY 1,810 safety cap. That formal budget is not approved, so no replacement freeze or Test execution is authorized. See the [v1.1 live Validation report](docs/v1_1_live_validation_report.md).
+
 ## License
 
 No license has been selected yet.

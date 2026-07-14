@@ -9,6 +9,7 @@ from shiftmem.logging.run_logger import JsonlRunJournal
 from shiftmem.logging.schemas import DecisionJournalEntry
 
 from .base import ModelProvider, ProviderRequest, ProviderResponse
+from .compatible_api import ProviderError
 
 
 class JournaledProvider:
@@ -48,8 +49,29 @@ class JournaledProvider:
         if replay is not None:
             if replay.request_hash != request_hash:
                 raise ValueError("journaled request hash does not match replay request")
+            if replay.status == "failed":
+                raise ProviderError(
+                    f"journaled provider failure: {replay.error_type}"
+                )
             return ProviderResponse.model_validate(replay.provider_response)
-        response = self.delegate.generate(request)
+        try:
+            response = self.delegate.generate(request)
+        except Exception as error:
+            self.journal.append(
+                DecisionJournalEntry(
+                    identity=self.journal.identity,
+                    cell_id=self._cell_id,
+                    decision_id=decision_id,
+                    request_hash=request_hash,
+                    status="failed",
+                    error_type=type(error).__name__,
+                    calls=1,
+                    input_tokens=0,
+                    output_tokens=0,
+                    estimated_cost_cny=0,
+                )
+            )
+            raise
         cost = (
             response.input_tokens * self.input_rate
             + response.output_tokens * self.output_rate

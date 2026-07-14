@@ -4,6 +4,8 @@ Audit date: 2026-07-14
 Audited freeze: `phase4-20260713-b99c0d3e4d27`  
 Verdict: **BLOCKED pending protocol v1.1 and a replacement freeze**
 
+Current blocker: **formal API budget approval** for the proposed CNY 1,810 safety cap, followed by a clean replacement freeze.
+
 ## Scope and evidence rule
 
 This audit reviews repository state, frozen configurations, aggregate Development/Validation evidence, and implementation paths. It does not alter the v1 freeze and does not use held-out outcomes. Test-ID and Test-OOD outcomes must not be generated or read before protocol v1.1 and its replacement freeze verify from a clean commit.
@@ -26,6 +28,8 @@ The archived v1 package is an immutable audit snapshot. Later live documentation
 | Formal endpoint/statistics implementation | BLOCKED | Recovery metrics, paired inference, Holm correction, and final schemas are not fully implemented and tested. |
 | Idempotent logging and budget gates | BLOCKED | Cell-level resume can repeat live calls; per-decision journaling/replay and enforced call/cost ceilings are absent. |
 | Six-method formal configuration | BLOCKED | No freeze-bound runner currently executes the complete NoMemory, FullHistory, Summary, VectorMemory, TimeDecay, and ShiftMem matrix. |
+
+Post-audit v1.1 implementation has resolved detector routing, held-out H3/H4 definitions, formal statistics, the six-method configuration, and failure-aware decision journaling in live code. The matrix above remains an audit of v1. The replacement package is still blocked because the full formal API budget has not been approved; Test outcomes remain prohibited.
 
 ## Evidence that remains valid
 

@@ -84,6 +84,12 @@ class JsonlRunJournal:
     def _totals(self) -> dict[str, float | int]:
         return {
             "calls": sum(entry.calls for entry in self._entries.values()),
+            "successful_responses": sum(
+                entry.status == "complete" for entry in self._entries.values()
+            ),
+            "failed_attempts": sum(
+                entry.status == "failed" for entry in self._entries.values()
+            ),
             "input_tokens": sum(
                 entry.input_tokens for entry in self._entries.values()
             ),
