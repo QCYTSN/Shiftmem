@@ -2,9 +2,11 @@
 
 Audit date: 2026-07-14  
 Audited freeze: `phase4-20260713-b99c0d3e4d27`  
-Verdict: **BLOCKED pending protocol v1.1 and a replacement freeze**
+Verdict at audit time: **BLOCKED pending protocol v1.1 and a replacement freeze**
 
-Current blocker: **formal API budget approval** for the proposed CNY 1,810 safety cap, followed by a clean replacement freeze.
+Current status: **superseded by the protocol v2 hierarchical strategy-Agent revision before any Test execution**. This document remains the historical audit of v1.
+
+Historical blocker wording preserved for regression audit: **formal API budget approval** was required for the retired v1.1 proposal and was never granted.
 
 ## Scope and evidence rule
 
@@ -30,6 +32,8 @@ The archived v1 package is an immutable audit snapshot. Later live documentation
 | Six-method formal configuration | BLOCKED | No freeze-bound runner currently executes the complete NoMemory, FullHistory, Summary, VectorMemory, TimeDecay, and ShiftMem matrix. |
 
 Post-audit v1.1 implementation has resolved detector routing, held-out H3/H4 definitions, formal statistics, the six-method configuration, and failure-aware decision journaling in live code. The matrix above remains an audit of v1. The replacement package is still blocked because the full formal API budget has not been approved; Test outcomes remain prohibited.
+
+Protocol v1.1 was subsequently retired rather than frozen for Test execution. Its direct-daily-order Agent and complete factorial budget are no longer the proposed formal design. Protocol v2 retains the corrected engineering components but changes the LLM into a five-day/event-triggered strategy reviewer behind a shared deterministic daily controller. See `docs/experiment_protocol.md` for current governance.
 
 ## Evidence that remains valid
 
@@ -81,4 +85,8 @@ Formal Test execution may begin only when all of the following are true:
 - protocol v1.1 lists every amendment and is committed before affected execution;
 - a replacement freeze verifies from a clean commit and all network-free tests pass.
 
-Until every criterion is satisfied, the correct next activity is v1.1 engineering and Development/Validation revalidation, not formal Test execution.
+At the time of this audit, the correct next activity was v1.1 engineering and Development/Validation revalidation, not formal Test execution.
+
+## Superseding v2 decision
+
+The v1.1 work order and exit criteria above describe the historical route considered at audit time. The current route is to implement and validate protocol v2 using Development/Validation only, qualify both core models on the strategy schema, run a newly budgeted v2 Pilot, and create a clean v2 freeze. The immutable v1 package and historical Pilot remain unchanged, and Test-ID/Test-OOD execution remains prohibited until that new freeze verifies.

@@ -1,93 +1,182 @@
 # Experiment Protocol
 
-Protocol version: 1.1
+Protocol version: 2.0-draft
+
 Preparation date: 2026-07-14
-Replacement freeze: pending formal API budget approval
-Scope: ShiftMem single-item lost-sales inventory experiments
+
+Replacement freeze: not created
+
+Scope: hierarchical strategy-review ShiftMem experiments in a single-item lost-sales inventory environment
 
 ## Status and amendment policy
 
-Version 1.0 remains archived in freeze `phase4-20260713-b99c0d3e4d27`. Version 1.1 is a pre-Test amendment prepared after a repository audit and Development/Validation-only dry-run; no Test-ID or Test-OOD outcome was generated or read. Changed fields are the detector signal contract, Core B identity, held-out H3/H4 coverage, formal statistics implementation, decision journaling, six-method runner, and budget gates. The primary endpoint, primary comparison, exclusion rules, and statistical decision tree are unchanged.
+Protocol v2 replaces the direct-daily-order Agent design before any Test-ID or Test-OOD outcome was generated or read. Version 1.0 remains archived in immutable freeze `phase4-20260713-b99c0d3e4d27`; v1.1 engineering and its Validation-only live dry-run remain historical evidence but were never frozen for held-out execution.
 
-Version 1.1 is not frozen and does not authorize Test execution until the formal API budget is explicitly approved and a replacement freeze verifies from a clean commit.
+The v2 change is methodological, not a response to Test results. It makes the LLM a low-frequency strategy reviewer and assigns every daily order calculation to a shared deterministic controller. It also retires the v1.1 52-seed, six-method, two-model full factorial plan and its cost projection.
 
-Implementation bug fixes are permitted after freeze only with a failing regression test and a rerun of every affected configuration. Provider retirement or model unavailability may trigger a model amendment, but the unavailable model and failed attempt remain documented.
+Historical audit record: **Protocol version: 1.1** proposed 168,480 direct daily model decisions under its mistaken nine-scenario count. That proposal was not frozen or executed on Test outcomes. The corrected eight-scenario historical count and cost are preserved in `docs/v1_1_live_validation_report.md`; neither count is a v2 plan.
+
+This draft authorizes documentation and Development/Validation engineering only. It does not authorize Test execution or a live v2 Pilot until the implementation plan and a bounded Pilot budget are separately approved. Test-ID and Test-OOD environments must not be executed before a clean v2 freeze verifies.
+
+After the v2 freeze, an implementation bug may be corrected only with a failing regression test and rerun of every affected configuration. Changes to the controller formula, parameter bounds, scheduler, cooldown, primary comparison, endpoint, seeds, or budget require a numbered amendment.
 
 ## Research questions and hypotheses
 
 - **RQ1:** Does ShiftMem reduce cumulative excess cost after a regime change and shorten recovery?
-- **RQ2:** Does ShiftMem reuse fewer invalid experiences than FullHistory, Summary, VectorMemory, and TimeDecay?
-- **RQ3:** Are effects consistent across abrupt, gradual, periodic, and combined changes?
+- **RQ2:** Does ShiftMem reuse fewer invalid strategy experiences than FullHistory, Summary, VectorMemory, and TimeDecay?
+- **RQ3:** Are effects consistent across abrupt, gradual, periodic, supply, and combined changes?
 - **RQ4:** Do effects transfer across two open model families?
-- **RQ5:** Are the gains auditable at acceptable token, latency, failure, and memory-size cost?
+- **RQ5:** Are the gains auditable at acceptable review, token, latency, failure, and memory-size cost?
 
-The hypotheses are fixed:
+The hypotheses remain:
 
 - **H1:** ShiftMem has lower post-shift cumulative regret than VectorMemory.
-- **H2:** ShiftMem has lower invalid memory reuse rate than other memory baselines.
+- **H2:** ShiftMem has lower invalid strategy-experience reuse rate than other memory baselines.
 - **H3:** ShiftMem does not materially degrade stable-environment performance.
 - **H4:** Dormancy/reactivation is particularly useful under periodic recurrence.
 - **H5:** Statistical detectors are more stable and less costly than LLM-only change judgment.
 
+## Decision architecture
+
+### Daily execution
+
+The environment advances every day. A deterministic order-up-to controller receives public realized history, public quoted lead time, current inventory position, and the current validated strategy parameters. It emits the non-negative integer `order_quantity` used by the environment.
+
+The controller formula, initialization, supplier, parameter bounds, and integer rounding rule are identical across all LLM memory methods. Runtime detection and control use the canonical public fields `demand`, `lost_sales`, and `quoted_lead_time`. The controller never calls a provider and never receives hidden demand parameters, the regime ID, the shift schedule, future demand, realized future fill, or Oracle context.
+
+### Strategy review
+
+The LLM is eligible to run when either condition is true:
+
+1. five completed environment days have elapsed since the periodic schedule origin; or
+2. a configured detector raises a related demand or supply change signal outside the frozen cooldown.
+
+Periodic and event triggers on the same day are coalesced into one review. Repeated alerts during cooldown are logged but do not cause a call. Review interval and cooldown are not model-controlled.
+
+The LLM receives public history, current strategy parameters, trigger evidence, and memory context. It proposes only the following candidate strategy fields:
+
+- demand forecast window;
+- safety-stock multiplier;
+- lead-time buffer.
+
+It also returns cited memory IDs, confidence, and one short reason. Exact parameter bounds, defaults, maximum single-review changes, and cooldown are selected using Development/Validation only and become required freeze fields. The LLM cannot emit the daily order, change the controller formula, change the supplier, or change its own review schedule.
+
+Invalid output receives one schema-correction retry. If the retry fails, the previous validated strategy remains active. The environment continues, and all attempts and fallback retention are logged.
+
+### Experience and memory
+
+A strategy experience records the public context, trigger, previous and proposed parameters, cited memories, and later realized outcome evidence. Delayed validation waits for a complete frozen observation window and deterministically emits support, failure, or inconclusive.
+
+An invalid experience is counted as reused only if it was supplied to the reviewer, cited in a valid proposal, and the proposal was accepted by the schema/bounds validator. Retrieval without citation and citation in a rejected proposal are reported separately.
+
+Change signals place only related experiences into probation. Confidence and lifecycle states remain deterministic and auditable; an LLM cannot freely assign memory validity. Dormant experience may re-enter probation when a matching context recurs.
+
 ## Primary estimand and endpoint
 
-The primary comparison is **ShiftMem versus VectorMemory**. The estimand is the mean paired method difference, ShiftMem minus VectorMemory, for post-shift cumulative regret relative to Oracle over the first 30 completed post-shift days. The serialized endpoint name is `post_shift_cumulative_regret_30`; lower values favor ShiftMem.
+The primary comparison remains **ShiftMem versus VectorMemory**. The estimand is the mean paired method difference, ShiftMem minus VectorMemory, for post-shift cumulative regret relative to Oracle over the first 30 completed post-shift days. The serialized endpoint is `post_shift_cumulative_regret_30`; lower values favor ShiftMem.
 
-The confirmatory population consists of non-stable Test-ID and Test-OOD scenario groups, evaluated separately and then in a predeclared equal-weight group summary. Stable scenarios are used for H3 and are not mixed into the primary change-adaptation estimate.
+The confirmatory change-adaptation population contains the declared non-stable Test-ID and Test-OOD scenario groups. Groups are evaluated separately and then summarized with equal group weight. Stable scenarios are reserved for H3 and are not mixed into the primary adaptation estimate.
+
+Although the LLM acts only on review days, cost, regret, service, inventory, and recovery are calculated from every completed environment day.
 
 ## Secondary metrics
 
-Key secondary metrics are invalid memory reuse rate, total cost, recovery time, applicable memory precision at configured top-k, dormant memory reactivation accuracy, input/output token count, latency, JSON parse failure, and fallback rate.
+Key secondary metrics are invalid strategy-experience reuse rate, total cost, recovery time, applicable memory precision at configured top-k, dormant reactivation accuracy, input/output token count, latency, JSON failure, retained-strategy fallback rate, and memory-store size.
 
-Descriptive operational metrics are stockout rate, fill rate, holding cost, lost sales, average inventory, detection delay, regret at 7 and 14 days, memory churn, and memory store size. Secondary or descriptive results cannot replace the primary endpoint after outcomes are observed.
+Additional v2 operational metrics are:
+
+- scheduled, event-triggered, coalesced, and cooldown-suppressed review counts;
+- detector delay and false-alert count;
+- parameter change magnitude and strategy churn;
+- rejected or clamped proposal count;
+- days between successful strategy revisions;
+- provider cost per successful revision.
+
+Descriptive inventory metrics remain stockout rate, fill rate, holding cost, lost sales, average inventory, regret at 7 and 14 days, and memory churn. Secondary results cannot replace the primary endpoint after outcomes are observed.
 
 Recovery is the first post-shift day after which the rolling seven-day regret rate stays within 10% of the paired Oracle rate for seven consecutive completed days. If recovery does not occur, it is right-censored at the episode end and reported as not recovered.
 
 ## Scenario splits and no-test-tuning
 
-- **Development:** existing implementation scenarios and seeds used for debugging.
-- **Validation:** new in-domain parameter values used to choose detector, thresholds, dormancy patience, retrieval weights, and formal seed count.
-- **Test-ID:** held-out configurations from the declared in-domain ranges and held-out seeds.
-- **Test-OOD:** held-out magnitudes, timings, periods, or combined structures outside Validation and Test-ID values.
+- **Development:** existing implementation scenarios and seeds used for debugging and controller development.
+- **Validation:** disjoint in-domain parameters used to select detector settings, retrieval weights, strategy bounds, cooldown, delayed-validation window, and the final v2 budget.
+- **Test-ID:** four held-out configurations: stable, demand jump, gradual demand, and supply delay.
+- **Test-OOD:** four held-out configurations: periodic recurrence, Poisson demand jump, false alarm, and early combined shift.
 
-Test-ID includes a held-out stable configuration for H3. Test-OOD includes a held-out periodic-demand configuration for H4. Their definitions and hashes may be validated before freeze, but their environments must not be executed before the replacement freeze.
+The formal held-out design therefore contains eight scenarios, not the nine mistakenly reported in the v1.1 cost extrapolation. Scenario identity is the complete generating configuration rather than the seed alone. Split validation rejects prohibited seed overlap and configuration collisions.
 
-Test-ID and Test-OOD are not used for tuning. Scenario identity is the full generating configuration rather than the seed alone. Split validation rejects duplicate scenario IDs, identical configuration hashes across prohibited splits, and prohibited seed overlap. Phase 4 may create and hash test manifests but must not create or inspect test outcome files.
+Test manifests and hashes may be validated before freeze. Their environments and outcomes may not be generated, opened, summarized, or used for tuning before the v2 freeze.
 
 ## Models and method matrix
 
-Core model A is `deepseek-ai/DeepSeek-V3.2`. Core model B is `MiniMaxAI/MiniMax-M2.5`, which passed the unchanged qualification gate. `Pro/zai-org/GLM-5.1` remains supplementary. Commercial models may be reported as optional upper bounds but cannot replace either open core model.
+Core model A remains `deepseek-ai/DeepSeek-V3.2`; Core model B remains `MiniMaxAI/MiniMax-M2.5`. Both must pass a new bounded qualification suite for the v2 strategy schema before the Pilot. `Pro/zai-org/GLM-5.1` remains supplementary and is not required for a core conclusion.
 
-The six main memory methods are NoMemory, FullHistory, Summary, VectorMemory, TimeDecay, and ShiftMem. They use the same model, public observation, prompt objective, structured action schema, top-k budget, retry/fallback policy, and paired scenario/seed trajectory. Classical policies and Oracle are contextual baselines, not members of the six-method model comparison.
+### Primary tier
+
+- eight held-out scenarios;
+- ten paired seeds per scenario;
+- two core models;
+- VectorMemory and ShiftMem;
+- 320 model-method-scenario-seed cells.
+
+The ten-seed design is a bounded undergraduate-study choice. Results emphasize paired effects and confidence intervals and must not claim the power associated with the retired 52-seed planning value.
+
+### Secondary memory tier
+
+NoMemory, FullHistory, Summary, and TimeDecay are evaluated with DeepSeek only, five paired seeds, and the same eight scenarios. These 160 cells provide H2 context without duplicating the complete matrix across both models.
+
+### Targeted ablations and non-LLM context
+
+- H3 uses stable held-out evidence.
+- H4 compares full ShiftMem with a no-dormancy/reactivation variant on periodic recurrence.
+- H5 compares the statistical trigger with a predeclared LLM-only change-judgment variant on change scenarios.
+- A fixed-parameter shared controller, a deterministic rule-adaptation controller, classical policies, and Oracle run without provider calls.
+
+Any third-model, multi-item, additional seed, or broad ablation experiment is optional appendix work and requires its own budget before execution.
 
 ## Seeds, pairing, and failed runs
 
-Every method comparison is paired by scenario, model, and master seed. Demand and supply random streams use the repository's deterministic derivation and remain independent of policy/provider calls. Formal configurations use 52 seeds per cell, the conservative Pilot planning value for target power 0.80. The complete matrix has 9 scenarios, 52 seeds, 2 core models, 6 methods, and 30 scored model decisions per cell: 5,616 cells and 168,480 planned decisions.
+Comparisons are paired by scenario and master seed and, where applicable, model. Demand and supply random streams use deterministic derivation independent of policy and provider calls.
 
-Failed provider runs are retained. A transport or parsing failure follows the declared single retry and safe fallback. Its operational outcome remains in cost metrics, and the failure contributes to reliability metrics. Runs are excluded only for a reproducible infrastructure failure that prevents the environment from completing and affects all compared methods for the paired unit; exclusions are listed with reason and rerun status.
+Provider and parse failures are retained. After the declared retry, the previous valid strategy remains active. Its daily outcomes stay in business metrics, and the failure contributes to reliability metrics. A run is excluded only for a reproducible infrastructure failure that prevents the environment from completing and affects all compared methods for the paired unit; exclusions retain reason and rerun status.
+
+Logs distinguish detector signal, scheduler decision, retrieved memory, cited memory, proposal, validation/clamping, active strategy, deterministic order, and delayed outcome. This separation is required to attribute failures to detection, memory, strategy review, or execution.
 
 ## Statistical analysis
 
-For each method contrast, calculate paired differences on matching scenario/model/seed units. Report mean, sample standard deviation, 95% confidence interval, paired effect size, and raw sample count.
+For each declared contrast, calculate paired differences on matching scenario/model/seed units. Report mean, sample standard deviation, 95% confidence interval, paired effect size, and raw sample count.
 
-Use a paired t-test when the paired-difference normality diagnostic does not reject at 0.05 and no severe outlier pattern is present; otherwise use the Wilcoxon signed-rank test. Tests are two-sided with alpha 0.05. Apply Holm correction within each declared family of secondary contrasts. Report adjusted and unadjusted p-values and do not equate non-significance with equivalence.
+Use a paired t-test when the paired-difference normality diagnostic does not reject at 0.05 and no severe outlier pattern is present; otherwise use the Wilcoxon signed-rank test. Tests are two-sided with alpha 0.05. Apply Holm correction within each declared secondary contrast family. Report adjusted and unadjusted p-values and do not equate non-significance with equivalence.
 
-H3 stable non-degradation is descriptive until a smallest acceptable cost margin is fixed from Validation before formal tests. Pilot reports variance and runtime but no confirmatory p-values.
+H3 remains descriptive until Validation fixes a smallest acceptable cost margin before the v2 freeze. The selected margin and its rationale become frozen protocol fields; held-out stable outcomes cannot influence it.
+
+The v2 Pilot reports variance, review counts, runtime, token use, failures, parameter behavior, and cost but no confirmatory held-out p-values.
 
 ## Exclusion and stopping rules
 
-No failed run, fallback action, high-cost episode, or unfavorable model/method result is silently deleted. Duplicate records caused by an interrupted resumable job are de-duplicated by the complete configuration key and recorded. Predeclared diagnostics may identify causes but cannot change the endpoint.
+The v1.1 live Validation dry-run cost CNY 3.2184 and its projected full-matrix cost are historical direct-order evidence only. The reported v1.1 matrix also contained an arithmetic scope error: the declared Test manifests contain eight, not nine, scenarios. Neither the CNY 1,506.22 estimate nor the CNY 1,810 cap is proposed for v2.
 
-Live execution stops before additional calls when the estimated remaining cost exceeds the recorded Pilot budget, provider quota prevents paired completion, credentials become invalid, or the repository/configuration hash differs from the frozen package. Partial batches remain archived and are marked incomplete.
+A new Development/Validation-only Pilot must measure scheduled and event review frequency, attempts, input/output tokens, latency, and provider cost. Its result determines the v2 call/token/cost ceiling. Formal execution remains blocked until the user explicitly approves that ceiling and it is copied into the v2 freeze.
 
-The v1.1 Validation live dry-run used a user-approved CNY 30 cap and cost CNY 3.2184. Its 366 provider attempts included six failed attempts that the initial journal counted only at cell level. The corrected journal now persists both successful and failed attempts. Extrapolation gives 171,288 expected formal attempts, 289,375,164 input tokens, 74,781,252 output tokens, and estimated cost CNY 1,506.22. The proposed 20% safety cap is CNY 1,810 and remains unapproved.
+Simulation, detection, memory, aggregation, and remote-API orchestration are CPU-capable. A rented GPU is optional and may only be charged to a separately configured local-model experiment. At the user-provided CNY 3/hour rate, records include billed GPU hours, CNY cost, setup time, inference time, and idle time. API and local-inference charges are never counted twice for the same cell.
 
-The following are valid negative findings: ShiftMem adds stable-environment cost, classical policies outperform all LLM agents, detector false alarms cause churn, gains occur for only one model, or inference cost dominates the benefit.
+Live execution stops before another external call when any frozen call/token/cost/GPU-hour cap would be exceeded, provider quota prevents paired completion, credentials fail, or the repository/configuration hash differs from the v2 freeze. Partial batches remain archived and incomplete.
 
-## Reproducibility and freeze
+## Reproducibility and freeze requirements
 
-Every aggregate records the Git commit, dirty state, Python and dependency versions, provider and model ID, device class, scenario ID, master seed, configuration copy, and configuration hash. Raw records are immutable inputs to aggregation; tables and figures are generated by scripts.
+Every aggregate records Git commit and dirty state, Python and dependency versions, provider/model ID, device class, scenario ID, master seed, controller configuration, scheduler configuration, strategy bounds, memory configuration, and configuration hash. Raw records are immutable inputs to scripted aggregation and figures.
 
-Runtime detectors consume the canonical public daily fields `demand`, `lost_sales`, and `quoted_lead_time`; Validation selection uses `quoted_lead_time` for supply-only shifts. Every live provider attempt is identified by freeze, commit, configuration hash, cell, day, and attempt number. Completed responses and sanitized failures are appended and fsynced before execution continues, allowing deterministic replay without a second call.
+Every provider attempt is identified by freeze, commit, configuration hash, cell, review day, trigger, and attempt number. Successes and sanitized failures are appended and fsynced before execution continues so recovery cannot repeat a billed call.
 
-The Phase 4 freeze requires a clean repository, passing tests, a complete protocol, passing split validation, selected Validation settings, and two qualified open core models. Canonical formal configurations and split manifests are copied into a versioned freeze directory. A sorted `SHA-256` manifest covers every frozen file and is verified before formal execution.
+A v2 freeze requires:
+
+- a clean repository and passing network-free tests;
+- complete v2 implementation and protocol validation;
+- passing split validation without held-out execution;
+- two core models qualified on the strategy schema;
+- Development/Validation selection of controller bounds, cooldown, validation window, detector, and retrieval settings;
+- a completed bounded v2 Pilot report;
+- explicit API and, if applicable, GPU budgets;
+- a sorted SHA-256 manifest covering every frozen file.
+
+Until all conditions pass, the only authorized work is documentation, implementation, testing, and Development/Validation revalidation.

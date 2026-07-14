@@ -1,5 +1,7 @@
 # Inventory Model Qualification Report
 
+> **v2 note (2026-07-14):** The results below qualify models for the historical direct-order schema. DeepSeek-V3.2 and MiniMax-M2.5 remain candidates, but both must pass a new bounded qualification suite for strategy-parameter output before any v2 Pilot or freeze.
+
 Date: 2026-07-13
 
 ## Purpose

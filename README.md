@@ -2,7 +2,7 @@
 
 Change-aware conditional memory for inventory agents under regime shifts.
 
-ShiftMem is a research project investigating whether condition-aware memory can help inventory agents adapt when demand or supply regimes change. The repository currently includes the synthetic inventory environment, classical policies, structured model-agent pipeline, memory baselines, compatible API providers, and a bounded model-qualification suite.
+ShiftMem is a research project investigating whether condition-aware memory can help inventory agents adapt when demand or supply regimes change. In the v2 architecture, an LLM performs bounded strategy review every five days or after a detected change, while a shared deterministic controller computes exact daily orders. This separates memory-assisted adaptation from high-frequency arithmetic and output noise.
 
 The authoritative project scope, research questions, experimental design, and phased implementation requirements are documented in [ShiftMem_Implementation_Spec.md](ShiftMem_Implementation_Spec.md).
 
@@ -78,11 +78,11 @@ The Phase 4 v1 audit snapshot is `phase4-20260713-b99c0d3e4d27`. It preserves th
 .venv\Scripts\python.exe -m pytest -q
 ```
 
-The v1 snapshot is verified but is **not ready for formal Test execution**. A post-freeze audit found a detector-selection/runtime signal mismatch, missing held-out stable and periodic coverage for H3/H4, incomplete formal statistics and result logging, and insufficiently idempotent live-run recovery. The bounded Pilot remains useful operational evidence, but its 52-seed estimate is provisional.
+The v1 snapshot is verified but was **never authorized for formal Test execution**. A post-freeze audit found a detector-selection/runtime signal mismatch, missing held-out stable and periodic coverage for H3/H4, incomplete formal statistics and result logging, and insufficiently idempotent live-run recovery. Protocol v1.1 engineering corrected those implementation blockers and completed a CNY 3.2184 Validation-only dry-run, but its direct-daily-order matrix was not frozen or run on held-out outcomes.
 
-Formal execution is blocked until those items are corrected using Development/Validation data, protocol v1.1 is committed, the full API budget is explicitly approved, and a replacement freeze verifies from a clean commit. Do not edit the archived v1 freeze and do not generate or inspect Test-ID/Test-OOD outcomes before that replacement freeze. See the live [Phase 4 Pilot report](docs/phase4_pilot_report.md) and [formal experiment readiness audit](docs/formal_experiment_readiness_audit.md).
+The project is now migrating to protocol v2. The LLM will no longer emit daily `order_quantity`; it will propose a small bounded strategy vector at five-day reviews or detector events, and a deterministic controller will execute every daily order. The primary experiment is reduced to VectorMemory versus ShiftMem across two core models and ten seeds, while other memory methods move to a smaller secondary tier. See the [v2 experiment protocol](docs/experiment_protocol.md) and [v2 architecture design](docs/superpowers/specs/2026-07-14-hierarchical-strategy-agent-v2-design.md).
 
-Protocol v1.1 implementation has now closed the code and configuration blockers and completed a 12-cell Validation live dry-run for CNY 3.2184. The full 5,616-cell matrix is projected at CNY 1,506.22, with a proposed CNY 1,810 safety cap. That formal budget is not approved, so no replacement freeze or Test execution is authorized. See the [v1.1 live Validation report](docs/v1_1_live_validation_report.md).
+The v1.1 CNY 1,506.22 projection and proposed CNY 1,810 cap are retired historical estimates, not v2 budgets; the old projection also reported nine scenarios although the held-out manifests contain eight. A new Development/Validation-only v2 Pilot must measure strategy-review frequency and cost before a bounded formal budget can be approved. No Test-ID/Test-OOD environment may be executed or inspected before a clean v2 freeze. The archived v1 package must not be edited. See the historical [v1.1 live Validation report](docs/v1_1_live_validation_report.md).
 
 ## License
 

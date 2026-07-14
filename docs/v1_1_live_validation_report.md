@@ -1,5 +1,7 @@
 # Protocol v1.1 Live Validation Report
 
+> **Historical status (2026-07-14):** This direct-daily-order design was retired before Test execution and is not a v2 performance result or budget basis. The archived raw/aggregate evidence remains unchanged.
+
 Date: 2026-07-14  
 Scope: one Validation `demand_jump` scenario, seed 1000, two core models, six memory methods, 30 post-shift decisions per cell  
 Authorization: user-approved maximum CNY 30  
@@ -26,7 +28,9 @@ This is retained as an operational deviation. The corrected journal persists a s
 
 ## Formal matrix projection
 
-The formal matrix contains 9 scenarios × 52 seeds × 2 models × 6 methods = 5,616 cells and 168,480 planned model decisions. Scaling the observed attempt and token ratios by 468 gives:
+The original report incorrectly counted nine scenarios. The declared Test-ID and Test-OOD manifests contain eight scenarios, so the retired direct-order matrix would contain 8 scenarios × 52 seeds × 2 models × 6 methods = 4,992 cells and 149,760 planned model decisions. Scaling the observed one-scenario/one-seed cost by 416 gives an estimated CNY 1,338.86 and a 20% safety value of CNY 1,606.63.
+
+The following table is retained as the original, now-superseded nine-scenario extrapolation so the historical decision trail remains auditable:
 
 | Quantity | Estimate | 20% safety proposal |
 | --- | ---: | ---: |
@@ -35,7 +39,7 @@ The formal matrix contains 9 scenarios × 52 seeds × 2 models × 6 methods = 5,
 | Output tokens | 74,781,252 | 90,000,000 cap |
 | Cost | CNY 1,506.22 | CNY 1,810 cap |
 
-This is a planning extrapolation from one Validation scenario and one seed, not a guarantee. Formal API budget approval remains required before protocol v1.1 can be frozen or Test execution can begin.
+This was a planning extrapolation from one Validation scenario and one seed, not a guarantee. Protocol v1.1 was not frozen for Test execution, and neither its original nor corrected projection authorizes v2 calls.
 
 ## Evidence files
 

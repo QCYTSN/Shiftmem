@@ -114,3 +114,14 @@ Implementation decisions and deviations from the specification will be recorded 
 - Added fsynced per-decision response replay and CNY budgets. A CNY 30 Validation-only live run completed all 12 model/method cells for CNY 3.2184 with zero fallbacks.
 - Found that the initial journal omitted six failed provider attempts even though cell logs counted them. Preserved the deviation, then changed the journal to persist and replay sanitized failures and count them against budgets.
 - Corrected the formal matrix arithmetic to 5,616 cells and 168,480 planned decisions. The measured projection is CNY 1,506.22; the proposed 20% safety cap is CNY 1,810 and remains subject to explicit approval before replacement freeze.
+
+## 2026-07-14 - Protocol v2 hierarchical strategy-Agent revision
+
+- Retired the v1.1 direct-daily-order formal design before any Test-ID/Test-OOD execution. The v1 freeze remains immutable, and the v1/v1.1 Pilot and Validation evidence remain historical engineering evidence only.
+- Corrected a later-discovered scope error in the v1.1 projection: the declared held-out manifests contain eight scenarios, so the retired direct-order matrix would have 4,992 cells and 149,760 planned decisions, not 5,616 and 168,480. This correction does not authorize that matrix.
+- Redefined the LLM as a low-frequency strategy-review Agent, eligible every five completed days or after a detector event. Same-day triggers are coalesced, repeated alerts use a frozen cooldown, and the LLM cannot modify its schedule.
+- Assigned every daily `order_quantity` calculation to one deterministic controller shared by all LLM memory methods. The model may only propose a small bounded vector containing forecast window, safety-stock multiplier, and lead-time buffer.
+- Changed experience attribution from individual LLM orders to strategy revisions and their delayed daily outcomes. Retrieval, citation, proposal validation, active strategy, deterministic order, and delayed evidence must be logged separately.
+- Reduced the proposed primary matrix to eight scenarios, ten seeds, two core models, and VectorMemory versus ShiftMem (320 cells). Other memory baselines move to a DeepSeek-only five-seed secondary tier, while H3--H5 use targeted scenarios and ablations.
+- Retired the v1.1 CNY 1,506.22/CNY 1,810 budget proposal. A new Development/Validation-only Pilot must measure review frequency and token cost before any v2 formal budget or replacement freeze is approved.
+- Kept simulation and remote-API orchestration CPU-capable. GPU rental is optional, separately budgeted local-model appendix work and is not required for remote API experiments.

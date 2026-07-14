@@ -1,5 +1,7 @@
 # Phase 4 Pilot Report
 
+> **Historical v1 status (2026-07-14):** This Pilot used the retired direct-daily-order Agent with pre-seeded memories. It remains valid for bounded provider, detector, latency, and variance observations but is not performance or power evidence for the v2 hierarchical strategy-Agent design.
+
 ## Scope and gate
 
 This bounded Pilot used Development/Validation configuration only. Test-ID and Test-OOD outcomes were not generated or read. Matrix completion: 8/8 runs; complete = `true`.
@@ -39,3 +41,5 @@ Required per-run metrics complete: `true`.
 ## Recommended formal seed count
 
 Using a two-sided normal approximation with 5% alpha, 80% power, and minimum relevant paired effect 100.0, the conservative recommendation is **52 seeds per formal cell**. With only two Pilot seeds this is a planning estimate, not a precise power analysis.
+
+Protocol v2 does not adopt this recommendation. It predeclares a bounded ten-seed primary tier and requires a new Development/Validation Pilot to characterize strategy-review frequency and variance before the v2 freeze.
