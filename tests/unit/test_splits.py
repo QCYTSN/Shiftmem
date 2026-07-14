@@ -7,6 +7,7 @@ from shiftmem.evaluation.splits import (
     load_split_manifest,
     validate_split_manifests,
 )
+from shiftmem.envs.shifts import load_scenario
 
 
 def write_scenario(path: Path, name: str, base: int = 20) -> None:
@@ -112,3 +113,26 @@ def test_duplicate_id_and_hash_within_one_manifest_are_rejected(tmp_path: Path) 
     errors = validate_split_manifests([manifest])
     assert any("duplicate scenario id" in error for error in errors)
     assert any("duplicate scenario hash" in error for error in errors)
+
+
+def test_formal_test_manifests_cover_stable_and_periodic_hypotheses() -> None:
+    test_id = load_split_manifest("configs/splits/test_id.yaml")
+    test_ood = load_split_manifest("configs/splits/test_ood.yaml")
+
+    stable = [
+        entry
+        for entry in test_id.scenarios
+        if not load_scenario(entry.path).shifts
+    ]
+    periodic = [
+        entry
+        for entry in test_ood.scenarios
+        if any(
+            shift.type == "periodic_demand"
+            for shift in load_scenario(entry.path).shifts
+        )
+    ]
+
+    assert [entry.id for entry in stable] == ["test-id-stable"]
+    assert [entry.id for entry in periodic] == ["test-ood-periodic"]
+    assert "period" in periodic[0].held_out_dimensions
