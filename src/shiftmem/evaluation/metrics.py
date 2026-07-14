@@ -62,3 +62,75 @@ def _add_segment(
         int(record["lost_sales"]) for record in records
     )
     summary[f"{prefix}_service_level"] = sales / demand if demand else 1.0
+
+
+def post_shift_cumulative_regret(
+    records: Sequence[dict[str, Any]],
+    oracle_records: Sequence[dict[str, Any]],
+    shift_day: int,
+    window: int = 30,
+) -> float:
+    """Return paired excess cost over an exact completed post-shift window."""
+
+    if shift_day < 0 or window < 1:
+        raise ValueError("shift_day must be non-negative and window must be positive")
+    agent = {int(row["day"]): float(row["total_cost"]) for row in records}
+    oracle = {
+        int(row["day"]): float(row["total_cost"]) for row in oracle_records
+    }
+    days = range(shift_day, shift_day + window)
+    missing = [day for day in days if day not in agent or day not in oracle]
+    if missing:
+        raise ValueError(f"paired post-shift window is incomplete: {missing}")
+    return float(sum(agent[day] - oracle[day] for day in days))
+
+
+def recovery_time(
+    records: Sequence[dict[str, Any]],
+    oracle_records: Sequence[dict[str, Any]],
+    shift_day: int,
+    *,
+    rolling_window: int = 7,
+    tolerance: float = 0.10,
+    sustain_days: int = 7,
+) -> dict[str, int | bool | None]:
+    """Find the first sustained rolling-cost recovery or right-censor it."""
+
+    if shift_day < 0 or rolling_window < 1 or sustain_days < 1:
+        raise ValueError("recovery windows and shift_day must be positive")
+    if tolerance < 0:
+        raise ValueError("tolerance must be non-negative")
+    agent = {int(row["day"]): float(row["total_cost"]) for row in records}
+    oracle = {
+        int(row["day"]): float(row["total_cost"]) for row in oracle_records
+    }
+    paired_days = sorted(set(agent) & set(oracle))
+    if not paired_days:
+        raise ValueError("paired records must be non-empty")
+    last_day = paired_days[-1]
+    consecutive = 0
+    for end_day in range(shift_day + rolling_window - 1, last_day + 1):
+        window_days = range(end_day - rolling_window + 1, end_day + 1)
+        if any(day not in agent or day not in oracle for day in window_days):
+            consecutive = 0
+            continue
+        agent_cost = sum(agent[day] for day in window_days)
+        oracle_cost = sum(oracle[day] for day in window_days)
+        within = abs(agent_cost - oracle_cost) <= tolerance * max(
+            abs(oracle_cost), 1e-12
+        )
+        consecutive = consecutive + 1 if within else 0
+        if consecutive >= sustain_days:
+            recovery_day = end_day - sustain_days + 1
+            return {
+                "recovered": True,
+                "recovery_day": recovery_day,
+                "recovery_time": recovery_day - shift_day,
+                "censored_at": None,
+            }
+    return {
+        "recovered": False,
+        "recovery_day": None,
+        "recovery_time": None,
+        "censored_at": last_day,
+    }
