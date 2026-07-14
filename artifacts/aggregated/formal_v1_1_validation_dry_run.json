@@ -1,0 +1,10 @@
+{
+  "cell_plan_hash": "d863253f0628e679754b27007b8f503a8a672d4a09fcfe8f7f0070c944d8d192",
+  "cells": 960,
+  "dry_run": true,
+  "estimated_decisions": 28800,
+  "freeze_id": "phase4-20260713-b99c0d3e4d27",
+  "manifest_split": "Validation",
+  "provider_calls": 0,
+  "test_outcomes_accessed": false
+}

@@ -1,0 +1,99 @@
+"""Validate and dry-run the freeze-bound formal experiment matrix."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+from shiftmem.evaluation.splits import load_split_manifest
+
+try:
+    from scripts.verify_freeze import verify_freeze
+except ModuleNotFoundError:
+    from verify_freeze import verify_freeze
+
+
+FORMAL_METHODS = {"none", "full_history", "summary", "vector", "time_decay", "shiftmem"}
+
+
+def validate_formal_config(config: dict[str, Any]) -> None:
+    methods = {str(row["config_id"]) for row in config.get("methods", [])}
+    if methods != FORMAL_METHODS or len(config.get("methods", [])) != 6:
+        raise ValueError("formal matrix must contain exactly the six methods")
+    if len(config.get("models", [])) != 2:
+        raise ValueError("formal matrix requires exactly two core models")
+    if int(config.get("seeds_per_cell", 0)) < 5:
+        raise ValueError("formal matrix requires at least five seeds per cell")
+
+
+def build_cell_plan(
+    config: dict[str, Any], scenario_ids: list[str], seeds: list[int]
+) -> list[dict[str, Any]]:
+    validate_formal_config(config)
+    prohibited = [name for name in scenario_ids if name.lower().startswith(("test-id", "test-ood"))]
+    if prohibited:
+        raise ValueError(f"Test-ID/Test-OOD scenarios are prohibited in dry-run: {prohibited}")
+    rows: list[dict[str, Any]] = []
+    for scenario_id in sorted(scenario_ids):
+        for seed in sorted(seeds):
+            for model in config["models"]:
+                for method in config["methods"]:
+                    identity = {
+                        "scenario_id": scenario_id,
+                        "seed": int(seed),
+                        "model": str(model["label"]),
+                        "method": str(method["config_id"]),
+                    }
+                    encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"))
+                    rows.append({**identity, "cell_id": hashlib.sha256(encoded.encode()).hexdigest()[:20]})
+    return rows
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--freeze-dir", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+    config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
+    validate_formal_config(config)
+    freeze_errors = verify_freeze(args.freeze_dir)
+    if freeze_errors:
+        raise ValueError(f"freeze verification failed: {freeze_errors}")
+    manifest = load_split_manifest(args.manifest)
+    if manifest.split not in {"Development", "Validation"}:
+        raise ValueError(f"{manifest.split} manifests are prohibited before replacement freeze")
+    seeds = manifest.seeds[: int(config["seeds_per_cell"])]
+    plan = build_cell_plan(config, [row.id for row in manifest.scenarios], seeds)
+    estimated_calls = len(plan) * int(config["post_shift_days"])
+    if estimated_calls > int(config["budgets"]["max_calls"]):
+        raise ValueError("planned decisions exceed max_calls")
+    if not args.dry_run:
+        if not config.get("budget_approved"):
+            raise ValueError("live API budget is not approved")
+        raise ValueError("live execution remains disabled until replacement freeze")
+    result = {
+        "dry_run": True,
+        "provider_calls": 0,
+        "test_outcomes_accessed": False,
+        "freeze_id": args.freeze_dir.name,
+        "manifest_split": manifest.split,
+        "cells": len(plan),
+        "estimated_decisions": estimated_calls,
+        "cell_plan_hash": hashlib.sha256(json.dumps(plan, sort_keys=True).encode()).hexdigest(),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

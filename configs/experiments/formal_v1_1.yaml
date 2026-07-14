@@ -1,0 +1,21 @@
+seeds_per_cell: 52
+post_shift_days: 30
+budget_approved: false
+budgets:
+  max_calls: 842400
+  max_input_tokens: 2500000000
+  max_output_tokens: 250000000
+  max_cost_usd: 0.0
+models:
+  - {label: deepseek_v3_2, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2}
+  - {label: minimax_m2_5, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5}
+methods:
+  - {config_id: none}
+  - {config_id: full_history}
+  - {config_id: summary}
+  - {config_id: vector}
+  - {config_id: time_decay}
+  - config_id: shiftmem
+    dormancy_patience: 3
+    detector: {kind: page_hinkley, min_samples: 10, delta: 0.1, threshold: 48.0}
+    weights: {semantic: 0.75, confidence: 0.5, recency: 1.0, utility: 0.25, probation_penalty: 0.25, changed_variable_penalty: 0.5}
