@@ -90,8 +90,8 @@ class JsonlRunJournal:
             "output_tokens": sum(
                 entry.output_tokens for entry in self._entries.values()
             ),
-            "cost_usd": sum(
-                entry.estimated_cost_usd for entry in self._entries.values()
+            "cost_cny": sum(
+                entry.estimated_cost_cny for entry in self._entries.values()
             ),
         }
 
@@ -101,7 +101,7 @@ class JsonlRunJournal:
             totals["calls"] += prospective.calls
             totals["input_tokens"] += prospective.input_tokens
             totals["output_tokens"] += prospective.output_tokens
-            totals["cost_usd"] += prospective.estimated_cost_usd
+            totals["cost_cny"] += prospective.estimated_cost_cny
         checks = {
             "max_calls": (totals["calls"], self.limits.max_calls),
             "max_input_tokens": (
@@ -112,7 +112,7 @@ class JsonlRunJournal:
                 totals["output_tokens"],
                 self.limits.max_output_tokens,
             ),
-            "max_cost_usd": (totals["cost_usd"], self.limits.max_cost_usd),
+            "max_cost_cny": (totals["cost_cny"], self.limits.max_cost_cny),
         }
         for field, (actual, limit) in checks.items():
             if actual > limit:

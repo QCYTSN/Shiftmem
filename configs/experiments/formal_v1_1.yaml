@@ -5,7 +5,7 @@ budgets:
   max_calls: 842400
   max_input_tokens: 2500000000
   max_output_tokens: 250000000
-  max_cost_usd: 0.0
+  max_cost_cny: 0.0
 models:
   - {label: deepseek_v3_2, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2}
   - {label: minimax_m2_5, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5}

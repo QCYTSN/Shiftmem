@@ -20,7 +20,7 @@ class BudgetLimits(BaseModel):
     max_calls: int = Field(ge=0)
     max_input_tokens: int = Field(ge=0)
     max_output_tokens: int = Field(ge=0)
-    max_cost_usd: float = Field(ge=0, allow_inf_nan=False)
+    max_cost_cny: float = Field(ge=0, allow_inf_nan=False)
 
 
 class DecisionJournalEntry(BaseModel):
@@ -35,5 +35,5 @@ class DecisionJournalEntry(BaseModel):
     calls: int = Field(ge=0)
     input_tokens: int = Field(ge=0)
     output_tokens: int = Field(ge=0)
-    estimated_cost_usd: float = Field(ge=0, allow_inf_nan=False)
+    estimated_cost_cny: float = Field(ge=0, allow_inf_nan=False)
     fallback_used: bool = False

@@ -2,7 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from scripts.run_formal_experiment import build_cell_plan, validate_formal_config
+from scripts.run_formal_experiment import (
+    build_cell_plan,
+    validate_formal_config,
+    validate_live_dry_run_config,
+)
 
 
 def config() -> dict:
@@ -15,7 +19,7 @@ def config() -> dict:
         "seeds_per_cell": 5,
         "post_shift_days": 30,
         "budget_approved": False,
-        "budgets": {"max_calls": 1000, "max_input_tokens": 1, "max_output_tokens": 1, "max_cost_usd": 1},
+        "budgets": {"max_calls": 1000, "max_input_tokens": 1, "max_output_tokens": 1, "max_cost_cny": 1},
     }
 
 
@@ -39,3 +43,14 @@ def test_cell_plan_is_deterministic_and_paired() -> None:
 def test_dry_run_rejects_test_manifest_even_without_outcome_access() -> None:
     with pytest.raises(ValueError, match="Test-ID|Test-OOD"):
         build_cell_plan(config(), ["test-id-stable"], [1])
+
+
+def test_live_dry_run_requires_explicit_cny_cap_and_approval() -> None:
+    approved = config()
+    approved["budget_approved"] = True
+    approved["budgets"]["max_cost_cny"] = 30
+    validate_live_dry_run_config(approved)
+
+    approved["budgets"]["max_cost_cny"] = 31
+    with pytest.raises(ValueError, match="30 CNY"):
+        validate_live_dry_run_config(approved)

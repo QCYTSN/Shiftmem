@@ -26,7 +26,7 @@ def entry(decision_id: str = "cell-1-day-0", **changes) -> DecisionJournalEntry:
         "calls": 1,
         "input_tokens": 10,
         "output_tokens": 2,
-        "estimated_cost_usd": 0.01,
+        "estimated_cost_cny": 0.01,
     }
     values.update(changes)
     return DecisionJournalEntry(**values)
@@ -37,7 +37,7 @@ def limits(**changes) -> BudgetLimits:
         "max_calls": 2,
         "max_input_tokens": 100,
         "max_output_tokens": 50,
-        "max_cost_usd": 1.0,
+        "max_cost_cny": 1.0,
     }
     values.update(changes)
     return BudgetLimits(**values)

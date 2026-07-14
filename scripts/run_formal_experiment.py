@@ -31,6 +31,14 @@ def validate_formal_config(config: dict[str, Any]) -> None:
         raise ValueError("formal matrix requires at least five seeds per cell")
 
 
+def validate_live_dry_run_config(config: dict[str, Any]) -> None:
+    validate_formal_config(config)
+    if config.get("budget_approved") is not True:
+        raise ValueError("live API budget is not approved")
+    if float(config["budgets"].get("max_cost_cny", 0)) > 30:
+        raise ValueError("live dry-run exceeds the approved 30 CNY cap")
+
+
 def build_cell_plan(
     config: dict[str, Any], scenario_ids: list[str], seeds: list[int]
 ) -> list[dict[str, Any]]:

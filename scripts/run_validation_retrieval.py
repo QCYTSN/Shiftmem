@@ -17,7 +17,8 @@ from shiftmem.envs.shifts import load_scenario
 from shiftmem.memory.retriever import RetrievalWeights
 from shiftmem.memory.schemas import ExperienceRecord, MemoryRecord, MemoryStatus
 from shiftmem.memory.shiftmem import ShiftMemory, ShiftMemoryConfig
-from shiftmem.memory.store import VectorMemory
+from shiftmem.memory.store import VectorMemory, make_memory
+from shiftmem.providers.base import ModelProvider
 from shiftmem.providers.compatible_api import CompatibleAPIProvider, ProviderConfig
 
 try:
@@ -95,9 +96,7 @@ def _seed_memories(memory: ShiftMemory | VectorMemory) -> None:
 
 
 def _make_memory(run_config: dict[str, Any]):
-    if run_config["config_id"] == "vector":
-        memory = VectorMemory()
-    else:
+    if run_config["config_id"] == "shiftmem":
         weights = dict(run_config["weights"])
         weights.setdefault("recency_half_life", 30.0)
         memory = ShiftMemory(
@@ -109,6 +108,8 @@ def _make_memory(run_config: dict[str, Any]):
             ),
             retrieval_weights=RetrievalWeights(**weights),
         )
+    else:
+        memory = make_memory(str(run_config["config_id"]))
     _seed_memories(memory)
     return memory
 
@@ -120,6 +121,9 @@ def run_one(
     run_config: dict[str, Any],
     profile: str,
     model_id: str,
+    *,
+    provider: ModelProvider | None = None,
+    cell_id: str | None = None,
 ) -> dict[str, Any]:
     scenario = load_scenario(scenario_path)
     shift_days = [shift.start_day for shift in scenario.shifts if shift.start_day > 0]
@@ -136,7 +140,7 @@ def run_one(
         observation, _, _, _, _ = env.step(warmup.act(observation))
 
     memory = _make_memory(run_config)
-    provider = CompatibleAPIProvider(
+    provider = provider or CompatibleAPIProvider(
         ProviderConfig.from_env(profile, model_override=model_id)
     )
     agent = StructuredAgent(
@@ -148,6 +152,11 @@ def run_one(
     total_cost = 0.0
     invalid_reuse = 0
     for _ in range(post_shift_days):
+        set_decision = getattr(provider, "set_decision", None)
+        if callable(set_decision):
+            if cell_id is None:
+                raise ValueError("cell_id is required for a journaled provider")
+            set_decision(cell_id, int(observation["day"]))
         decision = agent.act(observation)
         if isinstance(memory, ShiftMemory):
             for memory_id in decision.used_memory_ids:
