@@ -1,0 +1,23 @@
+[
+  {
+    "completed_runs": 1,
+    "config_id": "balanced",
+    "invalid_reuse": 0,
+    "post_shift_cumulative_regret_30": 50.200000000000045,
+    "tokens": 86070
+  },
+  {
+    "completed_runs": 1,
+    "config_id": "confidence-heavy",
+    "invalid_reuse": 0,
+    "post_shift_cumulative_regret_30": -24.199999999999818,
+    "tokens": 78735
+  },
+  {
+    "completed_runs": 1,
+    "config_id": "recency-heavy",
+    "invalid_reuse": 0,
+    "post_shift_cumulative_regret_30": -156.39999999999964,
+    "tokens": 94767
+  }
+]

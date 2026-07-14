@@ -1,0 +1,9 @@
+{
+  "estimated_calls": 240,
+  "estimated_total_tokens_upper_planning_value": 800000,
+  "estimated_cost_usd_upper_planning_value": 1.92,
+  "estimate_basis": "All planning tokens conservatively priced at the publisher's MiniMax-M2.5 Lightning output rate of USD 2.40/M; DeepSeek and input-token rates are lower.",
+  "matrix": "2 Validation seeds x 2 core models x 2 memory methods x 30 post-shift days",
+  "pricing_checked_on": "2026-07-13",
+  "test_outcomes_accessed": false
+}
