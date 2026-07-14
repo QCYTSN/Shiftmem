@@ -4,6 +4,12 @@
 
 This bounded Pilot used Development/Validation configuration only. Test-ID and Test-OOD outcomes were not generated or read. Matrix completion: 8/8 runs; complete = `true`.
 
+## Pilot design boundary
+
+The Pilot covered one Validation `demand_jump` scenario, two seeds, and only VectorMemory versus ShiftMem for Core A and Core B. Each cell used a fixed-policy pre-shift warm-up, four pre-seeded memories, and 30 post-shift model decisions. It did not exercise the complete six-method formal matrix, held-out scenarios, stable-environment non-degradation, or periodic dormancy/reactivation.
+
+The recommended 52 seeds is therefore a provisional planning value based on only two paired observations per model, not a frozen power determination for the complete formal matrix. The live report adds this interpretation after the v1 freeze; the archived copy inside `configs/frozen/phase4-20260713-b99c0d3e4d27/` remains unchanged as an audit snapshot.
+
 ## Variance and paired endpoint
 
 Negative regret favors ShiftMem over its paired VectorMemory run.

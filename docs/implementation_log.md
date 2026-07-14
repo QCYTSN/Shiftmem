@@ -77,3 +77,31 @@ Implementation decisions and deviations from the specification will be recorded 
 - Added two-stage retrieval: hard lifecycle/applicability filtering followed by transparent lexical relevance, confidence, recency, utility, and shift-penalty scoring with deterministic ties.
 - Integrated `ShiftMemory` through optional structured-Agent hooks without changing the behavior of the five existing memory baselines. Raw audit output remains under ignored experiment-output paths.
 - Deferred ADWIN, remote embeddings, persistence, and all detector/retrieval hyperparameter selection to Pilot/design-freeze work. The deterministic provider remains an interface check and cannot support a performance conclusion.
+
+## 2026-07-13 - Phase 1 acceptance and research governance
+
+- Completed the 100-seed Phase 1 acceptance matrix: 2,500 network-free runs across five scenarios and five classical policies, with all declared acceptance gates passing.
+- Froze experiment protocol v1.0, established the related-work matrix, and created disjoint Development, Validation, Test-ID, and Test-OOD manifests with automated split validation.
+- Preserved the rule that Test-ID and Test-OOD manifests may be created and hashed before freeze, but their outcomes may not be generated or inspected during selection.
+
+## 2026-07-13 - Detector, lifecycle, and Validation selection
+
+- Added ADWIN alongside Page-Hinkley and implemented automatic dormancy/reactivation behavior.
+- Selected Page-Hinkley threshold 48, dormancy patience 3, and recency-heavy retrieval using Development/Validation evidence only.
+- Recorded that the selected detector produced zero misses but 283 repeated false-positive signals across 80 Validation episodes; this remains a material operational limitation.
+
+## 2026-07-13 - Second core model, Phase 4 Pilot, and v1 freeze
+
+- Qualified `MiniMaxAI/MiniMax-M2.5` as Core B alongside Core A `deepseek-ai/DeepSeek-V3.2`; retained `Pro/zai-org/GLM-5.1` as supplementary and kept both failed Qwen applicability results.
+- Completed the bounded Phase 4 Pilot on one Validation demand-jump scenario, two seeds, VectorMemory and ShiftMem, producing eight unique cells without reading Test outcomes.
+- Retained one fallback and documented the interrupted-run duplicate-call incident instead of deleting unfavorable or operational evidence.
+- Created and verified immutable freeze `phase4-20260713-b99c0d3e4d27` with a sorted SHA-256 manifest.
+
+## 2026-07-14 - Post-freeze readiness audit
+
+- Reverified the v1 freeze and full automated suite before reviewing formal-experiment readiness.
+- Found that detector selection evaluates supply change through public `quoted_lead_time`, while the production ShiftMemory outcome path updates detectors only with demand and lost sales. Supply-change Validation evidence therefore does not match the runtime signal path.
+- Found no held-out stable scenario for H3 and no held-out periodic recurrence scenario for H4 in the frozen Test manifests.
+- Confirmed that formal statistics, machine-readable result schemas, the six-method runner, per-decision idempotent recovery, and budget gates are not yet complete.
+- Clarified that the Pilot used fixed-policy warm-up and pre-seeded memories, and that 52 seeds is a provisional planning estimate based on two paired observations per model.
+- Classified v1 as a valid immutable audit snapshot but blocked it from formal Test execution. Corrections must use Development/Validation only, be recorded in protocol v1.1, and culminate in a verified replacement freeze before any Test outcome is generated or read.

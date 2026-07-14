@@ -52,3 +52,25 @@ def test_bibliography_contains_matrix_citation_keys() -> None:
         "drouin2024workarena",
     ):
         assert f"{{{key}," in bib
+
+
+def test_live_research_docs_report_post_freeze_status() -> None:
+    audit_path = ROOT / "docs/formal_experiment_readiness_audit.md"
+    assert audit_path.exists(), "live formal-readiness audit is missing"
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    implementation_log = (ROOT / "docs/implementation_log.md").read_text(
+        encoding="utf-8"
+    )
+    pilot = (ROOT / "docs/phase4_pilot_report.md").read_text(encoding="utf-8")
+    audit = audit_path.read_text(encoding="utf-8")
+
+    assert "phase4-20260713-b99c0d3e4d27" in readme
+    assert "MiniMax-M2.5" in readme
+    assert "v1.1" in readme
+    assert "fixed-policy pre-shift warm-up" in pilot
+    assert "pre-seeded memories" in pilot
+    assert "Detector-selection/runtime mismatch" in audit
+    assert "Hypothesis coverage gaps" in audit
+    assert "Test-ID and Test-OOD outcomes must not be generated or read" in audit
+    assert "Post-freeze readiness audit" in implementation_log
+    assert "the planned two-model formal design is not yet frozen" not in readme

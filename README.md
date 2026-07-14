@@ -67,7 +67,20 @@ Run the fixed eight-case, two-repetition qualification matrix with:
 .venv\Scripts\python.exe scripts/qualify_models.py --config configs/experiments/model_qualification.yaml --raw-output artifacts/raw_runs/model_qualification.jsonl --summary-output artifacts/aggregated/model_qualification_summary.json
 ```
 
-The 2026-07-13 qualification found that `deepseek-ai/DeepSeek-V3.2` and `Pro/zai-org/GLM-5.1` passed every hard gate. Both tested Qwen models produced valid, monotonic decisions but cited an explicitly dormant, mismatched memory in both repetitions and therefore did not qualify. DeepSeek is the current core candidate and GLM-5.1 remains supplementary; the planned two-model formal design is not yet frozen. See [the qualification report](docs/model_qualification.md) and the trackable [aggregate JSON](artifacts/aggregated/model_qualification_summary.json).
+The 2026-07-13 qualification and second-core gate selected `deepseek-ai/DeepSeek-V3.2` as Core A and `MiniMaxAI/MiniMax-M2.5` as Core B. `Pro/zai-org/GLM-5.1` remains supplementary. Both tested Qwen candidates produced valid, monotonic decisions but cited an explicitly dormant, mismatched memory in both repetitions and therefore failed the fixed applicability gate. See [the qualification report](docs/model_qualification.md) and the trackable [aggregate JSON](artifacts/aggregated/model_qualification_summary.json).
+
+## Research freeze and current readiness
+
+The Phase 4 v1 audit snapshot is `phase4-20260713-b99c0d3e4d27`. It preserves the protocol, split manifests, selected Validation settings, qualified core models, and bounded Pilot evidence as they stood at the freeze. Verify it without network access:
+
+```powershell
+.venv\Scripts\python.exe scripts/verify_freeze.py configs/frozen/phase4-20260713-b99c0d3e4d27
+.venv\Scripts\python.exe -m pytest -q
+```
+
+The v1 snapshot is verified but is **not ready for formal Test execution**. A post-freeze audit found a detector-selection/runtime signal mismatch, missing held-out stable and periodic coverage for H3/H4, incomplete formal statistics and result logging, and insufficiently idempotent live-run recovery. The bounded Pilot remains useful operational evidence, but its 52-seed estimate is provisional.
+
+Formal execution is blocked until those items are corrected using Development/Validation data, protocol v1.1 is committed, the full API budget is explicitly approved, and a replacement freeze verifies from a clean commit. Do not edit the archived v1 freeze and do not generate or inspect Test-ID/Test-OOD outcomes before that replacement freeze. See the live [Phase 4 Pilot report](docs/phase4_pilot_report.md) and [formal experiment readiness audit](docs/formal_experiment_readiness_audit.md).
 
 ## License
 
