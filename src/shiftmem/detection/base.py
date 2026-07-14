@@ -6,6 +6,9 @@ from typing import Protocol
 from pydantic import BaseModel, ConfigDict, Field
 
 
+DETECTOR_SIGNAL_FIELDS = ("demand", "lost_sales", "quoted_lead_time")
+
+
 class ChangeDirection(StrEnum):
     INCREASE = "increase"
     DECREASE = "decrease"

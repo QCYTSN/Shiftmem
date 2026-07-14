@@ -13,6 +13,7 @@ import yaml
 
 from shiftmem.agents.classical import FixedOrderPolicy
 from shiftmem.detection import ADWINDetector, PageHinkleyDetector
+from shiftmem.detection.base import DETECTOR_SIGNAL_FIELDS
 from shiftmem.envs.inventory_env import InventoryEnv
 from shiftmem.envs.shifts import load_scenario
 from shiftmem.evaluation.splits import load_split_manifest
@@ -105,6 +106,16 @@ def evaluate_dormancy_grid(patiences: list[int]) -> list[dict[str, int]]:
     return rows
 
 
+def detector_variable(shifts) -> str:
+    supply_only = bool(shifts) and all(
+        shift.type == "sudden_supply" for shift in shifts
+    )
+    variable = "quoted_lead_time" if supply_only else "demand"
+    if variable not in DETECTOR_SIGNAL_FIELDS:
+        raise ValueError(f"unsupported detector signal: {variable}")
+    return variable
+
+
 def evaluate_detector_grid(config: dict[str, Any]) -> list[dict[str, Any]]:
     validation_path = Path(config["manifests"]["validation"])
     ensure_selection_paths([Path(config["manifests"]["development"]), validation_path])
@@ -119,10 +130,8 @@ def evaluate_detector_grid(config: dict[str, Any]) -> list[dict[str, Any]]:
             scenario = load_scenario(scenario_entry.path)
             shifts = [shift.start_day for shift in scenario.shifts if shift.start_day > 0]
             target = min(shifts) if shifts else None
-            supply_only = bool(scenario.shifts) and all(
-                shift.type == "sudden_supply" for shift in scenario.shifts
-            )
-            variable = "quoted_lead_time" if supply_only else "demand"
+            variable = detector_variable(scenario.shifts)
+            supply_only = variable == "quoted_lead_time"
             for seed in manifest.seeds:
                 episodes += 1
                 detector = _make_detector(candidate, variable)

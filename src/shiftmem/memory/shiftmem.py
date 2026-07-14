@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from shiftmem.detection.base import ChangeSignal
+from shiftmem.detection.base import ChangeSignal, DETECTOR_SIGNAL_FIELDS
 from shiftmem.detection.page_hinkley import PageHinkleyDetector
 
 from .extractor import ExperienceExtractor, validate_public_data
@@ -158,7 +158,7 @@ class ShiftMemory:
 
     def observe_outcome(self, record: dict[str, Any]) -> list[ValidationResult]:
         step = int(record["day"])
-        for variable in ("demand", "lost_sales"):
+        for variable in DETECTOR_SIGNAL_FIELDS:
             if variable in record:
                 self.observe_signal(variable, float(record[variable]), step)
         self._history.append(deepcopy(record))

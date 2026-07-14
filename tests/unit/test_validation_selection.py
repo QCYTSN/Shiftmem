@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+import scripts.select_validation_config as selection
 
 from scripts.select_validation_config import (
     ensure_selection_paths,
@@ -8,6 +9,7 @@ from scripts.select_validation_config import (
     select_detector,
     select_retrieval,
 )
+from shiftmem.envs.shifts import Shift
 
 
 def test_selection_rejects_test_manifest_paths() -> None:
@@ -52,3 +54,9 @@ def test_selectors_reject_empty_or_nonfinite_rows() -> None:
         select_retrieval(
             [{"config_id": "bad", "post_shift_cumulative_regret_30": float("nan"), "invalid_reuse": 0, "tokens": 0}]
         )
+
+
+def test_supply_selection_uses_runtime_public_signal_contract() -> None:
+    assert hasattr(selection, "detector_variable")
+    assert selection.detector_variable((Shift("sudden_supply", 10),)) == "quoted_lead_time"
+    assert selection.detector_variable((Shift("sudden_demand", 10),)) == "demand"

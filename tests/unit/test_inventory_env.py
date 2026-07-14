@@ -100,6 +100,17 @@ def test_step_conserves_inventory_and_costs() -> None:
     assert reward == -10.5
 
 
+def test_daily_record_contains_decision_time_quoted_lead_time() -> None:
+    env = InventoryEnv(make_scenario(), ConstantDemand(3))
+    env.reset(seed=1)
+
+    _, _, _, _, record = env.step(
+        {"order_quantity": 0, "supplier_id": "standard"}
+    )
+
+    assert record["quoted_lead_time"] == 2
+
+
 def test_order_arrives_only_after_lead_time() -> None:
     env = InventoryEnv(make_scenario(), ConstantDemand(0))
     env.reset(seed=1)

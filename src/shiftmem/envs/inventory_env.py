@@ -79,6 +79,7 @@ class InventoryEnv:
 
         record: dict[str, Any] = {
             "day": self.day,
+            "quoted_lead_time": parameters.supply.lead_time,
             "starting_inventory": starting_inventory,
             "arrivals": arrivals,
             "demand": demand,

@@ -182,3 +182,29 @@ def test_controlled_import_rejects_hidden_payload_and_audit_records_config() -> 
     assert summary["config"]["detector_threshold"] == 7
     assert summary["lifecycle_policy"]["promotion_supports"] == 2
     assert summary["retrieval_weights"]["semantic"] == 1.0
+
+
+def test_observe_outcome_routes_every_public_detector_signal(monkeypatch) -> None:
+    memory = ShiftMemory()
+    observed: list[tuple[str, float, int]] = []
+    monkeypatch.setattr(
+        memory,
+        "observe_signal",
+        lambda variable, value, step: observed.append((variable, value, step)),
+    )
+
+    memory.observe_outcome(
+        {
+            "day": 4,
+            "demand": 12,
+            "lost_sales": 3,
+            "quoted_lead_time": 5,
+            "total_cost": 20,
+        }
+    )
+
+    assert observed == [
+        ("demand", 12.0, 4),
+        ("lost_sales", 3.0, 4),
+        ("quoted_lead_time", 5.0, 4),
+    ]
