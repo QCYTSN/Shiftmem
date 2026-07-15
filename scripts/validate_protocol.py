@@ -62,11 +62,36 @@ def validate_protocol(path: Path) -> list[str]:
     return errors
 
 
+V2_REQUIRED_TERMS = (
+    "deterministic controller",
+    "strategy review",
+    "forecast_window",
+    "safety_stock_multiplier",
+    "lead_time_buffer",
+    "cooldown",
+    "coalesced",
+)
+
+
+def validate_protocol_v2(path: Path) -> list[str]:
+    """Base protocol checks plus v2 controller/scheduler/strategy requirements."""
+
+    errors = validate_protocol(path)
+    if errors == ["protocol file does not exist"]:
+        return errors
+    lower = path.read_text(encoding="utf-8").lower()
+    for term in V2_REQUIRED_TERMS:
+        if term.lower() not in lower:
+            errors.append(f"missing required v2 term: {term}")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("path", type=Path)
+    parser.add_argument("--v2", action="store_true", help="apply v2 protocol gates")
     args = parser.parse_args()
-    errors = validate_protocol(args.path)
+    errors = validate_protocol_v2(args.path) if args.v2 else validate_protocol(args.path)
     for error in errors:
         print(error)
     return int(bool(errors))

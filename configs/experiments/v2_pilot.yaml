@@ -1,0 +1,20 @@
+# Development/Validation-only v2 Pilot configuration.
+#
+# Measures strategy-review frequency, fallback behavior, parameter churn, and
+# per-episode cost/service under the deterministic offline provider. Live
+# provider execution requires budget_approved: true and is refused otherwise.
+# This config never references Test-ID/Test-OOD scenarios.
+protocol: v2
+split: Validation
+provider: deterministic
+
+memory_methods: [vector, shiftmem]
+models:
+  - {label: deterministic-offline}
+seeds: [1000, 1001, 1002, 1003, 1004]
+
+max_days: 150
+review_interval: 5
+cooldown: 3
+
+budget_approved: false

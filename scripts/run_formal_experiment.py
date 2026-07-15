@@ -20,6 +20,74 @@ except ModuleNotFoundError:
 
 FORMAL_METHODS = {"none", "full_history", "summary", "vector", "time_decay", "shiftmem"}
 
+V2_PRIMARY_METHODS = {"vector", "shiftmem"}
+V2_SECONDARY_METHODS = {"none", "full_history", "summary", "time_decay"}
+
+
+def _reject_test_scenarios(scenario_ids: list[str]) -> None:
+    prohibited = [
+        name for name in scenario_ids if name.lower().startswith(("test-id", "test-ood"))
+    ]
+    if prohibited:
+        raise ValueError(
+            f"Test-ID/Test-OOD scenarios are prohibited in dry-run: {prohibited}"
+        )
+
+
+def _hash_cell(identity: dict[str, Any]) -> str:
+    encoded = json.dumps(identity, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode()).hexdigest()[:20]
+
+
+def validate_v2_config(config: dict[str, Any]) -> None:
+    """Validate the v2 hierarchical primary/secondary matrix shape."""
+
+    if config.get("protocol") != "v2":
+        raise ValueError("config protocol must be v2")
+    primary = {str(row["config_id"]) for row in config.get("primary_methods", [])}
+    if primary != V2_PRIMARY_METHODS:
+        raise ValueError("v2 primary tier must be exactly VectorMemory and ShiftMem")
+    secondary = {str(row["config_id"]) for row in config.get("secondary_methods", [])}
+    if secondary != V2_SECONDARY_METHODS:
+        raise ValueError("v2 secondary tier must be the four remaining baselines")
+    if len(config.get("models", [])) != 2:
+        raise ValueError("v2 matrix requires exactly two core models")
+    if int(config.get("primary_seeds", 0)) < 1:
+        raise ValueError("v2 primary tier requires positive seed count")
+
+
+def build_v2_cell_plan(
+    config: dict[str, Any],
+    scenario_ids: list[str],
+    seeds: list[int],
+    tier: str,
+) -> list[dict[str, Any]]:
+    validate_v2_config(config)
+    _reject_test_scenarios(scenario_ids)
+    if tier == "primary":
+        methods = config["primary_methods"]
+        models = [str(model["label"]) for model in config["models"]]
+    elif tier == "secondary":
+        methods = config["secondary_methods"]
+        models = [str(config["secondary_model"])]
+    else:
+        raise ValueError(f"unknown tier: {tier}")
+
+    rows: list[dict[str, Any]] = []
+    for scenario_id in sorted(scenario_ids):
+        for seed in sorted(seeds):
+            for model in models:
+                for method in methods:
+                    identity = {
+                        "tier": tier,
+                        "scenario_id": scenario_id,
+                        "seed": int(seed),
+                        "model": model,
+                        "method": str(method["config_id"]),
+                    }
+                    rows.append({**identity, "cell_id": _hash_cell(identity)})
+    return rows
+
 
 def validate_formal_config(config: dict[str, Any]) -> None:
     methods = {str(row["config_id"]) for row in config.get("methods", [])}

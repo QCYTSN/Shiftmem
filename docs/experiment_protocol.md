@@ -53,11 +53,13 @@ The LLM is eligible to run when either condition is true:
 
 Periodic and event triggers on the same day are coalesced into one review. Repeated alerts during cooldown are logged but do not cause a call. Review interval and cooldown are not model-controlled.
 
-The LLM receives public history, current strategy parameters, trigger evidence, and memory context. It proposes only the following candidate strategy fields:
+The LLM receives public history, current strategy parameters, trigger evidence, and memory context. It proposes only the following candidate strategy fields (the serialized parameter identifiers are `forecast_window`, `safety_stock_multiplier`, and `lead_time_buffer`):
 
-- demand forecast window;
-- safety-stock multiplier;
-- lead-time buffer.
+- demand forecast window (`forecast_window`);
+- safety-stock multiplier (`safety_stock_multiplier`);
+- lead-time buffer (`lead_time_buffer`).
+
+A shared deterministic controller consumes this validated strategy vector to compute every daily order. Same-day periodic and event triggers are coalesced into one review, and repeated detector alerts inside the frozen cooldown are suppressed. The review interval, cooldown, controller formula, and daily order are never model-controlled.
 
 It also returns cited memory IDs, confidence, and one short reason. Exact parameter bounds, defaults, maximum single-review changes, and cooldown are selected using Development/Validation only and become required freeze fields. The LLM cannot emit the daily order, change the controller formula, change the supplier, or change its own review schedule.
 
@@ -157,6 +159,10 @@ The v2 Pilot reports variance, review counts, runtime, token use, failures, para
 The v1.1 live Validation dry-run cost CNY 3.2184 and its projected full-matrix cost are historical direct-order evidence only. The reported v1.1 matrix also contained an arithmetic scope error: the declared Test manifests contain eight, not nine, scenarios. Neither the CNY 1,506.22 estimate nor the CNY 1,810 cap is proposed for v2.
 
 A new Development/Validation-only Pilot must measure scheduled and event review frequency, attempts, input/output tokens, latency, and provider cost. Its result determines the v2 call/token/cost ceiling. Formal execution remains blocked until the user explicitly approves that ceiling and it is copied into the v2 freeze.
+
+The 2026-07-15 strategy qualification evidence is classified as `inconclusive_harness_invalid` because the runner used the archived daily-order prompt, omitted current-strategy and trigger inputs, did not preserve corrected attempts, and used inconsistent lost-sales fixtures. The raw and aggregate files remain immutable engineering evidence and cannot qualify or disqualify a model. The repaired qualification keeps the predeclared strict condition `monotonicity_checks == 4` and `monotonicity_passes == 4`.
+
+After the repaired prompt, fixtures, gate, and provenance format pass offline verification, they are frozen before any further provider call. Each candidate model may receive at most one newly budget-approved qualification run under that harness. The recorded outcome is accepted without another gate revision. If fewer than two core models qualify, the limitation is reported and any model-selection or scope decision is issued separately rather than changing the observed gate.
 
 Simulation, detection, memory, aggregation, and remote-API orchestration are CPU-capable. A rented GPU is optional and may only be charged to a separately configured local-model experiment. At the user-provided CNY 3/hour rate, records include billed GPU hours, CNY cost, setup time, inference time, and idle time. API and local-inference charges are never counted twice for the same cell.
 

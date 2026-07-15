@@ -64,6 +64,52 @@ def _add_segment(
     summary[f"{prefix}_service_level"] = sales / demand if demand else 1.0
 
 
+def summarize_strategy_reviews(
+    scheduler_log: Sequence[dict[str, Any]],
+    review_logs: Sequence[dict[str, Any]],
+) -> dict[str, float | int]:
+    """Aggregate v2 operational review metrics from separated logs.
+
+    Counts scheduled/event/coalesced/cooldown-suppressed triggers, fallback and
+    clamp counts, invalid-proposal rate, parameter churn, and mean parameter
+    levels. All inputs are auditable log rows, not hidden state.
+    """
+
+    scheduled = sum(1 for row in scheduler_log if row.get("trigger") == "periodic")
+    event = sum(1 for row in scheduler_log if row.get("trigger") == "event")
+    coalesced = sum(1 for row in scheduler_log if row.get("trigger") == "coalesced")
+    suppressed = sum(1 for row in scheduler_log if row.get("cooldown_suppressed"))
+
+    total_reviews = len(review_logs)
+    fallback_count = sum(1 for row in review_logs if row.get("fallback_used"))
+    clamped_count = sum(1 for row in review_logs if row.get("clamped"))
+
+    params = ("forecast_window", "safety_stock_multiplier", "lead_time_buffer")
+    churn = 0
+    previous: dict[str, Any] | None = None
+    windows: list[float] = []
+    for row in review_logs:
+        active = row.get("active_strategy") or {}
+        if "forecast_window" in active:
+            windows.append(float(active["forecast_window"]))
+        if previous is not None:
+            churn += sum(1 for key in params if active.get(key) != previous.get(key))
+        previous = active
+
+    return {
+        "total_reviews": total_reviews,
+        "scheduled_reviews": scheduled,
+        "event_reviews": event,
+        "coalesced_reviews": coalesced,
+        "cooldown_suppressed": suppressed,
+        "fallback_count": fallback_count,
+        "clamped_count": clamped_count,
+        "invalid_proposal_rate": fallback_count / total_reviews if total_reviews else 0.0,
+        "parameter_churn": churn,
+        "mean_forecast_window": sum(windows) / len(windows) if windows else 0.0,
+    }
+
+
 def post_shift_cumulative_regret(
     records: Sequence[dict[str, Any]],
     oracle_records: Sequence[dict[str, Any]],

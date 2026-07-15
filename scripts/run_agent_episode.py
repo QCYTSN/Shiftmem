@@ -6,11 +6,12 @@ from pathlib import Path
 
 from shiftmem.agents.classical import FixedOrderPolicy
 from shiftmem.agents.llm_agent import StructuredAgent
+from shiftmem.control.episode import V2EpisodeConfig, run_v2_episode
 from shiftmem.envs.inventory_env import InventoryEnv
 from shiftmem.envs.shifts import load_scenario
 from shiftmem.evaluation.metrics import summarize_episode
 from shiftmem.memory.store import make_memory
-from shiftmem.providers.local import DeterministicProvider
+from shiftmem.providers.local import DeterministicProvider, DeterministicStrategyProvider
 from shiftmem.providers.compatible_api import CompatibleAPIProvider, ProviderConfig
 
 
@@ -18,9 +19,10 @@ def make_provider(
     name: str,
     target_inventory: int,
     model_name: str | None = None,
+    strategy: bool = False,
 ):
     if name == "deterministic":
-        return DeterministicProvider(target_inventory)
+        return DeterministicStrategyProvider() if strategy else DeterministicProvider(target_inventory)
     if name in {"compatible", "bailian", "siliconflow"}:
         return CompatibleAPIProvider(
             ProviderConfig.from_env(name, model_override=model_name)
@@ -46,12 +48,53 @@ def main() -> int:
         default="deterministic",
     )
     parser.add_argument("--model-name")
+    parser.add_argument(
+        "--protocol",
+        choices=("v1", "v2"),
+        default="v1",
+        help="v1 = direct daily order (archived); v2 = low-frequency strategy review",
+    )
+    parser.add_argument("--review-interval", type=int, default=5)
+    parser.add_argument("--cooldown", type=int, default=3)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.max_days < 1:
         parser.error("--max-days must be positive")
 
     scenario = load_scenario(args.config)
+
+    if args.protocol == "v2":
+        provider = make_provider(
+            args.provider, args.target_inventory, args.model_name, strategy=True
+        )
+        result = run_v2_episode(
+            scenario=scenario,
+            provider=provider,
+            memory=make_memory(args.memory),
+            config=V2EpisodeConfig(
+                seed=args.seed,
+                max_days=args.max_days,
+                review_interval=args.review_interval,
+                cooldown=args.cooldown,
+            ),
+        )
+        metrics = summarize_episode(result["environment_records"])
+        summary = {
+            "protocol": "v2",
+            "memory": args.memory,
+            **metrics,
+            "review_count": result["review_count"],
+            "fallback_count": result["fallback_count"],
+        }
+        detail = {"summary": summary, **result}
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(detail, ensure_ascii=False, indent=2, sort_keys=True),
+            encoding="utf-8",
+        )
+        print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+        return 0
+
     env = InventoryEnv(scenario)
     agent = StructuredAgent(
         provider=make_provider(args.provider, args.target_inventory, args.model_name),

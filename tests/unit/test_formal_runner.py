@@ -4,9 +4,56 @@ import pytest
 
 from scripts.run_formal_experiment import (
     build_cell_plan,
+    build_v2_cell_plan,
     validate_formal_config,
     validate_live_dry_run_config,
+    validate_v2_config,
 )
+
+
+def v2_config() -> dict:
+    return {
+        "protocol": "v2",
+        "models": [{"label": "deepseek"}, {"label": "minimax"}],
+        "primary_methods": [{"config_id": "vector"}, {"config_id": "shiftmem"}],
+        "secondary_methods": [
+            {"config_id": name} for name in ["none", "full_history", "summary", "time_decay"]
+        ],
+        "secondary_model": "deepseek",
+        "primary_seeds": 10,
+        "secondary_seeds": 5,
+        "post_shift_days": 30,
+        "budget_approved": False,
+        "budgets": {"max_calls": 100000, "max_input_tokens": 1, "max_output_tokens": 1, "max_cost_cny": 1},
+    }
+
+
+def test_v2_config_requires_two_primary_methods_and_two_models() -> None:
+    invalid = v2_config()
+    invalid["primary_methods"] = [{"config_id": "vector"}]
+    with pytest.raises(ValueError, match="primary"):
+        validate_v2_config(invalid)
+
+
+def test_v2_primary_tier_is_320_cells() -> None:
+    scenarios = [f"validation-{i}" for i in range(8)]
+    plan = build_v2_cell_plan(v2_config(), scenarios, list(range(10)), tier="primary")
+    # 8 scenarios x 10 seeds x 2 models x 2 methods.
+    assert len(plan) == 8 * 10 * 2 * 2
+    assert len({row["cell_id"] for row in plan}) == len(plan)
+
+
+def test_v2_secondary_tier_is_160_cells_deepseek_only() -> None:
+    scenarios = [f"validation-{i}" for i in range(8)]
+    plan = build_v2_cell_plan(v2_config(), scenarios, list(range(5)), tier="secondary")
+    # 8 scenarios x 5 seeds x 1 model x 4 methods.
+    assert len(plan) == 8 * 5 * 1 * 4
+    assert all(row["model"] == "deepseek" for row in plan)
+
+
+def test_v2_cell_plan_rejects_test_manifest() -> None:
+    with pytest.raises(ValueError, match="Test-ID|Test-OOD"):
+        build_v2_cell_plan(v2_config(), ["test-ood-periodic"], [1], tier="primary")
 
 
 def config() -> dict:

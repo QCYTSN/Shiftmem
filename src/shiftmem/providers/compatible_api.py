@@ -151,9 +151,15 @@ class CompatibleAPIProvider:
         self,
         config: ProviderConfig,
         transport: HttpTransport | None = None,
+        system_prompt: str | None = None,
+        build_user_message=None,
     ) -> None:
         self.config = config
         self.transport = transport or UrllibTransport()
+        # Default to the v1 direct-order prompt so existing callers are
+        # unchanged; the v2 pilot injects the strategy-review prompt instead.
+        self.system_prompt = system_prompt or INVENTORY_DECISION_SYSTEM_PROMPT
+        self.build_user_message = build_user_message or build_inventory_user_message
 
     def generate(self, request: ProviderRequest) -> ProviderResponse:
         payload = {
@@ -162,10 +168,10 @@ class CompatibleAPIProvider:
             "max_tokens": self.config.max_tokens,
             "response_format": {"type": "json_object"},
             "messages": [
-                {"role": "system", "content": INVENTORY_DECISION_SYSTEM_PROMPT},
+                {"role": "system", "content": self.system_prompt},
                 {
                     "role": "user",
-                    "content": build_inventory_user_message(request),
+                    "content": self.build_user_message(request),
                 },
             ],
         }

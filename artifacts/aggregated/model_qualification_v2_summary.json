@@ -1,0 +1,40 @@
+{
+  "models": [
+    {
+      "applicable_memory_citation_count": 2,
+      "fallback_count": 0,
+      "inapplicable_memory_citation_count": 0,
+      "invalid_memory_citation_count": 0,
+      "label": "deepseek_v3_2",
+      "model_id": "deepseek-ai/DeepSeek-V3.2",
+      "monotonicity_checks": 4,
+      "monotonicity_passes": 3,
+      "parse_failure_count": 0,
+      "profile": "siliconflow",
+      "qualifies": false,
+      "result_count": 12,
+      "total_input_tokens": 20412,
+      "total_latency_ms": 167799.87180046737,
+      "total_output_tokens": 1509
+    },
+    {
+      "applicable_memory_citation_count": 2,
+      "fallback_count": 0,
+      "inapplicable_memory_citation_count": 0,
+      "invalid_memory_citation_count": 0,
+      "label": "minimax_m2_5",
+      "model_id": "MiniMaxAI/MiniMax-M2.5",
+      "monotonicity_checks": 4,
+      "monotonicity_passes": 3,
+      "parse_failure_count": 0,
+      "profile": "siliconflow",
+      "qualifies": false,
+      "result_count": 12,
+      "total_input_tokens": 19061,
+      "total_latency_ms": 416120.9784995299,
+      "total_output_tokens": 19978
+    }
+  ],
+  "qualification_date": "2026-07-15",
+  "schema": "strategy"
+}

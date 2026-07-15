@@ -1,0 +1,46 @@
+# Protocol v2 formal experiment matrix (hierarchical strategy-review design).
+#
+# The primary confirmatory tier compares VectorMemory vs ShiftMem across the
+# eight held-out scenarios, ten paired seeds, and two core models = 320 cells.
+# The secondary tier runs the four remaining baselines on DeepSeek only with
+# five seeds and the same eight scenarios = 160 cells.
+#
+# This config authorizes Development/Validation dry-runs only. Live execution
+# remains blocked until a completed v2 Pilot, an explicitly approved budget,
+# and a verified clean v2 freeze. Test-ID/Test-OOD scenarios are rejected by
+# the cell-plan builder.
+protocol: v2
+
+models:
+  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2}
+  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5}
+
+primary_methods:
+  - {config_id: vector}
+  - {config_id: shiftmem}
+
+secondary_methods:
+  - {config_id: none}
+  - {config_id: full_history}
+  - {config_id: summary}
+  - {config_id: time_decay}
+
+secondary_model: deepseek
+
+primary_seeds: 10
+secondary_seeds: 5
+post_shift_days: 30
+
+# Review schedule and strategy bounds are Validation-selected and become frozen
+# fields; the values below are provisional Development placeholders.
+review_interval: 5
+cooldown: 3
+
+# No budget is approved yet. The v2 Pilot must measure review frequency and
+# token cost before any ceiling is proposed and copied into the v2 freeze.
+budget_approved: false
+budgets:
+  max_calls: 0
+  max_input_tokens: 0
+  max_output_tokens: 0
+  max_cost_cny: 0

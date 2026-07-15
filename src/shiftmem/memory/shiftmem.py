@@ -156,6 +156,49 @@ class ShiftMemory:
             }
         return memory_id
 
+    def register_strategy_revision(
+        self,
+        episode_id: str,
+        step: int,
+        observation: dict[str, Any],
+        revision: dict[str, Any],
+        used_memory_ids: list[str] | None = None,
+    ) -> str:
+        """Register a v2 strategy revision for delayed window validation.
+
+        The experience unit is the revision, not a daily order. Reuse of cited
+        memories is validated over the same delayed window as in the v1 path.
+        """
+
+        memory_id = f"exp-{episode_id}-{step}"
+        pending = self.validator.register(
+            memory_id,
+            decision_step=step,
+            quoted_lead_time=int(observation["quoted_lead_time"]),
+        )
+        self._pending[memory_id] = pending
+        self._sources[memory_id] = {
+            "kind": "strategy_revision",
+            "episode_id": episode_id,
+            "step": step,
+            "observation": deepcopy(observation),
+            "revision": deepcopy(revision),
+        }
+        for used_memory_id in used_memory_ids or []:
+            self.store.get(used_memory_id)
+            validation_id = f"reuse-{used_memory_id}-{step}"
+            reuse_pending = self.validator.register(
+                validation_id,
+                decision_step=step,
+                quoted_lead_time=int(observation["quoted_lead_time"]),
+            )
+            self._pending[validation_id] = reuse_pending
+            self._sources[validation_id] = {
+                "kind": "reuse",
+                "target_memory_id": used_memory_id,
+            }
+        return memory_id
+
     def observe_outcome(self, record: dict[str, Any]) -> list[ValidationResult]:
         step = int(record["day"])
         for variable in DETECTOR_SIGNAL_FIELDS:
@@ -179,6 +222,21 @@ class ShiftMemory:
                     source["step"],
                     source["observation"],
                     source["action"],
+                    result,
+                )
+                self.lifecycle.apply_evidence(
+                    experience,
+                    result.outcome,
+                    current_step,
+                    after_related_change=False,
+                )
+                self.store.add(experience)
+            elif source["kind"] == "strategy_revision":
+                experience = self.extractor.extract_strategy_revision(
+                    source["episode_id"],
+                    source["step"],
+                    source["observation"],
+                    source["revision"],
                     result,
                 )
                 self.lifecycle.apply_evidence(
