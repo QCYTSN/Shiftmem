@@ -44,6 +44,7 @@ def run_v2_episode(
 
     strategy = StrategyParameters()
     scheduler_log: list[dict[str, Any]] = []
+    daily_decision_log: list[dict[str, Any]] = []
     pending_event: dict[str, Any] | None = None
 
     observation, _ = env.reset(seed=config.seed)
@@ -68,6 +69,9 @@ def run_v2_episode(
 
         if decision.should_review:
             trigger_reason = decision.trigger
+            set_decision = getattr(provider, "set_decision", None)
+            if callable(set_decision):
+                set_decision(config.episode_id, day)
             new_strategy = agent.review(
                 observation,
                 strategy,
@@ -91,6 +95,13 @@ def run_v2_episode(
             strategy = new_strategy
 
         action = controller.order(observation, strategy)
+        daily_decision_log.append(
+            {
+                "day": day,
+                "active_strategy": strategy.model_dump(),
+                "order": dict(action),
+            }
+        )
         observation, _, terminated, _, record = env.step(action)
 
         if callable(observe_outcome):
@@ -112,6 +123,7 @@ def run_v2_episode(
         "environment_records": env.records,
         "review_logs": review_logs,
         "scheduler_log": scheduler_log,
+        "daily_decision_log": daily_decision_log,
         "reuse_attribution": [
             {
                 "reused": r.reused,

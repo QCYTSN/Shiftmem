@@ -6,7 +6,15 @@ import pytest
 import yaml
 
 from scripts.validate_protocol import validate_protocol_v2
-from scripts.run_v2_pilot import build_pilot_plan, validate_pilot_config
+from scripts.run_v2_pilot import (
+    _effective_call_cap,
+    build_pilot_plan,
+    run_pilot,
+    validate_pilot_config,
+)
+from shiftmem.logging.run_logger import JsonlRunJournal
+from shiftmem.logging.schemas import BudgetLimits, RunIdentity
+from shiftmem.providers.local import DeterministicStrategyProvider
 
 
 def _pilot_config():
@@ -66,9 +74,6 @@ def test_pilot_live_execution_requires_budget_approval():
 
 
 def test_pilot_stops_before_exceeding_call_cap():
-    from scripts.run_v2_pilot import run_pilot
-    from shiftmem.providers.local import DeterministicStrategyProvider
-
     cfg = _pilot_config()
     cfg["budgets"] = {"max_calls": 3, "max_cost_cny": 6, "cny_per_call": 0.01}
     # A counting factory so the test never touches the network.
@@ -87,3 +92,102 @@ def test_pilot_stops_before_exceeding_call_cap():
         )
     # It stopped at or before the cap rather than blowing past it.
     assert counter["calls"] <= 3
+
+
+def _live_config():
+    config = _pilot_config()
+    config.update(
+        {
+            "provider": "siliconflow",
+            "budget_approved": True,
+            "memory_methods": ["vector"],
+            "models": [
+                {
+                    "label": "deepseek",
+                    "profile": "siliconflow",
+                    "model_id": "deepseek-ai/DeepSeek-V3.2",
+                    "input_cny_per_million": 4.0,
+                    "output_cny_per_million": 6.0,
+                }
+            ],
+            "seeds": [1000],
+            "max_days": 12,
+            "budgets": {
+                "max_calls": 10,
+                "max_input_tokens": 10000,
+                "max_output_tokens": 10000,
+                "max_cost_cny": 0.05,
+                "cny_per_call": 0.01,
+            },
+        }
+    )
+    return config
+
+
+def test_live_pilot_requires_complete_model_pricing_and_token_budgets():
+    live = _live_config()
+    del live["models"][0]["output_cny_per_million"]
+    with pytest.raises(ValueError, match="pricing"):
+        validate_pilot_config(live)
+
+    live = _live_config()
+    del live["budgets"]["max_output_tokens"]
+    with pytest.raises(ValueError, match="budget"):
+        validate_pilot_config(live)
+
+
+def test_live_pilot_cost_ceiling_reduces_effective_call_cap():
+    assert _effective_call_cap(_live_config()) == 5
+
+
+def test_live_pilot_journals_attempts_and_resumes_without_new_calls(tmp_path):
+    config = _live_config()
+    identity = RunIdentity(
+        run_id="pilot-test",
+        freeze_id="pilot-freeze",
+        git_commit="a" * 40,
+        config_hash="b" * 64,
+    )
+    limits = BudgetLimits(
+        max_calls=5,
+        max_input_tokens=10000,
+        max_output_tokens=10000,
+        max_cost_cny=0.05,
+    )
+    journal = JsonlRunJournal(tmp_path / "journal.jsonl", identity, limits)
+    raw = tmp_path / "raw.jsonl"
+    aggregate = tmp_path / "summary.json"
+    calls = {"count": 0}
+
+    class _Counting(DeterministicStrategyProvider):
+        def generate(self, request):
+            calls["count"] += 1
+            return super().generate(request)
+
+    metadata = {"run_id": "pilot-test"}
+    report = run_pilot(
+        config,
+        [Path("configs/environments/validation_demand_jump.yaml")],
+        provider_override=_Counting(),
+        journal=journal,
+        raw_output=raw,
+        aggregate_output=aggregate,
+        run_metadata=metadata,
+    )
+    assert report["complete"] is True
+    assert report["completed_cells"] == 1
+    assert journal.totals()["calls"] == calls["count"] == report["provider_calls"]
+    assert raw.read_text(encoding="utf-8").count("\n") == 1
+
+    resumed = run_pilot(
+        config,
+        [Path("configs/environments/validation_demand_jump.yaml")],
+        provider_override=_Counting(),
+        journal=journal,
+        raw_output=raw,
+        aggregate_output=aggregate,
+        run_metadata=metadata,
+        resume=True,
+    )
+    assert resumed["complete"] is True
+    assert calls["count"] == report["provider_calls"]

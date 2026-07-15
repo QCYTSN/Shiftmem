@@ -1,8 +1,8 @@
 # Budget-approved live v2 Pilot (Validation only).
 #
 # User-approved 2026-07-14: max 350 provider calls and CNY 6 total.
-# Measures real token cost per strategy review and requalifies the two core
-# models on the strategy schema. Never references Test-ID/Test-OOD.
+# Measures real token cost per strategy review for the two already-qualified
+# core models. Never references Test-ID/Test-OOD.
 #
 # Cost anchor from the v1.1 live run: CNY 0.00894/call (CNY 3.2184 / 360 calls).
 # Planned reviews: 1 scenario x 2 seeds x 2 models x 2 methods x ~31 reviews
@@ -13,8 +13,8 @@ provider: siliconflow
 
 memory_methods: [vector, shiftmem]
 models:
-  - {label: deepseek, model_name: deepseek-ai/DeepSeek-V3.2}
-  - {label: minimax, model_name: MiniMaxAI/MiniMax-M2.5}
+  - {label: deepseek, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0}
+  - {label: minimax, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4}
 seeds: [1000, 1001]
 
 max_days: 150
@@ -22,7 +22,11 @@ review_interval: 5
 cooldown: 3
 
 budget_approved: true
+budget_approval_date: 2026-07-14
+budget_scope: Development/Validation v2 live Pilot only
 budgets:
   max_calls: 350
+  max_input_tokens: 1500000
+  max_output_tokens: 500000
   max_cost_cny: 6
   cny_per_call: 0.00894

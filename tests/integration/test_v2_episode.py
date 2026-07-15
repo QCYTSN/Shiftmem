@@ -26,8 +26,13 @@ def test_every_day_has_a_controller_order():
     result = _run()
     records = result["environment_records"]
     assert len(records) == 40
+    assert len(result["daily_decision_log"]) == 40
     # The deterministic controller must produce an order for every completed day.
     assert all("order_quantity" in record for record in records)
+    assert all(
+        set(row) == {"day", "active_strategy", "order"}
+        for row in result["daily_decision_log"]
+    )
 
 
 def test_reviews_occur_only_on_scheduled_or_event_days():
@@ -45,6 +50,7 @@ def test_logs_separate_scheduler_memory_proposal_and_order():
     result = _run()
     assert "review_logs" in result
     assert "scheduler_log" in result
+    assert "daily_decision_log" in result
     assert "environment_records" in result
     sample = result["review_logs"][0]
     for field in ("trigger_reason", "supplied_memory_ids", "cited_memory_ids",
