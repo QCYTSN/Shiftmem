@@ -2,6 +2,19 @@
 
 > **v2 note (2026-07-14):** The results below qualify models for the historical direct-order schema. DeepSeek-V3.2 and MiniMax-M2.5 remain candidates, but both must pass a new bounded qualification suite for strategy-parameter output before any v2 Pilot or freeze.
 
+## Protocol-v2 strategy-schema result
+
+The repaired and frozen v2 harness was executed once on 2026-07-15 under run ID
+`v2-qual-live-20260715-739bc99`. DeepSeek-V3.2 and MiniMax-M2.5 each passed all
+4/4 strict strategy-monotonicity checks. Across 24 result rows there were 24
+provider attempts, zero retries, zero parse failures, zero fallbacks, and zero
+invalid or explicitly inapplicable memory citations. Estimated spend was CNY
+0.2146 under the approved CNY 0.50 / 48-call ceiling.
+
+This qualifies both models for the bounded v2 strategy-review interface only;
+it does not evaluate ShiftMem effectiveness and does not unlock held-out Test
+execution by itself.
+
 Date: 2026-07-13
 
 ## Purpose

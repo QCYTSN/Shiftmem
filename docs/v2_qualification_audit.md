@@ -78,3 +78,25 @@ limitation and makes a separately documented model-selection or scope decision.
 
 Formal Test execution remains blocked until model qualification, protocol
 finalization, budget approval, and a clean v2 freeze all succeed.
+
+## Frozen-harness requalification result
+
+The single authorized Development/Validation requalification ran on 2026-07-15
+with run ID `v2-qual-live-20260715-739bc99`. The execution used the amended
+qualification freeze, made 24 provider calls with no correction retry, and
+recorded an estimated cost of CNY 0.2146 against the hard limits of 48 calls and
+CNY 0.50.
+
+| Model | Rows | Attempts | Monotonicity | Parse / fallback | Invalid / inapplicable citation | Result |
+|---|---:|---:|---:|---:|---:|---|
+| `deepseek-ai/DeepSeek-V3.2` | 12 | 12 | 4 / 4 | 0 / 0 | 0 / 0 | Pass |
+| `MiniMaxAI/MiniMax-M2.5` | 12 | 12 | 4 / 4 | 0 / 0 | 0 / 0 | Pass |
+
+Both candidates therefore qualify for the protocol-v2 bounded strategy schema.
+This result does not authorize Test-ID/Test-OOD execution or constitute evidence
+for the project's memory-effect hypotheses.
+
+| Evidence artifact | SHA-256 |
+|---|---|
+| `artifacts/raw_runs/model_qualification_v2_v2-qual-live-20260715-739bc99.jsonl` | `1E1F9EDB2F78D4F4DA9410CEEFDF815E54D2975FB5492DFCEA8DB9849C5812E7` |
+| `artifacts/aggregated/model_qualification_v2_v2-qual-live-20260715-739bc99_summary.json` | `C89076CD8E3DC7372AD9558A631FDE7A2E3A5859419328F58BF0AA89647BBF68` |
