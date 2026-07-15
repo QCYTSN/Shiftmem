@@ -120,12 +120,14 @@ def _runtime_metadata(config: dict[str, Any], scenario_paths: list[Path]) -> dic
         "models": config["models"],
         "memory_methods": config["memory_methods"],
         "shiftmem_profile": config.get("shiftmem_profile"),
+        "controller_profile": config.get("controller_profile"),
         "seeds": config["seeds"],
         "max_days": config["max_days"],
         "review_interval": config["review_interval"],
         "cooldown": config["cooldown"],
         "strategy_defaults": StrategyParameters().model_dump(),
         "strategy_bounds": StrategyParameters.bounds(),
+        "strategy_max_review_deltas": StrategyParameters.max_review_deltas(),
         "scenarios": [
             {"path": str(path), "sha256": _sha256_file(path)}
             for path in scenario_paths
@@ -156,6 +158,17 @@ def validate_pilot_config(config: dict[str, Any]) -> None:
         raise ValueError("pilot requires models, memory methods, and seeds")
     if "shiftmem" in config["memory_methods"] and not config.get("shiftmem_profile"):
         raise ValueError("Pilot with ShiftMem requires an explicit runtime profile")
+    controller = config.get("controller_profile", {})
+    expected_bounds = {
+        key: list(value) for key, value in StrategyParameters.bounds().items()
+    }
+    if (
+        controller.get("defaults") != StrategyParameters().model_dump()
+        or controller.get("bounds") != expected_bounds
+        or controller.get("max_review_deltas")
+        != StrategyParameters.max_review_deltas()
+    ):
+        raise ValueError("Pilot controller profile must match the implementation")
     provider = str(config.get("provider", "deterministic"))
     if provider in _OFFLINE_PROVIDERS:
         return

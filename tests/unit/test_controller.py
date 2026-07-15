@@ -42,6 +42,24 @@ def test_strategy_parameters_clamp_out_of_range():
     assert clamped.lead_time_buffer == bounds["lead_time_buffer"][1]
 
 
+def test_strategy_revision_clamps_to_validation_selected_delta_caps():
+    current = StrategyParameters()
+    revised = StrategyParameters.clamp_revision(
+        current,
+        forecast_window=60,
+        safety_stock_multiplier=5.0,
+        lead_time_buffer=14,
+    )
+    assert revised.forecast_window == 21
+    assert revised.safety_stock_multiplier == 2.2
+    assert revised.lead_time_buffer == 2
+    assert StrategyParameters.max_review_deltas() == {
+        "forecast_window": 7,
+        "safety_stock_multiplier": 1.0,
+        "lead_time_buffer": 1,
+    }
+
+
 def test_order_is_non_negative_integer_action():
     controller = DeterministicController()
     action = controller.order(_observation(), StrategyParameters())

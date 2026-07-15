@@ -128,6 +128,9 @@ def test_agent_clamps_out_of_bounds_proposal():
     assert result.forecast_window <= bounds["forecast_window"][1]
     assert result.safety_stock_multiplier <= bounds["safety_stock_multiplier"][1]
     assert result.lead_time_buffer <= bounds["lead_time_buffer"][1]
+    assert result.forecast_window == 21
+    assert result.safety_stock_multiplier == 2.2
+    assert result.lead_time_buffer == 2
 
 
 def test_deterministic_strategy_provider_emits_no_order_quantity():

@@ -104,6 +104,16 @@ Consequently:
   explicit runtime profile is selected, passed through the runner, and verified
   offline on Development/Validation only.
 
+### Post-Pilot conformance remediation
+
+Future Pilot/formal paths now reject implicit memory and controller profiles.
+The explicit profile above passed a 40-cell network-free readiness run. The
+per-review delta caps were selected as forecast window 7, safety multiplier
+1.0, and lead-time buffer 1, matching the maximum changes already observed in
+the 240 live reviews. Enforcing those caps would change none of the recorded
+Pilot strategies, so no live rerun is needed. The historical Pilot limitation
+remains attached to its exploratory business outcomes.
+
 ## Provisional formal planning envelope
 
 After explicit profile injection, a new network-free 40-cell readiness run
@@ -119,9 +129,9 @@ yields a rounded planning envelope of:
 - 7 million output tokens;
 - CNY 360.
 
-This is a proposal for review, not an approved formal budget. It must be
-recomputed after the runtime profile is frozen, and Test execution remains
-unauthorized.
+This is a proposal for review, not an approved formal budget. Test execution
+remains unauthorized until the budget is explicitly approved and a replacement
+v2 freeze verifies the complete formal execution path.
 
 ## Evidence
 

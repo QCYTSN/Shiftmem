@@ -31,5 +31,12 @@ seeds: [1000, 1001, 1002, 1003, 1004]
 max_days: 150
 review_interval: 5
 cooldown: 3
+controller_profile:
+  defaults: {forecast_window: 14, safety_stock_multiplier: 1.2, lead_time_buffer: 1}
+  bounds:
+    forecast_window: [1, 60]
+    safety_stock_multiplier: [0.0, 5.0]
+    lead_time_buffer: [0, 14]
+  max_review_deltas: {forecast_window: 7, safety_stock_multiplier: 1.0, lead_time_buffer: 1}
 
 budget_approved: false

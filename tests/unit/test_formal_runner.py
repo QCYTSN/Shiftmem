@@ -36,6 +36,11 @@ def v2_config() -> dict:
                 "safety_stock_multiplier": [0.0, 5.0],
                 "lead_time_buffer": [0, 14],
             },
+            "max_review_deltas": {
+                "forecast_window": 7,
+                "safety_stock_multiplier": 1.0,
+                "lead_time_buffer": 1,
+            },
         },
         "shiftmem_profile": {
             "memory": {

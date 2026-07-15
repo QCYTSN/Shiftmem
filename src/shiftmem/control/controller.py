@@ -20,6 +20,12 @@ _BOUNDS: dict[str, tuple[float, float]] = {
     "lead_time_buffer": (0, 14),
 }
 
+_MAX_REVIEW_DELTAS: dict[str, float] = {
+    "forecast_window": 7,
+    "safety_stock_multiplier": 1.0,
+    "lead_time_buffer": 1,
+}
+
 # Public observation keys the controller is allowed to read. Anything that
 # resembles hidden truth (demand_mean, dispersion, fill_rate, regime_id, ...)
 # is refused in strict mode so leakage fails loudly during development.
@@ -55,6 +61,10 @@ class StrategyParameters(BaseModel):
     def bounds() -> dict[str, tuple[float, float]]:
         return dict(_BOUNDS)
 
+    @staticmethod
+    def max_review_deltas() -> dict[str, float]:
+        return dict(_MAX_REVIEW_DELTAS)
+
     @classmethod
     def clamp(
         cls,
@@ -71,6 +81,54 @@ class StrategyParameters(BaseModel):
             forecast_window=int(min(max(forecast_window, fw_lo), fw_hi)),
             safety_stock_multiplier=min(max(safety_stock_multiplier, ss_lo), ss_hi),
             lead_time_buffer=int(min(max(lead_time_buffer, lt_lo), lt_hi)),
+        )
+
+    @classmethod
+    def clamp_revision(
+        cls,
+        current: "StrategyParameters",
+        *,
+        forecast_window: float,
+        safety_stock_multiplier: float,
+        lead_time_buffer: float,
+    ) -> "StrategyParameters":
+        """Project a proposal into absolute bounds and per-review delta caps."""
+
+        bounded = cls.clamp(
+            forecast_window=forecast_window,
+            safety_stock_multiplier=safety_stock_multiplier,
+            lead_time_buffer=lead_time_buffer,
+        )
+        return cls(
+            forecast_window=int(
+                min(
+                    max(
+                        bounded.forecast_window,
+                        current.forecast_window - _MAX_REVIEW_DELTAS["forecast_window"],
+                    ),
+                    current.forecast_window + _MAX_REVIEW_DELTAS["forecast_window"],
+                )
+            ),
+            safety_stock_multiplier=min(
+                max(
+                    bounded.safety_stock_multiplier,
+                    current.safety_stock_multiplier
+                    - _MAX_REVIEW_DELTAS["safety_stock_multiplier"],
+                ),
+                current.safety_stock_multiplier
+                + _MAX_REVIEW_DELTAS["safety_stock_multiplier"],
+            ),
+            lead_time_buffer=int(
+                min(
+                    max(
+                        bounded.lead_time_buffer,
+                        current.lead_time_buffer
+                        - _MAX_REVIEW_DELTAS["lead_time_buffer"],
+                    ),
+                    current.lead_time_buffer
+                    + _MAX_REVIEW_DELTAS["lead_time_buffer"],
+                )
+            ),
         )
 
 

@@ -96,10 +96,13 @@ claim that the v1 direct-order outcomes validate v2 strategy experiences. The
 2026-07-15 live v2 Pilot used old library defaults and therefore remains valid
 only for its recorded cost/reliability envelope, not final ShiftMem performance.
 
-One protocol field is still unresolved: the maximum permitted change in each
-strategy parameter at a single review. Absolute bounds are implemented, but a
-separate per-review delta cap is not. Protocol 2.0 and the replacement freeze
-remain blocked until those caps are declared and enforced before Test access.
+The maximum permitted single-review changes are forecast window 7,
+safety-stock multiplier 1.0, and lead-time buffer 1. These values equal the
+largest respective changes observed across the 240 valid live-Pilot reviews
+(7, 1.0, and 1), so deterministic enforcement would not alter any recorded
+Pilot active strategy or require a post-hoc rerun. Future proposals beyond a
+cap are projected to the cap and logged as clamped. This selection uses
+Validation evidence only and was made before Test access.
 
 ## Primary estimand and endpoint
 

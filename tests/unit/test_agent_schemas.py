@@ -125,3 +125,6 @@ def test_strategy_prompt_discloses_joint_controller_target() -> None:
 
     assert "quoted_lead_time + lead_time_buffer + 1" in STRATEGY_REVIEW_SYSTEM_PROMPT
     assert "sqrt(protection_periods)" in STRATEGY_REVIEW_SYSTEM_PROMPT
+    assert "forecast_window by at most 7" in STRATEGY_REVIEW_SYSTEM_PROMPT
+    assert "safety_stock_multiplier by at most 1.0" in STRATEGY_REVIEW_SYSTEM_PROMPT
+    assert "lead_time_buffer by at most 1" in STRATEGY_REVIEW_SYSTEM_PROMPT

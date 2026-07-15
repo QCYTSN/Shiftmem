@@ -63,10 +63,15 @@ def validate_v2_config(config: dict[str, Any]) -> None:
     controller = config.get("controller_profile", {})
     defaults = controller.get("defaults")
     bounds = controller.get("bounds")
+    max_review_deltas = controller.get("max_review_deltas")
     expected_bounds = {
         key: list(value) for key, value in StrategyParameters.bounds().items()
     }
-    if defaults != StrategyParameters().model_dump() or bounds != expected_bounds:
+    if (
+        defaults != StrategyParameters().model_dump()
+        or bounds != expected_bounds
+        or max_review_deltas != StrategyParameters.max_review_deltas()
+    ):
         raise ValueError("v2 controller profile must match the frozen implementation")
     if int(config.get("review_interval", 0)) < 1 or int(config.get("cooldown", -1)) < 0:
         raise ValueError("v2 scheduler profile is incomplete")

@@ -114,7 +114,8 @@ class StrategyReviewAgent:
             active = current_strategy
             fallback_used = True
         else:
-            active = StrategyParameters.clamp(
+            active = StrategyParameters.clamp_revision(
+                current_strategy,
                 forecast_window=proposal.forecast_window,
                 safety_stock_multiplier=proposal.safety_stock_multiplier,
                 lead_time_buffer=proposal.lead_time_buffer,

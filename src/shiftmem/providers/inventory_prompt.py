@@ -54,6 +54,11 @@ shorter, more reactive window) when recent demand or lost sales rise or when a
 change is signalled; relax it when on-hand plus pipeline inventory is
 persistently excessive relative to recent demand.
 
+Relative to the supplied current strategy, one review may change
+forecast_window by at most 7, safety_stock_multiplier by at most 1.0, and
+lead_time_buffer by at most 1. Larger proposals are deterministically projected
+to these limits before the controller uses them.
+
 The deterministic controller computes protection_periods as
 quoted_lead_time + lead_time_buffer + 1. Its order-up-to target is
 forecast * protection_periods + safety_stock_multiplier * demand_std *
