@@ -1,0 +1,62 @@
+{
+  "freeze_type": "qualification_harness_only",
+  "formal_experiment_freeze": false,
+  "protocol_version": "2.0-draft",
+  "created_date": "2026-07-15",
+  "git_revision": "c22a4d1986b0321145d4c3e7242265bb1a045127",
+  "git_dirty_at_smoke": false,
+  "hash_algorithm": "sha256",
+  "provider_calls_authorized_by_freeze": false,
+  "test_id_or_test_ood_authorized": false,
+  "qualification_gate": {
+    "case_ids": [
+      "demand_low",
+      "demand_high",
+      "lost_sales_none",
+      "lost_sales_high",
+      "applicable_memory",
+      "inapplicable_memory"
+    ],
+    "repetitions": 2,
+    "monotonicity_checks": 4,
+    "monotonicity_passes_required": 4,
+    "maximum_correction_retries_per_case": 1,
+    "fallbacks_allowed": 0,
+    "unresolved_parse_failures_allowed": 0,
+    "invalid_memory_citations_allowed": 0,
+    "inapplicable_memory_citations_allowed": 0
+  },
+  "offline_smoke": {
+    "run_id": "offline-smoke-c22a4d1",
+    "models": 2,
+    "result_rows": 24,
+    "provider_calls": 24,
+    "attempts": 24,
+    "retries": 0,
+    "monotonicity": ["4/4", "4/4"],
+    "overwrite_guard": "pass",
+    "network_used": false,
+    "output_location": "temporary_directory_not_preserved"
+  },
+  "preserved_invalid_harness_evidence": {
+    "status": "inconclusive_harness_invalid",
+    "artifacts/raw_runs/model_qualification_v2.jsonl": "ac43899348bda28cf8870f7f27a9dc6160c8b4da776b23c824c27a3a844c95c9",
+    "artifacts/aggregated/model_qualification_v2_summary.json": "ecfa8ed57a2f4d2b11f5e6fd10189021706515a8a7e1237b9724a18ebd58ac35"
+  },
+  "files": {
+    "configs/experiments/model_qualification_v2.yaml": "d0cf78631ac7e530e80068629c5c7fdd7fc939dc8fc822beeae8f91df99e3e2c",
+    "scripts/qualify_models.py": "0291f04f68354748e1341d89cb6dc1299c9ec5248c95d664177ee7f06978e3d5",
+    "src/shiftmem/agents/base.py": "88c200e7ac14c3e5b756581e2dd6862460f9da26bcae4af4a6f495aa3e3ae256",
+    "src/shiftmem/agents/strategy_agent.py": "dfaeeae22904d956653a5daa8e4ab27d63c673bacf9e8bb73000e8afd865695e",
+    "src/shiftmem/control/controller.py": "e03a15fa3338cf62ace41268b1da52bd46c9149c55b9fa9ecd85db0741379b5c",
+    "src/shiftmem/evaluation/qualification_run.py": "0b211aa3058ae6105a9cc5ae544d267c039f7155628d65b9c47120ab091a3f20",
+    "src/shiftmem/evaluation/strategy_qualification.py": "ed577108bdcdf441323c805bbfe2195f30b9ea79b166dd2ab1f2a29434eddfd1",
+    "src/shiftmem/providers/base.py": "891a658bcf7a76d2ef4be9b7ef79bee6bcfd647c4d001d842de3f8df08077a28",
+    "src/shiftmem/providers/compatible_api.py": "2b4032ac9cfbcc8237883e267ab6b1b7616ff0d512dbeefd805122f8d5545a8b",
+    "src/shiftmem/providers/inventory_prompt.py": "f118c87ca347555ada4faaa7e6dab089dcf221130a40a06d76a5479a96c27ff9",
+    "tests/unit/test_agent_schemas.py": "53d14fd3ea761a44d6964633c5ae628faa0c4c8943c92e7852e841653395978e",
+    "tests/unit/test_strategy_agent.py": "3e3616d27c7eaed5c9eac2a5198cfd1388cb5bab5fbcc82eaa6cb15613d25378",
+    "tests/unit/test_strategy_qualification.py": "6704f69000e9cdad7e5de9b0331afa01f45f2b1d529f262a02305cd04b895b03",
+    "tests/unit/test_strategy_qualification_runner.py": "63d61603016004b93f05a3a5b8a4eb6a16da941102014fe674b9cfe1d081563e"
+  }
+}
