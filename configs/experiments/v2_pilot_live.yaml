@@ -12,6 +12,21 @@ split: Validation
 provider: siliconflow
 
 memory_methods: [vector, shiftmem]
+shiftmem_profile:
+  memory:
+    detector_min_samples: 10
+    detector_delta: 0.1
+    detector_threshold: 48.0
+    validation_service_window: 3
+    dormancy_patience: 3
+  retrieval:
+    semantic: 0.75
+    confidence: 0.5
+    recency: 1.0
+    utility: 0.25
+    probation_penalty: 0.25
+    changed_variable_penalty: 0.5
+    recency_half_life: 30.0
 models:
   - {label: deepseek, profile: siliconflow, model_id: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0}
   - {label: minimax, profile: siliconflow, model_id: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4}
@@ -21,7 +36,8 @@ max_days: 150
 review_interval: 5
 cooldown: 3
 
-budget_approved: true
+execution_status: completed_no_rerun
+budget_approved: false
 budget_approval_date: 2026-07-14
 budget_scope: Development/Validation v2 live Pilot only
 budgets:

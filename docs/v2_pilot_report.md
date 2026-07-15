@@ -106,16 +106,18 @@ Consequently:
 
 ## Provisional formal planning envelope
 
-Extrapolating the observed model/method token rates to the declared 320-cell
-primary tier, and conservatively applying the highest observed DeepSeek
-ShiftMem per-cell rate to all 160 secondary cells, gives a base estimate near
-CNY 281. Applying the offline 30.8/30 cadence factor and a 20% reserve yields a
-rounded planning envelope of:
+After explicit profile injection, a new network-free 40-cell readiness run
+measured 30.0 reviews per baseline cell and 34.1 per ShiftMem cell (32.05
+overall). Extrapolating the live per-review model/method token rates to the
+declared 320-cell primary tier, and conservatively applying the highest
+observed DeepSeek ShiftMem rate to all 160 secondary cells, gives a base
+estimate near CNY 296. Applying the method-specific cadence and a 20% reserve
+yields a rounded planning envelope of:
 
 - 20,000 provider attempts;
-- 85 million input tokens;
-- 6.5 million output tokens;
-- CNY 350.
+- 90 million input tokens;
+- 7 million output tokens;
+- CNY 360.
 
 This is a proposal for review, not an approved formal budget. It must be
 recomputed after the runtime profile is frozen, and Test execution remains
@@ -127,3 +129,4 @@ unauthorized.
 - Attempt journal: `artifacts/raw_runs/v2-live-pilot-20260715-a148a81_journal.jsonl`
 - Aggregate: `artifacts/aggregated/v2-live-pilot-20260715-a148a81_summary.json`
 - Derived analysis: `artifacts/aggregated/v2-live-pilot-20260715-a148a81_analysis.json`
+- Explicit-profile offline readiness: `artifacts/aggregated/v2_pilot_selected_profile_readiness.json`

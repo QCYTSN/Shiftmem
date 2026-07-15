@@ -10,7 +10,9 @@ from typing import Any
 
 import yaml
 
+from shiftmem.control.controller import StrategyParameters
 from shiftmem.evaluation.splits import load_split_manifest
+from shiftmem.memory.store import make_memory
 
 try:
     from scripts.verify_freeze import verify_freeze
@@ -54,6 +56,20 @@ def validate_v2_config(config: dict[str, Any]) -> None:
         raise ValueError("v2 matrix requires exactly two core models")
     if int(config.get("primary_seeds", 0)) < 1:
         raise ValueError("v2 primary tier requires positive seed count")
+    profile = config.get("shiftmem_profile")
+    if not profile:
+        raise ValueError("v2 matrix requires an explicit ShiftMem runtime profile")
+    make_memory("shiftmem", profile)
+    controller = config.get("controller_profile", {})
+    defaults = controller.get("defaults")
+    bounds = controller.get("bounds")
+    expected_bounds = {
+        key: list(value) for key, value in StrategyParameters.bounds().items()
+    }
+    if defaults != StrategyParameters().model_dump() or bounds != expected_bounds:
+        raise ValueError("v2 controller profile must match the frozen implementation")
+    if int(config.get("review_interval", 0)) < 1 or int(config.get("cooldown", -1)) < 0:
+        raise ValueError("v2 scheduler profile is incomplete")
 
 
 def build_v2_cell_plan(

@@ -119,6 +119,7 @@ def _runtime_metadata(config: dict[str, Any], scenario_paths: list[Path]) -> dic
         "dependencies": dependencies,
         "models": config["models"],
         "memory_methods": config["memory_methods"],
+        "shiftmem_profile": config.get("shiftmem_profile"),
         "seeds": config["seeds"],
         "max_days": config["max_days"],
         "review_interval": config["review_interval"],
@@ -153,6 +154,8 @@ def validate_pilot_config(config: dict[str, Any]) -> None:
         raise ValueError("pilot split must be Development or Validation only")
     if not config.get("models") or not config.get("memory_methods") or not config.get("seeds"):
         raise ValueError("pilot requires models, memory methods, and seeds")
+    if "shiftmem" in config["memory_methods"] and not config.get("shiftmem_profile"):
+        raise ValueError("Pilot with ShiftMem requires an explicit runtime profile")
     provider = str(config.get("provider", "deterministic"))
     if provider in _OFFLINE_PROVIDERS:
         return
@@ -330,7 +333,12 @@ def run_pilot(
                 result = run_v2_episode(
                     scenario=scenario,
                     provider=provider,
-                    memory=make_memory(row["method"]),
+                    memory=make_memory(
+                        row["method"],
+                        config.get("shiftmem_profile")
+                        if row["method"] == "shiftmem"
+                        else None,
+                    ),
                     config=V2EpisodeConfig(
                         seed=row["seed"],
                         max_days=int(config["max_days"]),

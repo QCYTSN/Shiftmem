@@ -5,6 +5,7 @@ from shiftmem.memory.store import (
     SummaryMemory,
     TimeDecayMemory,
     VectorMemory,
+    make_memory,
 )
 
 
@@ -65,3 +66,23 @@ def test_top_k_must_be_positive() -> None:
         pass
     else:
         raise AssertionError("top_k=0 must be rejected")
+
+
+def test_make_memory_applies_explicit_shiftmem_profile() -> None:
+    memory = make_memory(
+        "shiftmem",
+        {
+            "memory": {
+                "detector_min_samples": 10,
+                "detector_delta": 0.1,
+                "detector_threshold": 48.0,
+                "validation_service_window": 3,
+                "dormancy_patience": 3,
+            },
+            "retrieval": {"semantic": 0.75, "recency": 1.0},
+        },
+    )
+    assert memory.config.detector_threshold == 48.0
+    assert memory.config.dormancy_patience == 3
+    assert memory.retriever.weights.semantic == 0.75
+    assert memory.retriever.weights.recency == 1.0

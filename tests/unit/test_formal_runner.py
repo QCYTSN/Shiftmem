@@ -23,6 +23,30 @@ def v2_config() -> dict:
         "primary_seeds": 10,
         "secondary_seeds": 5,
         "post_shift_days": 30,
+        "review_interval": 5,
+        "cooldown": 3,
+        "controller_profile": {
+            "defaults": {
+                "forecast_window": 14,
+                "safety_stock_multiplier": 1.2,
+                "lead_time_buffer": 1,
+            },
+            "bounds": {
+                "forecast_window": [1, 60],
+                "safety_stock_multiplier": [0.0, 5.0],
+                "lead_time_buffer": [0, 14],
+            },
+        },
+        "shiftmem_profile": {
+            "memory": {
+                "detector_min_samples": 10,
+                "detector_delta": 0.1,
+                "detector_threshold": 48.0,
+                "validation_service_window": 3,
+                "dormancy_patience": 3,
+            },
+            "retrieval": {"semantic": 0.75, "recency": 1.0},
+        },
         "budget_approved": False,
         "budgets": {"max_calls": 100000, "max_input_tokens": 1, "max_output_tokens": 1, "max_cost_cny": 1},
     }
@@ -32,6 +56,13 @@ def test_v2_config_requires_two_primary_methods_and_two_models() -> None:
     invalid = v2_config()
     invalid["primary_methods"] = [{"config_id": "vector"}]
     with pytest.raises(ValueError, match="primary"):
+        validate_v2_config(invalid)
+
+
+def test_v2_config_rejects_implicit_runtime_defaults() -> None:
+    invalid = v2_config()
+    del invalid["shiftmem_profile"]
+    with pytest.raises(ValueError, match="explicit ShiftMem"):
         validate_v2_config(invalid)
 
 

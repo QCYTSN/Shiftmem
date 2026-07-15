@@ -3,7 +3,7 @@
 from collections import Counter
 from math import sqrt
 import re
-from typing import Protocol
+from typing import Any, Mapping, Protocol
 
 from .schemas import ExperienceRecord, MemoryRecord
 
@@ -139,11 +139,24 @@ class TimeDecayMemory(VectorMemory):
         return ranked[:top_k]
 
 
-def make_memory(name: str) -> MemoryStore:
+def make_memory(
+    name: str,
+    config: Mapping[str, Any] | None = None,
+) -> MemoryStore:
+    profile = dict(config or {})
     if name == "shiftmem":
-        from .shiftmem import ShiftMemory
+        from .retriever import RetrievalWeights
+        from .shiftmem import ShiftMemory, ShiftMemoryConfig
 
-        return ShiftMemory()
+        unknown = set(profile) - {"memory", "retrieval"}
+        if unknown:
+            raise ValueError(f"unknown ShiftMem profile fields: {sorted(unknown)}")
+        return ShiftMemory(
+            ShiftMemoryConfig(**dict(profile.get("memory", {}))),
+            retrieval_weights=RetrievalWeights(**dict(profile.get("retrieval", {}))),
+        )
+    if profile:
+        raise ValueError(f"memory profile is only supported for shiftmem, got: {name}")
     factories = {
         "none": NoMemory,
         "full_history": FullHistoryMemory,

@@ -23,6 +23,16 @@ def _pilot_config():
         "split": "Validation",
         "provider": "deterministic",
         "memory_methods": ["vector", "shiftmem"],
+        "shiftmem_profile": {
+            "memory": {
+                "detector_min_samples": 10,
+                "detector_delta": 0.1,
+                "detector_threshold": 48.0,
+                "validation_service_window": 3,
+                "dormancy_patience": 3,
+            },
+            "retrieval": {"semantic": 0.75, "recency": 1.0},
+        },
         "models": [{"label": "deepseek"}],
         "seeds": [1000, 1001],
         "max_days": 40,
@@ -71,6 +81,13 @@ def test_pilot_live_execution_requires_budget_approval():
     live["provider"] = "siliconflow"
     with pytest.raises(ValueError, match="budget"):
         validate_pilot_config(live)
+
+
+def test_pilot_rejects_implicit_shiftmem_defaults():
+    config = _pilot_config()
+    del config["shiftmem_profile"]
+    with pytest.raises(ValueError, match="explicit runtime profile"):
+        validate_pilot_config(config)
 
 
 def test_pilot_stops_before_exceeding_call_cap():

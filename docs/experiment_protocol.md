@@ -16,7 +16,7 @@ The v2 change is methodological, not a response to Test results. It makes the LL
 
 Historical audit record: **Protocol version: 1.1** proposed 168,480 direct daily model decisions under its mistaken nine-scenario count. That proposal was not frozen or executed on Test outcomes. The corrected eight-scenario historical count and cost are preserved in `docs/v1_1_live_validation_report.md`; neither count is a v2 plan.
 
-This draft authorizes documentation and Development/Validation engineering only. It does not authorize Test execution or a live v2 Pilot until the implementation plan and a bounded Pilot budget are separately approved. Test-ID and Test-OOD environments must not be executed before a clean v2 freeze verifies.
+This draft authorizes documentation and Development/Validation engineering only. The bounded live v2 Pilot completed on 2026-07-15 under its separate CNY 6 / 350-attempt authorization. It does not authorize another Pilot or any Test execution. Test-ID and Test-OOD environments must not be executed before an explicit formal budget approval and a clean v2 freeze verifies.
 
 After the v2 freeze, an implementation bug may be corrected only with a failing regression test and rerun of every affected configuration. Changes to the controller formula, parameter bounds, scheduler, cooldown, primary comparison, endpoint, seeds, or budget require a numbered amendment.
 
@@ -72,6 +72,34 @@ A strategy experience records the public context, trigger, previous and proposed
 An invalid experience is counted as reused only if it was supplied to the reviewer, cited in a valid proposal, and the proposal was accepted by the schema/bounds validator. Retrieval without citation and citation in a rejected proposal are reported separately.
 
 Change signals place only related experiences into probation. Confidence and lifecycle states remain deterministic and auditable; an LLM cannot freely assign memory validity. Dormant experience may re-enter probation when a matching context recurs.
+
+### Candidate runtime profile before the replacement freeze
+
+The runtime configuration must be explicit; production runners may not silently
+instantiate library defaults. The current Development/Validation candidate is:
+
+- review interval 5 days and cooldown 3 days;
+- strategy defaults: forecast window 14, safety-stock multiplier 1.2, and
+  lead-time buffer 1;
+- absolute strategy bounds: forecast window 1--60, safety-stock multiplier
+  0--5, and lead-time buffer 0--14;
+- Page-Hinkley minimum samples 10, delta 0.1, and threshold 48;
+- delayed-validation service window 3 and dormancy patience 3;
+- recency-heavy retrieval weights: semantic 0.75, confidence 0.5, recency 1.0,
+  utility 0.25, probation penalty 0.25, changed-variable penalty 0.5, and
+  recency half-life 30.
+
+The detector, dormancy, and retrieval values transfer the prior
+Development/Validation selection because the public detector signal path is
+unchanged. The transfer is an explicit pre-Test design assumption; it is not a
+claim that the v1 direct-order outcomes validate v2 strategy experiences. The
+2026-07-15 live v2 Pilot used old library defaults and therefore remains valid
+only for its recorded cost/reliability envelope, not final ShiftMem performance.
+
+One protocol field is still unresolved: the maximum permitted change in each
+strategy parameter at a single review. Absolute bounds are implemented, but a
+separate per-review delta cap is not. Protocol 2.0 and the replacement freeze
+remain blocked until those caps are declared and enforced before Test access.
 
 ## Primary estimand and endpoint
 

@@ -32,11 +32,11 @@
     "effect": "cost and reliability evidence remains valid; final ShiftMem performance and protocol freeze remain blocked"
   },
   "provisional_formal_planning_envelope": {
-    "basis": "observed primary rates plus highest DeepSeek ShiftMem rate for secondary cells, offline cadence factor 30.8/30, and 20 percent reserve",
+    "basis": "observed per-review rates, explicit-profile offline cadence of 30.0 reviews for baselines and 34.1 for ShiftMem, highest DeepSeek ShiftMem rate for secondary cells, and 20 percent reserve",
     "max_calls": 20000,
-    "max_input_tokens": 85000000,
-    "max_output_tokens": 6500000,
-    "max_cost_cny": 350,
+    "max_input_tokens": 90000000,
+    "max_output_tokens": 7000000,
+    "max_cost_cny": 360,
     "approved": false
   }
 }
