@@ -127,6 +127,12 @@ def run_strategy_case(
 ProviderFactory = Callable[[str, str], Any]
 
 
+def _canonical_json_default(value: Any) -> str:
+    if isinstance(value, date):
+        return value.isoformat()
+    raise TypeError(f"unsupported qualification config value: {type(value).__name__}")
+
+
 class QualificationBudgetStop(BaseException):
     """Hard-stop signal that cannot be swallowed by per-case retry handling."""
 
@@ -338,7 +344,11 @@ def execute_strategy_qualification(
     if repetitions != 2:
         raise ValueError("strategy qualification requires exactly two repetitions")
     canonical_config = json.dumps(
-        config, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        config,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=_canonical_json_default,
     ).encode("utf-8")
     metadata = build_run_metadata(
         run_id=run_id or f"strategy-{date.today().isoformat()}-{uuid4().hex[:8]}",

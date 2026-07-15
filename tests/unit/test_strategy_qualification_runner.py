@@ -1,6 +1,7 @@
 """Offline tests for the strategy-schema qualification runner (no network)."""
 
 import json
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -111,6 +112,7 @@ def test_existing_outputs_are_rejected_before_provider_creation(tmp_path: Path):
 
     config = {
         "repetitions": 2,
+        "budget_approval_date": date(2026, 7, 15),
         "models": [
             {
                 "label": "fake",
@@ -145,6 +147,7 @@ def test_execute_writes_run_metadata_and_attempt_evidence(tmp_path: Path):
     summary = tmp_path / "summary.json"
     config = {
         "repetitions": 2,
+        "budget_approval_date": date(2026, 7, 15),
         "models": [
             {
                 "label": "fake",
