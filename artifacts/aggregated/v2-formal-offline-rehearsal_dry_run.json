@@ -1,0 +1,11 @@
+{
+  "cell_plan_hash": "1c8365746a668ca2aab4f034db966771cef1e481f0679f3b52e14e667ebc6ef6",
+  "cells": 48,
+  "dry_run": true,
+  "estimated_periodic_reviews": 1440,
+  "freeze_id": "pre-freeze-offline-rehearsal",
+  "manifest_split": "Validation",
+  "protocol": "v2",
+  "provider_calls": 0,
+  "test_outcomes_accessed": false
+}

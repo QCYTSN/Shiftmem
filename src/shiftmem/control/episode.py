@@ -7,6 +7,7 @@ lifecycle-aware memories) registered as a delayed-validated strategy revision.
 This loop is network-free when given a deterministic provider.
 """
 
+from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any
 
@@ -14,6 +15,8 @@ from shiftmem.agents.strategy_agent import StrategyReviewAgent
 from shiftmem.envs.inventory_env import InventoryEnv
 from shiftmem.envs.shifts import Scenario
 from shiftmem.memory.reuse import classify_reuse
+from shiftmem.memory.extractor import ExperienceExtractor
+from shiftmem.memory.validator import DelayedValidator, PendingValidation, ValidationPolicy
 from shiftmem.providers.base import ModelProvider
 
 from .controller import DeterministicController, StrategyParameters
@@ -28,6 +31,7 @@ class V2EpisodeConfig:
     cooldown: int = 3
     top_k: int = 5
     episode_id: str = "v2ep"
+    validation_service_window: int = 3
 
 
 def run_v2_episode(
@@ -46,6 +50,9 @@ def run_v2_episode(
     scheduler_log: list[dict[str, Any]] = []
     daily_decision_log: list[dict[str, Any]] = []
     pending_event: dict[str, Any] | None = None
+    baseline_experiences = _BaselineStrategyExperiences(
+        memory, config.validation_service_window
+    )
 
     observation, _ = env.reset(seed=config.seed)
     terminated = False
@@ -92,6 +99,17 @@ def run_v2_episode(
                     revision,
                     list(review_log.cited_memory_ids),
                 )
+            elif not review_log.fallback_used:
+                baseline_experiences.register(
+                    config.episode_id,
+                    day,
+                    observation,
+                    {
+                        "trigger": trigger_reason,
+                        "previous": strategy.model_dump(),
+                        "proposed": new_strategy.model_dump(),
+                    },
+                )
             strategy = new_strategy
 
         action = controller.order(observation, strategy)
@@ -109,6 +127,8 @@ def run_v2_episode(
             # A change signal on this outcome requests an extra review next day.
             if _raised_change(memory):
                 pending_event = {"variable": "outcome", "day": int(record["day"])}
+        else:
+            baseline_experiences.observe(record)
 
     review_logs = [log.model_dump(mode="json") for log in agent.logs]
     reuse = [
@@ -139,6 +159,61 @@ def run_v2_episode(
     if callable(audit_summary):
         result["memory_audit"] = audit_summary()
     return result
+
+
+class _BaselineStrategyExperiences:
+    """Give non-lifecycle baselines the same delayed strategy experience unit."""
+
+    def __init__(self, memory: Any, service_window: int) -> None:
+        self.memory = memory
+        self.validator = DelayedValidator(
+            ValidationPolicy(service_window=service_window)
+        )
+        self.extractor = ExperienceExtractor()
+        self.history: list[dict[str, Any]] = []
+        self.pending: dict[str, tuple[PendingValidation, dict[str, Any]]] = {}
+
+    def register(
+        self,
+        episode_id: str,
+        step: int,
+        observation: dict[str, Any],
+        revision: dict[str, Any],
+    ) -> None:
+        memory_id = f"exp-{episode_id}-{step}"
+        pending = self.validator.register(
+            memory_id,
+            decision_step=step,
+            quoted_lead_time=int(observation["quoted_lead_time"]),
+        )
+        self.pending[memory_id] = (
+            pending,
+            {
+                "episode_id": episode_id,
+                "step": step,
+                "observation": deepcopy(observation),
+                "revision": deepcopy(revision),
+            },
+        )
+
+    def observe(self, record: dict[str, Any]) -> None:
+        self.history.append(deepcopy(record))
+        current_step = int(record["day"]) + 1
+        for memory_id, (pending, source) in list(self.pending.items()):
+            if current_step < pending.due_step:
+                continue
+            result = self.validator.evaluate(
+                pending, self.history, current_step=current_step
+            )
+            experience = self.extractor.extract_strategy_revision(
+                source["episode_id"],
+                source["step"],
+                source["observation"],
+                source["revision"],
+                result,
+            )
+            self.memory.add(experience.to_memory_record())
+            del self.pending[memory_id]
 
 
 def _raised_change(memory: Any) -> bool:

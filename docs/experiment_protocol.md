@@ -69,6 +69,11 @@ Invalid output receives one schema-correction retry. If the retry fails, the pre
 
 A strategy experience records the public context, trigger, previous and proposed parameters, cited memories, and later realized outcome evidence. Delayed validation waits for a complete frozen observation window and deterministically emits support, failure, or inconclusive.
 
+All memory methods receive this same delayed strategy-revision experience
+unit. Non-lifecycle baselines append the completed public experience after the
+same lead-time plus validation window; ShiftMem additionally applies its
+declared confidence and lifecycle transitions.
+
 An invalid experience is counted as reused only if it was supplied to the reviewer, cited in a valid proposal, and the proposal was accepted by the schema/bounds validator. Retrieval without citation and citation in a rejected proposal are reported separately.
 
 Change signals place only related experiences into probation. Confidence and lifecycle states remain deterministic and auditable; an LLM cannot freely assign memory validity. Dormant experience may re-enter probation when a matching context recurs.
@@ -170,6 +175,12 @@ Any third-model, multi-item, additional seed, or broad ablation experiment is op
 ## Seeds, pairing, and failed runs
 
 Comparisons are paired by scenario and master seed and, where applicable, model. Demand and supply random streams use deterministic derivation independent of policy and provider calls.
+
+The supply stream is derived from the master supply seed and calendar order
+day, rather than advanced by the number of orders a policy happened to place.
+Policies placing different earlier orders therefore receive the same fill
+shock for an order placed on the same day. This pre-freeze correction does not
+rewrite the historical live Pilot as final paired business evidence.
 
 Provider and parse failures are retained. After the declared retry, the previous valid strategy remains active. Its daily outcomes stay in business metrics, and the failure contributes to reliability metrics. A run is excluded only for a reproducible infrastructure failure that prevents the environment from completing and affects all compared methods for the paired unit; exclusions retain reason and rerun status.
 

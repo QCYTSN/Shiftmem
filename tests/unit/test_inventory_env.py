@@ -225,3 +225,28 @@ def test_policy_actions_do_not_change_demand_trajectory() -> None:
     assert [record["demand"] for record in ordering.records] == [
         record["demand"] for record in idle.records
     ]
+
+
+def test_same_order_day_has_policy_independent_supply_shock() -> None:
+    scenario = Scenario(
+        name="supply-stream-isolation",
+        episode_length=5,
+        initial_inventory=0,
+        demand_model="poisson",
+        demand=DemandParameters(base_level=1),
+        supply=SupplyParameters(lead_time=1, fill_rate=0.5),
+        costs=CostParameters(purchase=0, holding=0, stockout=0),
+    )
+    extra_order = InventoryEnv(scenario, ConstantDemand(0))
+    idle_first = InventoryEnv(scenario, ConstantDemand(0))
+    extra_order.reset(seed=123)
+    idle_first.reset(seed=123)
+
+    extra_order.step({"order_quantity": 100, "supplier_id": "standard"})
+    idle_first.step({"order_quantity": 0, "supplier_id": "standard"})
+    for env in (extra_order, idle_first):
+        env.step({"order_quantity": 0, "supplier_id": "standard"})
+        env.step({"order_quantity": 100, "supplier_id": "standard"})
+        env.step({"order_quantity": 0, "supplier_id": "standard"})
+
+    assert extra_order.records[3]["arrivals"] == idle_first.records[3]["arrivals"]

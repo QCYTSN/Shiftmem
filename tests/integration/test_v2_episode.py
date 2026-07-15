@@ -68,6 +68,13 @@ def test_episode_is_deterministic():
     assert first["environment_records"] == second["environment_records"]
 
 
+def test_vector_baseline_receives_delayed_strategy_experiences():
+    result = _run(memory_name="vector", max_days=12, interval=5)
+    reviews = result["review_logs"]
+    assert reviews[0]["supplied_memory_ids"] == []
+    assert reviews[1]["supplied_memory_ids"] == ["exp-v2ep-0"]
+
+
 def test_shiftmem_runs_end_to_end_without_network():
     result = _run(memory_name="shiftmem", max_days=40)
     assert len(result["environment_records"]) == 40

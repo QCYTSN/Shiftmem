@@ -26,17 +26,19 @@ class InventoryEnv:
         )
         self.supplier = supplier or SingleSupplier()
         self._demand_rng = np.random.default_rng()
-        self._supply_rng = np.random.default_rng()
+        self._supply_seed_words: tuple[int, ...] = ()
         self._terminated = True
         self.records: list[dict[str, Any]] = []
 
     def reset(self, seed: int | None = None) -> tuple[dict[str, Any], dict[str, str]]:
         demand_seed, supply_seed = np.random.SeedSequence(seed).spawn(2)
         self._demand_rng = np.random.default_rng(demand_seed)
-        self._supply_rng = np.random.default_rng(supply_seed)
+        self._supply_seed_words = tuple(
+            int(word) for word in supply_seed.generate_state(4)
+        )
         self.day = 0
         self.inventory = self.scenario.initial_inventory
-        self.pending_orders: dict[int, list[tuple[int, Any]]] = {}
+        self.pending_orders: dict[int, list[tuple[int, Any, int]]] = {}
         self.last_demand = 0
         self.last_sales = 0
         self.records = []
@@ -54,9 +56,13 @@ class InventoryEnv:
         starting_inventory = self.inventory
         arrivals = sum(
             self.supplier.arrival_quantity(
-                quantity, self._supply_rng, supply_parameters
+                quantity,
+                self._supply_rng_for_order_day(order_day),
+                supply_parameters,
             )
-            for quantity, supply_parameters in self.pending_orders.pop(self.day, [])
+            for quantity, supply_parameters, order_day in self.pending_orders.pop(
+                self.day, []
+            )
         )
         self.inventory += arrivals
         demand = self.demand_model.sample(self._demand_rng, parameters.demand)
@@ -67,7 +73,7 @@ class InventoryEnv:
         if quantity:
             due_day = self.day + parameters.supply.lead_time
             self.pending_orders.setdefault(due_day, []).append(
-                (quantity, parameters.supply)
+                (quantity, parameters.supply, self.day)
             )
 
         costs = self.scenario.costs
@@ -151,14 +157,21 @@ class InventoryEnv:
         return [
             {"due_day": due_day, "quantity": quantity}
             for due_day in sorted(self.pending_orders)
-            for quantity, _ in self.pending_orders[due_day]
+            for quantity, _, _ in self.pending_orders[due_day]
         ]
 
     def _pipeline_inventory(self) -> int:
         return sum(
             quantity
             for orders in self.pending_orders.values()
-            for quantity, _ in orders
+            for quantity, _, _ in orders
+        )
+
+    def _supply_rng_for_order_day(self, order_day: int) -> np.random.Generator:
+        """Return a policy-independent supply stream for a calendar order day."""
+
+        return np.random.default_rng(
+            np.random.SeedSequence([*self._supply_seed_words, int(order_day)])
         )
 
     @staticmethod

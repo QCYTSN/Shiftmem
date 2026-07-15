@@ -1,0 +1,36 @@
+{
+  "applicable_endpoint_cells": 36,
+  "cell_plan_hash": "1c8365746a668ca2aab4f034db966771cef1e481f0679f3b52e14e667ebc6ef6",
+  "cells": 48,
+  "complete": true,
+  "dry_run": false,
+  "estimated_periodic_reviews": 1440,
+  "fallback_count": 0,
+  "freeze_id": "pre-freeze-offline-rehearsal",
+  "input_tokens": 123684,
+  "manifest_split": "Validation",
+  "methods": {
+    "full_history": 4,
+    "none": 4,
+    "shiftmem": 16,
+    "summary": 4,
+    "time_decay": 4,
+    "vector": 16
+  },
+  "models": {
+    "deepseek": 32,
+    "minimax": 16
+  },
+  "offline_integration_only": true,
+  "offline_provider_attempts": 1512,
+  "output_tokens": 6048,
+  "parse_failures": 0,
+  "protocol": "v2",
+  "provider_calls": 0,
+  "raw_cells": "artifacts\\raw_runs\\v2-formal-offline-rehearsal_cells.jsonl",
+  "test_outcomes_accessed": false,
+  "tiers": {
+    "primary": 32,
+    "secondary": 16
+  }
+}
