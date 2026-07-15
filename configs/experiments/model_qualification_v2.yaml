@@ -6,6 +6,13 @@
 # requires a filled provider key and an approved budget; the default CLI path
 # elsewhere stays deterministic so this file cannot spend credit on its own.
 repetitions: 2
+budget_approved: true
+budget_approval_date: 2026-07-15
+budget_scope: Development/Validation strategy qualification only
+budgets:
+  max_calls: 48
+  max_cost_cny: 0.50
+  cny_per_call: 0.00894
 models:
   - label: deepseek_v3_2
     profile: siliconflow

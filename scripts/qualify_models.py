@@ -127,6 +127,61 @@ def run_strategy_case(
 ProviderFactory = Callable[[str, str], Any]
 
 
+class QualificationBudgetStop(BaseException):
+    """Hard-stop signal that cannot be swallowed by per-case retry handling."""
+
+
+class _QualificationBudgetedProvider:
+    def __init__(
+        self,
+        inner: Any,
+        counter: dict[str, int],
+        max_calls: int,
+    ) -> None:
+        self._inner = inner
+        self._counter = counter
+        self._max_calls = max_calls
+
+    def generate(self, request: Any):
+        if self._counter["calls"] >= self._max_calls:
+            raise QualificationBudgetStop(
+                f"qualification call cap reached: {self._max_calls}"
+            )
+        self._counter["calls"] += 1
+        return self._inner.generate(request)
+
+
+def _qualification_budget(config: dict[str, Any]) -> dict[str, int | float | None]:
+    profiles = {str(model.get("profile", "")) for model in config.get("models", [])}
+    live = bool(profiles - {"offline", "deterministic"})
+    budgets = config.get("budgets") or {}
+    if live and config.get("budget_approved") is not True:
+        raise ValueError("live strategy qualification requires explicit budget approval")
+    if not live and not budgets:
+        return {
+            "max_calls": 10**9,
+            "max_cost_cny": None,
+            "cny_per_call": 0.0,
+        }
+
+    max_calls = int(budgets.get("max_calls", 0))
+    max_cost_cny = float(budgets.get("max_cost_cny", 0.0))
+    cny_per_call = float(budgets.get("cny_per_call", 0.0))
+    if max_calls < 1:
+        raise ValueError("qualification max_calls must be positive")
+    if max_cost_cny <= 0 or cny_per_call <= 0:
+        raise ValueError("qualification cost cap and per-call estimate must be positive")
+    cost_limited_calls = int(max_cost_cny / cny_per_call)
+    effective_calls = min(max_calls, cost_limited_calls)
+    if effective_calls < 1:
+        raise ValueError("qualification cost cap does not permit one provider call")
+    return {
+        "max_calls": effective_calls,
+        "max_cost_cny": max_cost_cny,
+        "cny_per_call": cny_per_call,
+    }
+
+
 def _default_provider_factory(profile: str, model_id: str):
     return CompatibleAPIProvider(
         ProviderConfig.from_env(profile, model_override=model_id)
@@ -277,6 +332,8 @@ def execute_strategy_qualification(
     ensure_output_paths_available(
         (raw_output, summary_output), overwrite=overwrite
     )
+    budget = _qualification_budget(config)
+    call_counter = {"calls": 0}
     repetitions = int(config.get("repetitions", 2))
     if repetitions != 2:
         raise ValueError("strategy qualification requires exactly two repetitions")
@@ -297,7 +354,11 @@ def execute_strategy_qualification(
     for candidate in config["models"]:
         profile = str(candidate["profile"])
         model_id = str(candidate["model_id"])
-        provider = provider_factory(profile, model_id)
+        provider = _QualificationBudgetedProvider(
+            provider_factory(profile, model_id),
+            call_counter,
+            int(budget["max_calls"]),
+        )
         results = [
             run_strategy_case(provider, case, repetition)
             for repetition in range(repetitions)
@@ -329,6 +390,15 @@ def execute_strategy_qualification(
                 "qualification_date": date.today().isoformat(),
                 "schema": "strategy",
                 "run_metadata": metadata.model_dump(mode="json"),
+                "budget_usage": {
+                    "provider_calls": call_counter["calls"],
+                    "max_calls": budget["max_calls"],
+                    "estimated_cost_cny": round(
+                        call_counter["calls"] * float(budget["cny_per_call"]), 4
+                    ),
+                    "max_cost_cny": budget["max_cost_cny"],
+                    "cny_per_call": budget["cny_per_call"],
+                },
                 "models": summaries,
             },
             ensure_ascii=False,
@@ -368,13 +438,16 @@ def main() -> int:
         if missing:
             raise ValueError(f"unknown qualification labels: {sorted(missing)}")
     if args.schema == "strategy":
-        summaries = execute_strategy_qualification(
-            config,
-            args.raw_output,
-            args.summary_output,
-            run_id=args.run_id,
-            overwrite=args.overwrite,
-        )
+        try:
+            summaries = execute_strategy_qualification(
+                config,
+                args.raw_output,
+                args.summary_output,
+                run_id=args.run_id,
+                overwrite=args.overwrite,
+            )
+        except QualificationBudgetStop as stop:
+            raise RuntimeError(str(stop)) from None
     else:
         summaries = execute_qualification(
             config, args.raw_output, args.summary_output, merge_existing=args.merge_summary

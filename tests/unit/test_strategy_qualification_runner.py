@@ -17,6 +17,9 @@ from shiftmem.providers.inventory_prompt import (
     build_strategy_review_user_message,
 )
 from scripts.qualify_models import (
+    QualificationBudgetStop,
+    _QualificationBudgetedProvider,
+    _qualification_budget,
     _default_provider_factory,
     _default_strategy_provider_factory,
     execute_strategy_qualification,
@@ -166,3 +169,68 @@ def test_execute_writes_run_metadata_and_attempt_evidence(tmp_path: Path):
     assert all(len(row["attempts"]) == 1 for row in raw_rows)
     assert aggregate["run_metadata"]["run_id"] == "qual-test-001"
     assert aggregate["models"][0]["attempt_count"] == 12
+    assert aggregate["budget_usage"]["provider_calls"] == 12
+
+
+def test_budgeted_provider_stops_before_exceeding_call_cap():
+    inner = _FakeProvider(_good_proposal())
+    counter = {"calls": 0}
+    provider = _QualificationBudgetedProvider(inner, counter, max_calls=1)
+    request = build_strategy_qualification_cases()[0].request
+
+    provider.generate(request)
+    with pytest.raises(QualificationBudgetStop, match="call cap"):
+        provider.generate(request)
+
+    assert counter["calls"] == 1
+    assert inner.calls == 1
+
+
+def test_live_qualification_requires_explicit_budget_before_provider_creation(
+    tmp_path: Path,
+):
+    created = 0
+
+    def factory(profile, model_id):
+        nonlocal created
+        created += 1
+        return _FakeProvider(_good_proposal())
+
+    config = {
+        "repetitions": 2,
+        "models": [
+            {
+                "label": "live",
+                "profile": "siliconflow",
+                "model_id": "fake/model",
+            }
+        ],
+    }
+
+    with pytest.raises(ValueError, match="budget approval"):
+        execute_strategy_qualification(
+            config,
+            tmp_path / "raw.jsonl",
+            tmp_path / "summary.json",
+            provider_factory=factory,
+        )
+
+    assert created == 0
+
+
+def test_qualification_budget_uses_stricter_call_or_cost_cap():
+    config = {
+        "budget_approved": True,
+        "budgets": {
+            "max_calls": 48,
+            "max_cost_cny": 0.50,
+            "cny_per_call": 0.00894,
+        },
+        "models": [{"profile": "siliconflow"}],
+    }
+
+    budget = _qualification_budget(config)
+
+    assert budget["max_calls"] == 48
+    assert budget["max_cost_cny"] == 0.50
+    assert budget["cny_per_call"] == 0.00894
