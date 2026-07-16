@@ -39,7 +39,7 @@ def journal(path: Path) -> JsonlRunJournal:
     return JsonlRunJournal(
         path,
         RunIdentity(run_id="dry-run", freeze_id="freeze", git_commit="a" * 40, config_hash="b" * 64),
-        BudgetLimits(max_calls=10, max_input_tokens=1000, max_output_tokens=1000, max_cost_cny=1),
+        BudgetLimits(max_calls=10, max_input_tokens=1000, max_output_tokens=4000, max_cost_cny=1),
     )
 
 
@@ -105,6 +105,27 @@ def test_preflight_reservation_is_fsynced_then_replaced_by_actuals(tmp_path: Pat
     assert '"status":"reserved"' in lines[0]
     assert '"status":"complete"' in lines[1]
     assert wrapped.journal.totals()["input_tokens"] == 100
+
+
+def test_billed_output_reservation_is_independent_of_generation_cap(
+    tmp_path: Path,
+) -> None:
+    delegate = FakeProvider()
+    target = journal(tmp_path / "journal.jsonl")
+    wrapped = JournaledProvider(
+        delegate,
+        target,
+        4.0,
+        6.0,
+        require_preflight_reservation=True,
+        output_token_reservation_per_call=3000,
+    )
+    wrapped.set_decision("cell", 4)
+    wrapped.generate(ProviderRequest(observation={"day": 4}, memory=[]))
+
+    reserved = (tmp_path / "journal.jsonl").read_text(encoding="utf-8").splitlines()[0]
+    assert '"output_tokens":3000' in reserved
+    assert target.totals()["output_tokens"] == 20
 
 
 def test_preflight_stops_before_delegate_when_reservation_exceeds_budget(

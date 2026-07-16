@@ -1,9 +1,8 @@
 # Protocol v2 formal experiment matrix (hierarchical strategy-review design).
 #
-# The primary confirmatory tier compares VectorMemory vs ShiftMem across the
-# eight held-out scenarios, ten paired seeds, and two core models = 320 cells.
-# The secondary tier runs the four remaining baselines on DeepSeek only with
-# five seeds and the same eight scenarios = 160 cells.
+# Amendment 1 primary tier compares VectorMemory vs ShiftMem across eight
+# held-out scenarios, five paired seeds, and two core models = 160 cells.
+# The paid secondary tier is disabled to keep the approved hard cap at CNY 100.
 #
 # This config authorizes Development/Validation dry-runs only. Live execution
 # remains blocked until a completed v2 Pilot, an explicitly approved budget,
@@ -12,8 +11,8 @@
 protocol: v2
 
 models:
-  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512}
-  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512}
+  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
 
 primary_methods:
   - {config_id: vector}
@@ -27,8 +26,8 @@ secondary_methods:
 
 secondary_model: deepseek
 
-primary_seeds: 10
-secondary_seeds: 5
+primary_seeds: 5
+secondary_seeds: 0
 post_shift_days: 30
 
 # Review schedule, strategy bounds, and per-review caps are Validation-selected
@@ -58,12 +57,11 @@ shiftmem_profile:
     changed_variable_penalty: 0.5
     recency_half_life: 30.0
 
-# The completed v2 Pilot supports the provisional planning envelope below.
-# It is not approved: explicit user approval and a verified v2 freeze remain
-# mandatory before any Test-ID/Test-OOD execution.
-budget_approved: false
+# Explicitly approved by the user on 2026-07-16 under Protocol 2.0 Amendment 1.
+# Spending remains blocked until the exact config is inside a verified v2 freeze.
+budget_approved: true
 budgets:
-  max_calls: 20000
-  max_input_tokens: 90000000
-  max_output_tokens: 7000000
-  max_cost_cny: 360
+  max_calls: 7000
+  max_input_tokens: 25000000
+  max_output_tokens: 3200000
+  max_cost_cny: 100

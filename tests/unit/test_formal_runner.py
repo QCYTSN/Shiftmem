@@ -22,8 +22,8 @@ def v2_config() -> dict:
             {"config_id": name} for name in ["none", "full_history", "summary", "time_decay"]
         ],
         "secondary_model": "deepseek",
-        "primary_seeds": 10,
-        "secondary_seeds": 5,
+        "primary_seeds": 5,
+        "secondary_seeds": 0,
         "post_shift_days": 30,
         "review_interval": 5,
         "cooldown": 3,
@@ -73,11 +73,11 @@ def test_v2_config_rejects_implicit_runtime_defaults() -> None:
         validate_v2_config(invalid)
 
 
-def test_v2_primary_tier_is_320_cells() -> None:
+def test_v2_amendment_one_primary_tier_is_160_cells() -> None:
     scenarios = [f"validation-{i}" for i in range(8)]
-    plan = build_v2_cell_plan(v2_config(), scenarios, list(range(10)), tier="primary")
-    # 8 scenarios x 10 seeds x 2 models x 2 methods.
-    assert len(plan) == 8 * 10 * 2 * 2
+    plan = build_v2_cell_plan(v2_config(), scenarios, list(range(5)), tier="primary")
+    # 8 scenarios x 5 seeds x 2 models x 2 methods.
+    assert len(plan) == 8 * 5 * 2 * 2
     assert len({row["cell_id"] for row in plan}) == len(plan)
 
 
@@ -117,9 +117,14 @@ def test_v2_formal_live_gate_requires_approval_pricing_and_output_caps() -> None
                 "input_cny_per_million": 4.0,
                 "output_cny_per_million": 6.0,
                 "max_output_tokens_per_call": 512,
+                "max_billed_output_tokens_per_call": 3072,
             }
         )
     validate_v2_live_gate_config(candidate)
+
+    candidate["models"][0]["max_billed_output_tokens_per_call"] = 511
+    with pytest.raises(ValueError, match="rates or output cap"):
+        validate_v2_live_gate_config(candidate)
 
 
 def test_formal_config_must_match_copy_inside_verified_freeze(tmp_path: Path) -> None:

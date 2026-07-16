@@ -133,6 +133,17 @@ This is a proposal for review, not an approved formal budget. Test execution
 remains unauthorized until the budget is explicitly approved and a replacement
 v2 freeze verifies the complete formal execution path.
 
+### Protocol 2.0 Amendment 1 decision
+
+On 2026-07-16 the user explicitly approved a reduced hard cap of CNY 100 rather
+than the provisional CNY 360 envelope. The approved paid matrix retains both
+models, all eight held-out scenarios, and VectorMemory versus ShiftMem, reduces
+paired seeds from ten to five, and removes the paid secondary tier. It contains
+160 cells. Pilot-linear planning gives CNY 75.42 before reserve; the frozen hard
+limits are 7,000 attempts, 25M input tokens, 3.2M billed output tokens, and CNY
+100. H2 is exploratory under this amendment. The historical CNY 360 proposal
+above remains preserved as the superseded planning record.
+
 ## Evidence
 
 - Raw cells: `artifacts/raw_runs/v2-live-pilot-20260715-a148a81_cells.jsonl`

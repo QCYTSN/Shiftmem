@@ -180,6 +180,7 @@ def canonical_v2_paths(root: Path) -> list[Path]:
         Path("docs/experiment_protocol.md"),
         Path("docs/related_work_matrix.md"),
         Path("docs/model_card.md"),
+        Path("docs/implementation_log.md"),
         Path("docs/v2_qualification_audit.md"),
         Path("docs/v2_pilot_report.md"),
         Path("docs/v2_formal_readiness_audit.md"),

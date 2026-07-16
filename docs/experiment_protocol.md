@@ -1,10 +1,10 @@
 # Experiment Protocol
 
-Protocol version: 2.0-draft
+Protocol version: 2.0
 
 Preparation date: 2026-07-14
 
-Replacement freeze: not created
+Replacement freeze: content-addressed manifest assigned at clean creation
 
 Scope: hierarchical strategy-review ShiftMem experiments in a single-item lost-sales inventory environment
 
@@ -16,9 +16,26 @@ The v2 change is methodological, not a response to Test results. It makes the LL
 
 Historical audit record: **Protocol version: 1.1** proposed 168,480 direct daily model decisions under its mistaken nine-scenario count. That proposal was not frozen or executed on Test outcomes. The corrected eight-scenario historical count and cost are preserved in `docs/v1_1_live_validation_report.md`; neither count is a v2 plan.
 
-This draft authorizes documentation and Development/Validation engineering only. The bounded live v2 Pilot completed on 2026-07-15 under its separate CNY 6 / 350-attempt authorization. It does not authorize another Pilot or any Test execution. Test-ID and Test-OOD environments must not be executed before an explicit formal budget approval and a clean v2 freeze verifies.
+The bounded live v2 Pilot completed on 2026-07-15 under its separate CNY 6 / 350-attempt authorization. It does not authorize another Pilot. The formal budget was explicitly approved on 2026-07-16 under Amendment 1, but no Test-ID or Test-OOD execution is authorized until the exact approved config is inside a clean verified v2 replacement freeze.
 
 After the v2 freeze, an implementation bug may be corrected only with a failing regression test and rerun of every affected configuration. Changes to the controller formula, parameter bounds, scheduler, cooldown, primary comparison, endpoint, seeds, or budget require a numbered amendment.
+
+### Amendment 1: reduced formal budget and matrix
+
+Approved by the user on 2026-07-16 before any Test outcome access. To keep the
+formal API hard cap at CNY 100, the primary tier retains both core models, all
+eight held-out scenarios, and the ShiftMem-versus-VectorMemory comparison, but
+uses five rather than ten paired seeds. This gives 160 paid primary cells. The
+paid secondary four-baseline tier is removed; H2 becomes exploratory and may
+use only the already completed network-free rehearsal unless a separate future
+budget is approved. The hard limits are 7,000 attempts, 25 million input
+tokens, 3.2 million billed output tokens, and CNY 100. The generation cap
+remains 512 tokens, while budget reservation independently allows 3,072 billed
+output tokens per attempt because the Pilot observed a maximum of 2,352.
+
+This amendment reduces precision and widens confidence intervals relative to
+the superseded ten-seed plan. It preserves the primary estimand and cross-model
+RQ4 but does not support a confirmatory paid six-method H2 conclusion.
 
 ## Research questions and hypotheses
 
@@ -31,7 +48,7 @@ After the v2 freeze, an implementation bug may be corrected only with a failing 
 The hypotheses remain:
 
 - **H1:** ShiftMem has lower post-shift cumulative regret than VectorMemory.
-- **H2:** ShiftMem has lower invalid strategy-experience reuse rate than other memory baselines.
+- **H2 (exploratory under Amendment 1):** ShiftMem has lower invalid strategy-experience reuse rate than other memory baselines.
 - **H3:** ShiftMem does not materially degrade stable-environment performance.
 - **H4:** Dormancy/reactivation is particularly useful under periodic recurrence.
 - **H5:** Statistical detectors are more stable and less costly than LLM-only change judgment.
@@ -152,16 +169,16 @@ Core model A remains `deepseek-ai/DeepSeek-V3.2`; Core model B remains `MiniMaxA
 ### Primary tier
 
 - eight held-out scenarios;
-- ten paired seeds per scenario;
+- five paired seeds per scenario;
 - two core models;
 - VectorMemory and ShiftMem;
-- 320 model-method-scenario-seed cells.
+- 160 model-method-scenario-seed cells.
 
-The ten-seed design is a bounded undergraduate-study choice. Results emphasize paired effects and confidence intervals and must not claim the power associated with the retired 52-seed planning value.
+The five-seed Amendment 1 design is a budget-bounded undergraduate-study choice. Results emphasize paired effects and confidence intervals, explicitly report low precision, and must not claim the power associated with either the superseded ten-seed plan or the retired 52-seed planning value.
 
 ### Secondary memory tier
 
-NoMemory, FullHistory, Summary, and TimeDecay are evaluated with DeepSeek only, five paired seeds, and the same eight scenarios. These 160 cells provide H2 context without duplicating the complete matrix across both models.
+NoMemory, FullHistory, Summary, and TimeDecay remain implemented and were exercised in the 48-cell network-free Development/Validation rehearsal. Amendment 1 removes their paid held-out tier. They provide engineering context only and cannot support a confirmatory H2 claim without a separately approved future budget and numbered amendment.
 
 ### Targeted ablations and non-LLM context
 
@@ -201,7 +218,7 @@ issue another request.
 
 For each declared contrast, calculate paired differences on matching scenario/model/seed units. Report mean, sample standard deviation, 95% confidence interval, paired effect size, and raw sample count.
 
-Use a paired t-test when the paired-difference normality diagnostic does not reject at 0.05 and no severe outlier pattern is present; otherwise use the Wilcoxon signed-rank test. Tests are two-sided with alpha 0.05. Apply Holm correction within each declared secondary contrast family. Report adjusted and unadjusted p-values and do not equate non-significance with equivalence.
+Use a paired t-test when the paired-difference normality diagnostic does not reject at 0.05 and no severe outlier pattern is present; otherwise use the Wilcoxon signed-rank test. Tests are two-sided with alpha 0.05. Apply Holm correction within each declared secondary contrast family; Amendment 1 declares no paid secondary method-contrast family. Report adjusted and unadjusted p-values and do not equate non-significance with equivalence.
 
 H3 remains descriptive until Validation fixes a smallest acceptable cost margin before the v2 freeze. The selected margin and its rationale become frozen protocol fields; held-out stable outcomes cannot influence it.
 
@@ -211,7 +228,7 @@ The v2 Pilot reports variance, review counts, runtime, token use, failures, para
 
 The v1.1 live Validation dry-run cost CNY 3.2184 and its projected full-matrix cost are historical direct-order evidence only. The reported v1.1 matrix also contained an arithmetic scope error: the declared Test manifests contain eight, not nine, scenarios. Neither the CNY 1,506.22 estimate nor the CNY 1,810 cap is proposed for v2.
 
-A new Development/Validation-only Pilot must measure scheduled and event review frequency, attempts, input/output tokens, latency, and provider cost. Its result determines the v2 call/token/cost ceiling. Formal execution remains blocked until the user explicitly approves that ceiling and it is copied into the v2 freeze.
+The completed Development/Validation Pilot measured scheduled and event review frequency, attempts, input/output tokens, latency, and provider cost. Amendment 1 uses that evidence to set the explicitly approved CNY 100 ceiling and reduced 160-cell matrix. Formal execution remains blocked until these exact fields are copied into and verified by the v2 replacement freeze.
 
 The 2026-07-15 strategy qualification evidence is classified as `inconclusive_harness_invalid` because the runner used the archived daily-order prompt, omitted current-strategy and trigger inputs, did not preserve corrected attempts, and used inconsistent lost-sales fixtures. The raw and aggregate files remain immutable engineering evidence and cannot qualify or disqualify a model. The repaired qualification keeps the predeclared strict condition `monotonicity_checks == 4` and `monotonicity_passes == 4`.
 

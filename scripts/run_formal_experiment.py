@@ -75,6 +75,8 @@ def validate_v2_config(config: dict[str, Any]) -> None:
         raise ValueError("v2 matrix requires exactly two core models")
     if int(config.get("primary_seeds", 0)) < 1:
         raise ValueError("v2 primary tier requires positive seed count")
+    if int(config.get("secondary_seeds", -1)) < 0:
+        raise ValueError("v2 secondary seed count must be non-negative")
     profile = config.get("shiftmem_profile")
     if not profile:
         raise ValueError("v2 matrix requires an explicit ShiftMem runtime profile")
@@ -120,6 +122,7 @@ def validate_v2_live_gate_config(config: dict[str, Any]) -> None:
         "input_cny_per_million",
         "output_cny_per_million",
         "max_output_tokens_per_call",
+        "max_billed_output_tokens_per_call",
     }
     for model in config["models"]:
         if not required_model.issubset(model):
@@ -128,6 +131,8 @@ def validate_v2_live_gate_config(config: dict[str, Any]) -> None:
             float(model["input_cny_per_million"]) < 0
             or float(model["output_cny_per_million"]) < 0
             or int(model["max_output_tokens_per_call"]) < 1
+            or int(model["max_billed_output_tokens_per_call"])
+            < int(model["max_output_tokens_per_call"])
         ):
             raise ValueError("formal live model rates or output cap are invalid")
 
@@ -447,6 +452,9 @@ def _make_formal_live_provider(
         float(model["input_cny_per_million"]),
         float(model["output_cny_per_million"]),
         require_preflight_reservation=True,
+        output_token_reservation_per_call=int(
+            model["max_billed_output_tokens_per_call"]
+        ),
     )
 
 

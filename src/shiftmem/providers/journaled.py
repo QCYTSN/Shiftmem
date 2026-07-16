@@ -21,12 +21,19 @@ class JournaledProvider:
         output_cny_per_million: float,
         *,
         require_preflight_reservation: bool = False,
+        output_token_reservation_per_call: int | None = None,
     ) -> None:
         self.delegate = delegate
         self.journal = journal
         self.input_rate = float(input_cny_per_million)
         self.output_rate = float(output_cny_per_million)
         self.require_preflight_reservation = require_preflight_reservation
+        if (
+            output_token_reservation_per_call is not None
+            and output_token_reservation_per_call < 1
+        ):
+            raise ValueError("output token reservation must be positive")
+        self.output_token_reservation_per_call = output_token_reservation_per_call
         self._cell_id: str | None = None
         self._day: int | None = None
         self._attempt = 0
@@ -69,6 +76,10 @@ class JournaledProvider:
                     "live provider lacks token_budget_upper_bounds preflight"
                 )
             max_input_tokens, max_output_tokens = bounds(request)
+            if self.output_token_reservation_per_call is not None:
+                max_output_tokens = max(
+                    max_output_tokens, self.output_token_reservation_per_call
+                )
             max_cost = (
                 max_input_tokens * self.input_rate
                 + max_output_tokens * self.output_rate

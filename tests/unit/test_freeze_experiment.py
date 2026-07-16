@@ -124,12 +124,9 @@ def test_v2_candidate_package_covers_code_contract_configs_and_raw_evidence() ->
     assert set(candidate["files"]) == {path.as_posix() for path in paths}
 
 
-def test_current_v2_candidate_is_blocked_only_by_declared_pre_freeze_gates() -> None:
+def test_approved_protocol_v2_package_passes_replacement_freeze_gates() -> None:
     errors = collect_v2_gate_errors(Path.cwd(), git_status="")
-    assert errors == [
-        "protocol version must be finalized as 2.0",
-        "formal API budget is not explicitly approved",
-    ]
+    assert errors == []
 
 
 def test_v2_candidate_verifier_detects_hash_tampering(tmp_path: Path) -> None:
