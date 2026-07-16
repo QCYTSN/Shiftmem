@@ -313,9 +313,14 @@ def build_v2_candidate(root: Path, errors: list[str]) -> dict[str, Any]:
     paths = canonical_v2_paths(root)
     manifest = build_manifest(root, paths)
     freeze_id = f"v2-formal-{hashlib.sha256(manifest.encode()).hexdigest()[:12]}"
+    git_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True,
+        capture_output=True, text=True,
+    ).stdout.strip()
     return {
         "schema": "protocol-v2-replacement-freeze-candidate",
         "generated_date": date.today().isoformat(),
+        "git_commit": git_commit,
         "ready": not errors,
         "freeze_id": freeze_id,
         "test_outcomes_accessed": False,
