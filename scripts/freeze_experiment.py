@@ -332,6 +332,41 @@ def build_v2_candidate(root: Path, errors: list[str]) -> dict[str, Any]:
     }
 
 
+def verify_v2_candidate(root: Path, candidate_path: Path) -> list[str]:
+    """Verify a candidate against the complete current canonical package."""
+
+    root = root.resolve()
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    errors: list[str] = []
+    if candidate.get("schema") != "protocol-v2-replacement-freeze-candidate":
+        errors.append("candidate schema is invalid")
+    if candidate.get("test_outcomes_accessed") is not False:
+        errors.append("candidate does not prove Test outcome isolation")
+    commit = str(candidate.get("git_commit", ""))
+    if len(commit) != 40 or any(character not in "0123456789abcdef" for character in commit):
+        errors.append("candidate git commit is invalid")
+    paths = canonical_v2_paths(root)
+    expected_names = {path.as_posix() for path in paths}
+    files = candidate.get("files")
+    if not isinstance(files, dict):
+        return [*errors, "candidate files mapping is invalid"]
+    actual_names = set(files)
+    missing = sorted(expected_names - actual_names)
+    extra = sorted(actual_names - expected_names)
+    if missing or extra:
+        errors.append(f"candidate file membership mismatch: missing={missing}, extra={extra}")
+    for relative in sorted(expected_names & actual_names):
+        if _sha256(root / relative) != files[relative]:
+            errors.append(f"candidate hash mismatch: {relative}")
+    manifest = build_manifest(root, paths)
+    expected_id = f"v2-formal-{hashlib.sha256(manifest.encode()).hexdigest()[:12]}"
+    if candidate.get("freeze_id") != expected_id:
+        errors.append("candidate freeze ID does not match canonical manifest")
+    if candidate.get("file_count") != len(paths):
+        errors.append("candidate file count is incorrect")
+    return errors
+
+
 def canonical_paths(root: Path) -> list[Path]:
     paths = [
         Path("docs/experiment_protocol.md"),
@@ -402,8 +437,16 @@ def main() -> int:
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--v2", action="store_true")
     parser.add_argument("--candidate-output", type=Path)
+    parser.add_argument("--verify-candidate", type=Path)
     args = parser.parse_args()
     root = args.root.resolve()
+    if args.verify_candidate is not None:
+        candidate_path = args.verify_candidate
+        if not candidate_path.is_absolute():
+            candidate_path = root / candidate_path
+        errors = verify_v2_candidate(root, candidate_path)
+        print(json.dumps({"valid": not errors, "errors": errors}, indent=2))
+        return int(bool(errors))
     if args.v2:
         errors = collect_v2_gate_errors(root)
         candidate = build_v2_candidate(root, errors)

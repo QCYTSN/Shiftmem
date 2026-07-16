@@ -7,6 +7,7 @@ from scripts.freeze_experiment import (
     collect_v2_gate_errors,
     evaluate_freeze_gates,
     evaluate_v2_freeze_gates,
+    verify_v2_candidate,
     write_freeze,
 )
 from scripts.verify_freeze import verify_freeze
@@ -129,3 +130,18 @@ def test_current_v2_candidate_is_blocked_only_by_declared_pre_freeze_gates() -> 
         "protocol version must be finalized as 2.0",
         "formal API budget is not explicitly approved",
     ]
+
+
+def test_v2_candidate_verifier_detects_hash_tampering(tmp_path: Path) -> None:
+    root = Path.cwd().resolve()
+    candidate = build_v2_candidate(root, ["budget blocked"])
+    target = tmp_path / "candidate.json"
+    import json
+
+    target.write_text(json.dumps(candidate), encoding="utf-8")
+    assert verify_v2_candidate(root, target) == []
+
+    first = next(iter(candidate["files"]))
+    candidate["files"][first] = "0" * 64
+    target.write_text(json.dumps(candidate), encoding="utf-8")
+    assert any("hash mismatch" in error for error in verify_v2_candidate(root, target))
