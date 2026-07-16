@@ -8,6 +8,8 @@ from scripts.run_formal_experiment import (
     validate_formal_config,
     validate_live_dry_run_config,
     validate_v2_config,
+    validate_v2_live_gate_config,
+    verify_config_bound_to_freeze,
 )
 
 
@@ -90,6 +92,54 @@ def test_v2_secondary_tier_is_160_cells_deepseek_only() -> None:
 def test_v2_cell_plan_rejects_test_manifest() -> None:
     with pytest.raises(ValueError, match="Test-ID|Test-OOD"):
         build_v2_cell_plan(v2_config(), ["test-ood-periodic"], [1], tier="primary")
+
+
+def test_v2_formal_live_gate_requires_approval_pricing_and_output_caps() -> None:
+    candidate = v2_config()
+    with pytest.raises(ValueError, match="not approved"):
+        validate_v2_live_gate_config(candidate)
+
+    candidate["budget_approved"] = True
+    candidate["budgets"] = {
+        "max_calls": 100,
+        "max_input_tokens": 10000,
+        "max_output_tokens": 10000,
+        "max_cost_cny": 10,
+    }
+    with pytest.raises(ValueError, match="pricing and output cap"):
+        validate_v2_live_gate_config(candidate)
+
+    for model in candidate["models"]:
+        model.update(
+            {
+                "provider": "siliconflow",
+                "model_name": model["label"],
+                "input_cny_per_million": 4.0,
+                "output_cny_per_million": 6.0,
+                "max_output_tokens_per_call": 512,
+            }
+        )
+    validate_v2_live_gate_config(candidate)
+
+
+def test_formal_config_must_match_copy_inside_verified_freeze(tmp_path: Path) -> None:
+    root = tmp_path / "workspace"
+    config_path = root / "configs" / "formal.yaml"
+    frozen = root / "freeze"
+    config_path.parent.mkdir(parents=True)
+    config_path.write_bytes(b"protocol: v2\n")
+    frozen_config = frozen / "configs" / "formal.yaml"
+    frozen_config.parent.mkdir(parents=True)
+    frozen_config.write_bytes(config_path.read_bytes())
+    verify_config_bound_to_freeze(
+        config_path, config_path.read_bytes(), frozen, workspace_root=root
+    )
+
+    frozen_config.write_bytes(b"protocol: altered\n")
+    with pytest.raises(ValueError, match="do not match"):
+        verify_config_bound_to_freeze(
+            config_path, config_path.read_bytes(), frozen, workspace_root=root
+        )
 
 
 def config() -> dict:

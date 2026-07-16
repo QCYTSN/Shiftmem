@@ -54,6 +54,7 @@ class FormalV2CellResult(BaseModel):
     scheduler_log: list[dict[str, Any]]
     daily_decision_log: list[dict[str, Any]]
     memory_audit: dict[str, Any] | None = None
+    run_identity: dict[str, str] | None = None
     test_outcomes_accessed: bool = False
 
 
@@ -81,13 +82,33 @@ def execute_offline_cell(
 ) -> FormalV2CellResult:
     """Execute one network-free integration cell with the declared profile."""
 
+    return execute_cell(
+        row,
+        scenario,
+        config,
+        oracle_records,
+        provider=DeterministicStrategyProvider(),
+    )
+
+
+def execute_cell(
+    row: dict[str, Any],
+    scenario: Scenario,
+    config: dict[str, Any],
+    oracle_records: list[dict[str, Any]],
+    *,
+    provider: Any,
+    run_identity: dict[str, str] | None = None,
+) -> FormalV2CellResult:
+    """Execute one formal cell with an injected offline or journaled provider."""
+
     method = str(row["method"])
     memory = make_memory(
         method, config["shiftmem_profile"] if method == "shiftmem" else None
     )
     episode = run_v2_episode(
         scenario,
-        DeterministicStrategyProvider(),
+        provider,
         memory,
         V2EpisodeConfig(
             seed=int(row["seed"]),
@@ -139,6 +160,7 @@ def execute_offline_cell(
         scheduler_log=episode["scheduler_log"],
         daily_decision_log=episode["daily_decision_log"],
         memory_audit=episode.get("memory_audit"),
+        run_identity=run_identity,
     )
 
 
@@ -200,7 +222,10 @@ def validate_plan_completeness(
 
 
 def aggregate_results(
-    plan: list[dict[str, Any]], results: list[FormalV2CellResult]
+    plan: list[dict[str, Any]],
+    results: list[FormalV2CellResult],
+    *,
+    journal_totals: dict[str, float | int] | None = None,
 ) -> dict[str, Any]:
     validate_plan_completeness(plan, results)
     return {
@@ -210,11 +235,12 @@ def aggregate_results(
         "tiers": dict(Counter(row.tier for row in results)),
         "methods": dict(Counter(row.method for row in results)),
         "models": dict(Counter(row.model for row in results)),
-        "provider_calls": 0,
+        "provider_calls": int((journal_totals or {}).get("calls", 0)),
         "offline_provider_attempts": sum(row.provider_attempts for row in results),
         "input_tokens": sum(row.input_tokens for row in results),
         "output_tokens": sum(row.output_tokens for row in results),
         "parse_failures": sum(row.parse_failures for row in results),
         "fallback_count": sum(row.fallback_count for row in results),
         "applicable_endpoint_cells": sum(row.endpoint_applicable for row in results),
+        "journal_totals": journal_totals,
     }

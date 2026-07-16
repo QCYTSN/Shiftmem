@@ -83,3 +83,39 @@ def test_journal_rejects_secret_shaped_response_fields(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="secret field"):
         journal.append(entry(provider_response={"api_key": "must-not-persist"}))
+
+
+def test_reserved_entry_can_only_transition_to_matching_bounded_terminal(
+    tmp_path: Path,
+) -> None:
+    journal = JsonlRunJournal(tmp_path / "run.jsonl", identity(), limits())
+    reserved = entry(
+        status="reserved",
+        provider_response=None,
+        input_tokens=20,
+        output_tokens=5,
+        estimated_cost_cny=0.02,
+    )
+    journal.reserve(reserved)
+    journal.finalize(entry(input_tokens=10, output_tokens=2, estimated_cost_cny=0.01))
+    assert journal.lookup(reserved.decision_id).status == "complete"
+    assert journal.totals()["input_tokens"] == 10
+
+    reloaded = JsonlRunJournal(tmp_path / "run.jsonl", identity(), limits())
+    assert reloaded.lookup(reserved.decision_id).status == "complete"
+
+
+def test_terminal_cannot_exceed_preflight_reservation(tmp_path: Path) -> None:
+    journal = JsonlRunJournal(tmp_path / "run.jsonl", identity(), limits())
+    journal.reserve(
+        entry(
+            status="reserved",
+            provider_response=None,
+            input_tokens=9,
+            output_tokens=2,
+            estimated_cost_cny=0.01,
+        )
+    )
+    with pytest.raises(ValueError, match="input_tokens exceeds reservation"):
+        journal.finalize(entry(input_tokens=10))
+    assert journal.lookup("cell-1-day-0").status == "reserved"

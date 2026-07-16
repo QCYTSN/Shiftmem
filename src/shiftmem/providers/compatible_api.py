@@ -36,6 +36,8 @@ PROFILE_VARIABLES = {
     ),
 }
 
+TOKEN_ACCOUNTING_OVERHEAD = 1024
+
 
 @dataclass(frozen=True)
 class HttpResponse:
@@ -162,21 +164,7 @@ class CompatibleAPIProvider:
         self.build_user_message = build_user_message or build_inventory_user_message
 
     def generate(self, request: ProviderRequest) -> ProviderResponse:
-        payload = {
-            "model": self.config.model_name,
-            "temperature": self.config.temperature,
-            "max_tokens": self.config.max_tokens,
-            "response_format": {"type": "json_object"},
-            "messages": [
-                {"role": "system", "content": self.system_prompt},
-                {
-                    "role": "user",
-                    "content": self.build_user_message(request),
-                },
-            ],
-        }
-        if self.config.profile in {"bailian", "siliconflow"}:
-            payload["enable_thinking"] = self.config.enable_thinking
+        payload = self._payload(request)
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         headers = {
             "Authorization": f"Bearer {self.config.api_key.get_secret_value()}",
@@ -208,3 +196,32 @@ class CompatibleAPIProvider:
             output_tokens=output_tokens,
             latency_ms=latency_ms,
         )
+
+    def token_budget_upper_bounds(self, request: ProviderRequest) -> tuple[int, int]:
+        """Conservatively bound billable tokens before an external request."""
+
+        body = json.dumps(
+            self._payload(request), ensure_ascii=False
+        ).encode("utf-8")
+        # A tokenizer cannot emit more tokens than UTF-8 bytes for supplied
+        # text. Reserve an additional fixed margin for provider-side chat
+        # template/accounting tokens that are not represented in the body.
+        return len(body) + TOKEN_ACCOUNTING_OVERHEAD, self.config.max_tokens
+
+    def _payload(self, request: ProviderRequest) -> dict[str, object]:
+        payload: dict[str, object] = {
+            "model": self.config.model_name,
+            "temperature": self.config.temperature,
+            "max_tokens": self.config.max_tokens,
+            "response_format": {"type": "json_object"},
+            "messages": [
+                {"role": "system", "content": self.system_prompt},
+                {
+                    "role": "user",
+                    "content": self.build_user_message(request),
+                },
+            ],
+        }
+        if self.config.profile in {"bailian", "siliconflow"}:
+            payload["enable_thinking"] = self.config.enable_thinking
+        return payload

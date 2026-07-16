@@ -9,6 +9,7 @@ from shiftmem.providers.compatible_api import (
     ProviderConfig,
     ProviderConfigurationError,
     ProviderError,
+    TOKEN_ACCOUNTING_OVERHEAD,
 )
 
 
@@ -230,6 +231,28 @@ def test_named_provider_sends_non_thinking_generation_settings() -> None:
     assert payload["temperature"] == 0.2
     assert payload["max_tokens"] == 300
     assert payload["enable_thinking"] is False
+
+
+def test_preflight_token_bound_covers_exact_request_and_frozen_output_cap() -> None:
+    envelope = {
+        "choices": [{"message": {"content": '{"order_quantity": 12}'}}],
+        "usage": {},
+    }
+    transport = FakeTransport(HttpResponse(200, json.dumps(envelope).encode()))
+    provider = CompatibleAPIProvider(
+        ProviderConfig(
+            api_key="key",
+            base_url="https://example.test/v1",
+            model_name="model",
+            max_tokens=321,
+        ),
+        transport=transport,
+    )
+    input_bound, output_bound = provider.token_budget_upper_bounds(request())
+    provider.generate(request())
+
+    assert input_bound == len(transport.calls[0]["body"]) + TOKEN_ACCOUNTING_OVERHEAD
+    assert output_bound == 321
 
 
 def test_http_error_is_sanitized() -> None:

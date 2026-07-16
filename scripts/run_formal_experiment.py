@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import subprocess
 from typing import Any
 
 import yaml
@@ -16,12 +17,21 @@ from shiftmem.envs.shifts import load_scenario
 from shiftmem.evaluation.formal_v2 import (
     aggregate_results,
     append_completed_cell,
+    execute_cell,
     execute_offline_cell,
     load_completed_cells,
     run_oracle_episode,
 )
 from shiftmem.evaluation.splits import load_split_manifest
 from shiftmem.memory.store import make_memory
+from shiftmem.logging.run_logger import JsonlRunJournal
+from shiftmem.logging.schemas import BudgetLimits, RunIdentity
+from shiftmem.providers.compatible_api import CompatibleAPIProvider, ProviderConfig
+from shiftmem.providers.inventory_prompt import (
+    STRATEGY_REVIEW_SYSTEM_PROMPT,
+    build_strategy_review_user_message,
+)
+from shiftmem.providers.journaled import JournaledProvider
 
 try:
     from scripts.verify_freeze import verify_freeze
@@ -84,6 +94,61 @@ def validate_v2_config(config: dict[str, Any]) -> None:
         raise ValueError("v2 controller profile must match the frozen implementation")
     if int(config.get("review_interval", 0)) < 1 or int(config.get("cooldown", -1)) < 0:
         raise ValueError("v2 scheduler profile is incomplete")
+
+
+def validate_v2_live_gate_config(config: dict[str, Any]) -> None:
+    """Require every frozen field needed for fail-closed formal spending."""
+
+    validate_v2_config(config)
+    if config.get("budget_approved") is not True:
+        raise ValueError("formal live API budget is not approved")
+    budgets = config.get("budgets", {})
+    required_budgets = {
+        "max_calls",
+        "max_input_tokens",
+        "max_output_tokens",
+        "max_cost_cny",
+    }
+    if not required_budgets.issubset(budgets) or any(
+        float(budgets[field]) <= 0 for field in required_budgets
+    ):
+        raise ValueError("formal live budget limits must be complete and positive")
+    required_model = {
+        "label",
+        "provider",
+        "model_name",
+        "input_cny_per_million",
+        "output_cny_per_million",
+        "max_output_tokens_per_call",
+    }
+    for model in config["models"]:
+        if not required_model.issubset(model):
+            raise ValueError("formal live model pricing and output cap are incomplete")
+        if (
+            float(model["input_cny_per_million"]) < 0
+            or float(model["output_cny_per_million"]) < 0
+            or int(model["max_output_tokens_per_call"]) < 1
+        ):
+            raise ValueError("formal live model rates or output cap are invalid")
+
+
+def verify_config_bound_to_freeze(
+    config_path: Path,
+    config_bytes: bytes,
+    freeze_dir: Path,
+    *,
+    workspace_root: Path | None = None,
+) -> None:
+    root = (workspace_root or Path.cwd()).resolve()
+    try:
+        relative = config_path.resolve().relative_to(root)
+    except ValueError as error:
+        raise ValueError("formal config must be inside the workspace") from error
+    frozen_config = freeze_dir / relative
+    if not frozen_config.is_file():
+        raise ValueError(f"formal config is not present in freeze: {relative}")
+    if frozen_config.read_bytes() != config_bytes:
+        raise ValueError("formal config bytes do not match the verified freeze")
 
 
 def build_v2_cell_plan(
@@ -169,12 +234,17 @@ def main() -> int:
     parser.add_argument("--cells-output", type=Path)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--execute-offline", action="store_true")
+    parser.add_argument("--execute-live", action="store_true")
+    parser.add_argument("--journal", type=Path)
+    parser.add_argument("--run-id")
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
-    if args.dry_run and args.execute_offline:
-        raise ValueError("choose either --dry-run or --execute-offline")
-    config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
+    if sum((args.dry_run, args.execute_offline, args.execute_live)) > 1:
+        raise ValueError("choose one execution mode")
+    config_bytes = args.config.read_bytes()
+    config = yaml.safe_load(config_bytes)
     if config.get("protocol") == "v2":
-        return _main_v2(args, config)
+        return _main_v2(args, config, config_bytes)
     validate_formal_config(config)
     if args.freeze_dir is None:
         raise ValueError("v1 dry-run requires --freeze-dir")
@@ -209,7 +279,9 @@ def main() -> int:
     return 0
 
 
-def _main_v2(args: argparse.Namespace, config: dict[str, Any]) -> int:
+def _main_v2(
+    args: argparse.Namespace, config: dict[str, Any], config_bytes: bytes
+) -> int:
     validate_v2_config(config)
     manifest = load_split_manifest(args.manifest)
     if manifest.split not in {"Development", "Validation"}:
@@ -248,19 +320,69 @@ def _main_v2(args: argparse.Namespace, config: dict[str, Any]) -> int:
         _write_json(args.output, result)
         print(json.dumps(result, sort_keys=True))
         return 0
-    if not args.execute_offline:
+    if not args.execute_offline and not args.execute_live:
         if config.get("budget_approved") is not True:
             raise ValueError("live API budget is not approved")
         raise ValueError("live execution remains disabled until replacement freeze")
+
+    journal: JsonlRunJournal | None = None
+    if args.execute_live:
+        validate_v2_live_gate_config(config)
+        if args.freeze_dir is None or args.journal is None or not args.run_id:
+            raise ValueError(
+                "formal live execution requires freeze-dir, journal, and run-id"
+            )
+        verify_config_bound_to_freeze(
+            args.config, config_bytes, args.freeze_dir
+        )
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+        if status.strip():
+            raise ValueError("repository must be clean before formal live execution")
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        identity = RunIdentity(
+            run_id=str(args.run_id),
+            freeze_id=freeze_id,
+            git_commit=commit,
+            config_hash=hashlib.sha256(config_bytes).hexdigest(),
+        )
+        journal = JsonlRunJournal(
+            args.journal, identity, BudgetLimits(**config["budgets"])
+        )
 
     raw_path = args.cells_output or args.output.with_name(
         f"{args.output.stem}_cells.jsonl"
     )
     completed = load_completed_cells(raw_path)
+    if args.execute_live and not args.resume:
+        existing_paths = [path for path in (raw_path, args.output, args.journal) if path and path.exists()]
+        if existing_paths:
+            raise FileExistsError(f"formal live outputs already exist: {existing_paths}")
     expected_ids = {row["cell_id"] for row in plan}
     unexpected = sorted(set(completed) - expected_ids)
     if unexpected:
         raise ValueError(f"resume file contains cells outside this plan: {unexpected}")
+    if journal is not None:
+        expected_identity = journal.identity.model_dump(mode="json")
+        mismatched_identity = sorted(
+            cell_id
+            for cell_id, cell in completed.items()
+            if cell.run_identity != expected_identity
+        )
+        if mismatched_identity:
+            raise ValueError(
+                "completed cells do not match formal run identity: "
+                f"{mismatched_identity}"
+            )
     oracle_cache: dict[tuple[str, int], list[dict[str, Any]]] = {}
     for row in plan:
         if row["cell_id"] in completed:
@@ -269,20 +391,63 @@ def _main_v2(args: argparse.Namespace, config: dict[str, Any]) -> int:
         if key not in oracle_cache:
             oracle_cache[key] = run_oracle_episode(scenarios[key[0]], key[1])
         oracle = oracle_cache[key]
-        cell = execute_offline_cell(row, scenarios[key[0]], config, oracle)
+        if journal is None:
+            cell = execute_offline_cell(row, scenarios[key[0]], config, oracle)
+        else:
+            provider = _make_formal_live_provider(config, row["model"], journal)
+            cell = execute_cell(
+                row,
+                scenarios[key[0]],
+                config,
+                oracle,
+                provider=provider,
+                run_identity=journal.identity.model_dump(mode="json"),
+            )
         append_completed_cell(raw_path, cell)
         completed[cell.cell_id] = cell
     ordered = [completed[row["cell_id"]] for row in plan]
     result = {
         **base,
-        **aggregate_results(plan, ordered),
+        **aggregate_results(
+            plan,
+            ordered,
+            journal_totals=journal.totals() if journal is not None else None,
+        ),
         "dry_run": False,
-        "offline_integration_only": True,
+        "offline_integration_only": journal is None,
         "raw_cells": str(raw_path),
     }
     _write_json(args.output, result)
     print(json.dumps(result, sort_keys=True))
     return 0
+
+
+def _make_formal_live_provider(
+    config: dict[str, Any], model_label: str, journal: JsonlRunJournal
+) -> JournaledProvider:
+    model = next(
+        (row for row in config["models"] if str(row["label"]) == model_label),
+        None,
+    )
+    if model is None:
+        raise ValueError(f"unknown formal model: {model_label}")
+    provider_config = ProviderConfig.from_env(
+        str(model["provider"]), model_override=str(model["model_name"])
+    ).model_copy(
+        update={"max_tokens": int(model["max_output_tokens_per_call"])}
+    )
+    delegate = CompatibleAPIProvider(
+        provider_config,
+        system_prompt=STRATEGY_REVIEW_SYSTEM_PROMPT,
+        build_user_message=build_strategy_review_user_message,
+    )
+    return JournaledProvider(
+        delegate,
+        journal,
+        float(model["input_cny_per_million"]),
+        float(model["output_cny_per_million"]),
+        require_preflight_reservation=True,
+    )
 
 
 def _write_json(path: Path, value: dict[str, Any]) -> None:

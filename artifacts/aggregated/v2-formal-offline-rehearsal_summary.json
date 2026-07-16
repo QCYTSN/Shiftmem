@@ -8,6 +8,7 @@
   "fallback_count": 0,
   "freeze_id": "pre-freeze-offline-rehearsal",
   "input_tokens": 123684,
+  "journal_totals": null,
   "manifest_split": "Validation",
   "methods": {
     "full_history": 4,

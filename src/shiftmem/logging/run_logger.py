@@ -74,9 +74,38 @@ class JsonlRunJournal:
     def _accept_loaded(self, entry: DecisionJournalEntry) -> None:
         if entry.identity != self.identity:
             raise ValueError("journal identity does not match requested run identity")
-        if entry.decision_id in self._entries:
-            raise ValueError(f"decision already journaled: {entry.decision_id}")
+        previous = self._entries.get(entry.decision_id)
+        if previous is not None:
+            self._validate_transition(previous, entry)
         self._entries[entry.decision_id] = entry
+
+    @staticmethod
+    def _validate_transition(
+        previous: DecisionJournalEntry, entry: DecisionJournalEntry
+    ) -> None:
+        if previous.status != "reserved" or entry.status == "reserved":
+            raise ValueError(f"decision already journaled: {entry.decision_id}")
+        if (
+            previous.identity != entry.identity
+            or previous.cell_id != entry.cell_id
+            or previous.request_hash != entry.request_hash
+        ):
+            raise ValueError("journal terminal entry does not match reservation")
+        bounded = (
+            (entry.calls, previous.calls, "calls"),
+            (entry.input_tokens, previous.input_tokens, "input_tokens"),
+            (entry.output_tokens, previous.output_tokens, "output_tokens"),
+            (
+                entry.estimated_cost_cny,
+                previous.estimated_cost_cny,
+                "estimated_cost_cny",
+            ),
+        )
+        for actual, reserved, field in bounded:
+            if actual > reserved:
+                raise ValueError(
+                    f"journal terminal {field} exceeds reservation: {actual} > {reserved}"
+                )
 
     def lookup(self, decision_id: str) -> DecisionJournalEntry | None:
         return self._entries.get(decision_id)
@@ -89,6 +118,9 @@ class JsonlRunJournal:
             ),
             "failed_attempts": sum(
                 entry.status == "failed" for entry in self._entries.values()
+            ),
+            "reserved_attempts": sum(
+                entry.status == "reserved" for entry in self._entries.values()
             ),
             "input_tokens": sum(
                 entry.input_tokens for entry in self._entries.values()
@@ -133,12 +165,33 @@ class JsonlRunJournal:
         if secret:
             raise ValueError(f"provider response contains secret field: {secret}")
         self._check_budget(entry)
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
+    def reserve(self, entry: DecisionJournalEntry) -> None:
+        if entry.status != "reserved":
+            raise ValueError("reserve requires a reserved journal entry")
+        self.append(entry)
+
+    def finalize(self, entry: DecisionJournalEntry) -> None:
+        if entry.status == "reserved":
+            raise ValueError("finalize requires a terminal journal entry")
+        previous = self._entries.get(entry.decision_id)
+        if previous is None:
+            raise ValueError(f"decision was not reserved: {entry.decision_id}")
+        self._validate_transition(previous, entry)
+        secret = _secret_field(entry.provider_response)
+        if secret:
+            raise ValueError(f"provider response contains secret field: {secret}")
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
+    def _write(self, entry: DecisionJournalEntry) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.path.open("a", encoding="utf-8", newline="\n") as stream:
             stream.write(entry.model_dump_json() + "\n")
             stream.flush()
             os.fsync(stream.fileno())
-        self._entries[entry.decision_id] = entry
 
     def totals(self) -> dict[str, float | int]:
         return self._totals().copy()

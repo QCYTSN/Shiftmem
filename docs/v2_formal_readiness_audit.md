@@ -1,6 +1,6 @@
 # Protocol-v2 Formal Readiness Audit
 
-Audit date: 2026-07-15
+Audit date: 2026-07-16
 
 Verdict: **BLOCKED before Test execution**
 
@@ -16,8 +16,8 @@ No Test-ID/Test-OOD outcome was generated or read during this audit.
 | Per-review strategy caps | PASS | Caps 7/1.0/1 cover all 240 observed valid Pilot revisions and are enforced deterministically without changing recorded Pilot behavior. |
 | Offline explicit-profile readiness | PASS | Forty Development/Validation cells completed with zero fallback; baseline cadence was 30.0 reviews and ShiftMem cadence 34.1. |
 | Provisional budget model | READY FOR LATER REVIEW | Proposed envelope is 20,000 attempts, 90M input tokens, 7M output tokens, and CNY 360. It is not approved. |
-| Formal v2 execution runner | PASS OFFLINE / LIVE BLOCKED | The CLI now plans both hierarchical tiers, executes complete network-free cells, pairs every cell with Oracle, serializes the primary endpoint and recovery, and rejects held-out manifests before scenario loading. Live provider execution remains deliberately disabled. |
-| Formal journaling/replay integration | PARTIAL | Completed cells are schema-validated, fsynced one per JSONL line, resumed without duplication, and checked against the exact plan. Binding every live provider attempt to a verified replacement-freeze identity remains outstanding. |
+| Formal v2 execution runner | PASS ENGINEERING / ACTIVATION BLOCKED | The CLI plans both tiers, executes offline or journal-bound providers, pairs with Oracle, serializes endpoints, and rejects held-out manifests before scenario loading. The checked-in config remains unapproved and no v2 replacement freeze exists, so live activation fails closed. |
+| Formal journaling/replay integration | PASS | Every paid attempt is bound to run ID, freeze ID, clean commit, and config hash. A conservative call/token/cost reservation is fsynced before networking and terminalized afterward. Terminal attempts replay without calls; unresolved reservations hard-stop for reconciliation. Completed cells carry and validate the same run identity. |
 | Protocol and replacement freeze | BLOCKED | Protocol remains `2.0-draft`; no clean protocol-v2 replacement freeze exists. |
 | Formal API budget | BLOCKED | The CNY 360 proposal has not been explicitly approved and must not be inferred from prior Pilot/qualification approvals. |
 
@@ -49,20 +49,21 @@ the adaptation endpoint not applicable. There were 1,512 deterministic offline
 review attempts, zero parse failures, zero fallbacks, zero external provider
 calls, and no Test outcome access. Re-execution left the 48-line raw JSONL hash
 unchanged, confirming exact resume and deduplication. The compatible-environment
-full suite passed 323 tests.
+full suite passed 333 tests after the live-journal integration.
 
 ## Required next work order
 
-1. Bind every provider attempt to the replacement-freeze identity and reuse
-   the fsynced replay journal; archive partial batches and enforce paired-cell
-   completeness.
-2. Add live cost accounting and fail-closed budget enforcement to the completed
-   cell executor without enabling held-out execution.
-3. Re-run protocol, split, statistics, journal-replay, compile, and full-suite
+1. Replace the legacy v1 freeze builder with a protocol-v2 canonical package
+   and verify that it includes the formal config, runner, prompts, scenarios,
+   qualification evidence, Pilot evidence, and analysis contract.
+2. Re-run protocol, split, statistics, journal-replay, compile, and full-suite
    checks from a clean commit.
-4. Only then request explicit approval of the proposed formal budget.
-5. Finalize protocol 2.0 and create/verify a clean replacement freeze.
-6. Access Test-ID/Test-OOD only after both budget approval and freeze success.
+3. Request explicit approval of the proposed formal budget; approval must not
+   be inferred from earlier Pilot spending.
+4. Record that approval in the formal config, finalize protocol 2.0, and
+   create/verify a clean replacement freeze containing the exact approved
+   config bytes.
+5. Access Test-ID/Test-OOD only after both budget approval and freeze success.
 
-The next authorized activity is formal live-journal and budget-gate engineering,
+The next authorized activity is protocol-v2 replacement-freeze engineering,
 not provider spending and not Test execution.

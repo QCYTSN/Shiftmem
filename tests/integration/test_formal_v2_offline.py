@@ -3,10 +3,15 @@ from shiftmem.envs.shifts import CostParameters, Scenario, Shift
 from shiftmem.envs.supply_models import SupplyParameters
 from shiftmem.evaluation.formal_v2 import (
     aggregate_results,
+    execute_cell,
     execute_offline_cell,
     run_oracle_episode,
     validate_plan_completeness,
 )
+from shiftmem.logging.run_logger import JsonlRunJournal
+from shiftmem.logging.schemas import BudgetLimits, RunIdentity
+from shiftmem.providers.journaled import JournaledProvider
+from shiftmem.providers.local import DeterministicStrategyProvider
 
 
 def config() -> dict:
@@ -113,3 +118,82 @@ def test_completeness_rejects_missing_paired_cell() -> None:
         assert "missing" in str(error)
     else:
         raise AssertionError("missing paired cell was accepted")
+
+
+def test_formal_cell_attempts_are_freeze_bound_and_replayed(tmp_path) -> None:
+    class CountingProvider(DeterministicStrategyProvider):
+        def __init__(self) -> None:
+            super().__init__()
+            self.calls = 0
+
+        def generate(self, request):
+            self.calls += 1
+            return super().generate(request)
+
+        def token_budget_upper_bounds(self, request) -> tuple[int, int]:
+            return 10_000, 512
+
+    identity = RunIdentity(
+        run_id="formal-replay",
+        freeze_id="v2-freeze",
+        git_commit="a" * 40,
+        config_hash="b" * 64,
+    )
+    limits = BudgetLimits(
+        max_calls=100,
+        max_input_tokens=1_000_000,
+        max_output_tokens=100_000,
+        max_cost_cny=100,
+    )
+    journal_path = tmp_path / "journal.jsonl"
+    subject = scenario(stable=True)
+    oracle = run_oracle_episode(subject, seed=8)
+    row = {
+        "cell_id": "journal-vector",
+        "tier": "primary",
+        "scenario_id": "validation-stable",
+        "seed": 8,
+        "model": "deepseek",
+        "method": "vector",
+    }
+    delegate = CountingProvider()
+    first_journal = JsonlRunJournal(journal_path, identity, limits)
+    first = JournaledProvider(
+        delegate,
+        first_journal,
+        4.0,
+        6.0,
+        require_preflight_reservation=True,
+    )
+    run_identity = identity.model_dump(mode="json")
+    first_result = execute_cell(
+        row,
+        subject,
+        config(),
+        oracle,
+        provider=first,
+        run_identity=run_identity,
+    )
+    first_calls = delegate.calls
+    assert first_calls > 0
+    assert first_journal.totals()["reserved_attempts"] == 0
+    assert first_result.run_identity == run_identity
+
+    resumed_journal = JsonlRunJournal(journal_path, identity, limits)
+    resumed = JournaledProvider(
+        delegate,
+        resumed_journal,
+        4.0,
+        6.0,
+        require_preflight_reservation=True,
+    )
+    execute_cell(
+        row,
+        subject,
+        config(),
+        oracle,
+        provider=resumed,
+        run_identity=run_identity,
+    )
+    assert delegate.calls == first_calls
+    assert resumed_journal.totals()["calls"] == first_calls

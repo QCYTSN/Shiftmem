@@ -186,6 +186,17 @@ Provider and parse failures are retained. After the declared retry, the previous
 
 Logs distinguish detector signal, scheduler decision, retrieved memory, cited memory, proposal, validation/clamping, active strategy, deterministic order, and delayed outcome. This separation is required to attribute failures to detection, memory, strategy review, or execution.
 
+Every paid provider attempt uses a two-phase append-only journal bound to the
+run ID, replacement-freeze ID, clean git commit, and exact formal-config hash.
+Before the network call, the runner conservatively reserves one call, a UTF-8
+byte upper bound plus a fixed 1,024-token provider-template margin for input,
+the frozen provider completion cap, and their maximum token-priced cost, then
+fsyncs that reservation. A terminal response or
+failure replaces the reservation in budget totals. An unresolved reservation
+after interruption is never retried automatically; execution stops for manual
+provider-side reconciliation. Replayed terminal attempts never spend budget or
+issue another request.
+
 ## Statistical analysis
 
 For each declared contrast, calculate paired differences on matching scenario/model/seed units. Report mean, sample standard deviation, 95% confidence interval, paired effect size, and raw sample count.

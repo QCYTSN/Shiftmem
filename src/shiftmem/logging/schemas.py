@@ -30,7 +30,7 @@ class DecisionJournalEntry(BaseModel):
     cell_id: str = Field(min_length=1)
     decision_id: str = Field(min_length=1)
     request_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
-    status: Literal["complete", "failed"] = "complete"
+    status: Literal["reserved", "complete", "failed"] = "complete"
     provider_response: dict[str, Any] | None = None
     error_type: str | None = None
     calls: int = Field(ge=0)
@@ -45,4 +45,8 @@ class DecisionJournalEntry(BaseModel):
             raise ValueError("complete journal entry requires provider_response")
         if self.status == "failed" and not self.error_type:
             raise ValueError("failed journal entry requires error_type")
+        if self.status == "reserved" and (
+            self.provider_response is not None or self.error_type is not None
+        ):
+            raise ValueError("reserved journal entry cannot contain a terminal payload")
         return self
