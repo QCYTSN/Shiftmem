@@ -1,0 +1,67 @@
+# Protocol v2 formal experiment matrix (hierarchical strategy-review design).
+#
+# Amendment 1 primary tier compares VectorMemory vs ShiftMem across eight
+# held-out scenarios, five paired seeds, and two core models = 160 cells.
+# The paid secondary tier is disabled to keep the approved hard cap at CNY 100.
+#
+# This config authorizes Development/Validation dry-runs only. Live execution
+# remains blocked until a completed v2 Pilot, an explicitly approved budget,
+# and a verified clean v2 freeze. Test-ID/Test-OOD scenarios are rejected by
+# the cell-plan builder.
+protocol: v2
+
+models:
+  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+
+primary_methods:
+  - {config_id: vector}
+  - {config_id: shiftmem}
+
+secondary_methods:
+  - {config_id: none}
+  - {config_id: full_history}
+  - {config_id: summary}
+  - {config_id: time_decay}
+
+secondary_model: deepseek
+
+primary_seeds: 5
+secondary_seeds: 0
+post_shift_days: 30
+
+# Review schedule, strategy bounds, and per-review caps are Validation-selected
+# fields intended for the protocol-v2 replacement freeze.
+review_interval: 5
+cooldown: 3
+controller_profile:
+  defaults: {forecast_window: 14, safety_stock_multiplier: 1.2, lead_time_buffer: 1}
+  bounds:
+    forecast_window: [1, 60]
+    safety_stock_multiplier: [0.0, 5.0]
+    lead_time_buffer: [0, 14]
+  max_review_deltas: {forecast_window: 7, safety_stock_multiplier: 1.0, lead_time_buffer: 1}
+shiftmem_profile:
+  memory:
+    detector_min_samples: 10
+    detector_delta: 0.1
+    detector_threshold: 48.0
+    validation_service_window: 3
+    dormancy_patience: 3
+  retrieval:
+    semantic: 0.75
+    confidence: 0.5
+    recency: 1.0
+    utility: 0.25
+    probation_penalty: 0.25
+    changed_variable_penalty: 0.5
+    recency_half_life: 30.0
+
+# Explicitly approved by the user on 2026-07-16 under Protocol 2.0 Amendment 1.
+# Spending remains blocked until the exact config is inside a verified v2 freeze.
+budget_approved: true
+budgets:
+  max_calls: 7000
+  max_input_tokens: 25000000
+  max_output_tokens: 3200000
+  max_cost_cny: 100

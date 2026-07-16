@@ -1,0 +1,49 @@
+# Network-free Development/Validation rehearsal of both protocol-v2 tiers.
+# The deterministic provider validates orchestration only; it is not model evidence.
+protocol: v2
+
+models:
+  - {label: deepseek, provider: offline, model_name: deterministic-strategy}
+  - {label: minimax, provider: offline, model_name: deterministic-strategy}
+primary_methods:
+  - {config_id: vector}
+  - {config_id: shiftmem}
+secondary_methods:
+  - {config_id: none}
+  - {config_id: full_history}
+  - {config_id: summary}
+  - {config_id: time_decay}
+secondary_model: deepseek
+primary_seeds: 2
+secondary_seeds: 1
+post_shift_days: 30
+review_interval: 5
+cooldown: 3
+controller_profile:
+  defaults: {forecast_window: 14, safety_stock_multiplier: 1.2, lead_time_buffer: 1}
+  bounds:
+    forecast_window: [1, 60]
+    safety_stock_multiplier: [0.0, 5.0]
+    lead_time_buffer: [0, 14]
+  max_review_deltas: {forecast_window: 7, safety_stock_multiplier: 1.0, lead_time_buffer: 1}
+shiftmem_profile:
+  memory:
+    detector_min_samples: 10
+    detector_delta: 0.1
+    detector_threshold: 48.0
+    validation_service_window: 3
+    dormancy_patience: 3
+  retrieval:
+    semantic: 0.75
+    confidence: 0.5
+    recency: 1.0
+    utility: 0.25
+    probation_penalty: 0.25
+    changed_variable_penalty: 0.5
+    recency_half_life: 30.0
+budget_approved: false
+budgets:
+  max_calls: 0
+  max_input_tokens: 0
+  max_output_tokens: 0
+  max_cost_cny: 0
