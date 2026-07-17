@@ -1,0 +1,25 @@
+# v2 strategy-schema qualification for the two core models.
+#
+# Run with: qualify_models.py --schema strategy. Gates monotonicity over the
+# strategy vector (higher demand / lost-sales pressure must not lower
+# protection) plus the dormant-memory applicability check. Live execution
+# requires a filled provider key and an approved budget; the default CLI path
+# elsewhere stays deterministic so this file cannot spend credit on its own.
+repetitions: 2
+budget_approved: true
+budget_approval_date: 2026-07-15
+budget_scope: Development/Validation strategy qualification only
+budgets:
+  max_calls: 48
+  max_cost_cny: 0.50
+  cny_per_call: 0.00894
+models:
+  - label: deepseek_v3_2
+    profile: siliconflow
+    model_id: deepseek-ai/DeepSeek-V3.2
+    role: core_a
+  - label: minimax_m2_5
+    profile: siliconflow
+    model_id: MiniMaxAI/MiniMax-M2.5
+    role: core_b
+    license: MiniMax Model License (Modified MIT)

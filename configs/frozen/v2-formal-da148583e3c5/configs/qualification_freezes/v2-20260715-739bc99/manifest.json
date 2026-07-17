@@ -1,0 +1,73 @@
+{
+  "freeze_type": "qualification_harness_only",
+  "formal_experiment_freeze": false,
+  "protocol_version": "2.0-draft",
+  "created_date": "2026-07-15",
+  "supersedes": "configs/qualification_freezes/v2-20260715-c22a4d1/manifest.json",
+  "amendment_reason": "Add an approved hard call/cost gate and deterministic YAML date hashing before live execution.",
+  "git_revision": "739bc99a86b607c63a9be03767511b9bd37333d2",
+  "git_dirty_at_smoke": false,
+  "hash_algorithm": "sha256",
+  "provider_calls_authorized_by_freeze": true,
+  "provider_call_scope": "one Development/Validation requalification of the two declared core models",
+  "test_id_or_test_ood_authorized": false,
+  "budget": {
+    "approved": true,
+    "approval_date": "2026-07-15",
+    "max_calls": 48,
+    "max_cost_cny": 0.50,
+    "cny_per_call_estimate": 0.00894
+  },
+  "qualification_gate": {
+    "case_ids": [
+      "demand_low",
+      "demand_high",
+      "lost_sales_none",
+      "lost_sales_high",
+      "applicable_memory",
+      "inapplicable_memory"
+    ],
+    "repetitions": 2,
+    "monotonicity_checks": 4,
+    "monotonicity_passes_required": 4,
+    "maximum_correction_retries_per_case": 1,
+    "fallbacks_allowed": 0,
+    "unresolved_parse_failures_allowed": 0,
+    "invalid_memory_citations_allowed": 0,
+    "inapplicable_memory_citations_allowed": 0
+  },
+  "offline_smoke": {
+    "run_id": "offline-smoke-739bc99",
+    "models": 2,
+    "result_rows": 24,
+    "provider_calls": 24,
+    "attempts": 24,
+    "retries": 0,
+    "estimated_cost_cny_under_anchor": 0.2146,
+    "monotonicity": ["4/4", "4/4"],
+    "budget_gate": "pass",
+    "network_used": false,
+    "output_location": "temporary_directory_not_preserved"
+  },
+  "preserved_invalid_harness_evidence": {
+    "status": "inconclusive_harness_invalid",
+    "artifacts/raw_runs/model_qualification_v2.jsonl": "ac43899348bda28cf8870f7f27a9dc6160c8b4da776b23c824c27a3a844c95c9",
+    "artifacts/aggregated/model_qualification_v2_summary.json": "ecfa8ed57a2f4d2b11f5e6fd10189021706515a8a7e1237b9724a18ebd58ac35"
+  },
+  "files": {
+    "configs/experiments/model_qualification_v2.yaml": "daae4186fe38798d8223b96e600947a549b241435fed0660fd250cd2e26d6932",
+    "scripts/qualify_models.py": "3f4d5d7767fdb2b78ead9e9eec50989626ffd6c0a67c11cd5906f728c7b4cfba",
+    "src/shiftmem/agents/base.py": "88c200e7ac14c3e5b756581e2dd6862460f9da26bcae4af4a6f495aa3e3ae256",
+    "src/shiftmem/agents/strategy_agent.py": "dfaeeae22904d956653a5daa8e4ab27d63c673bacf9e8bb73000e8afd865695e",
+    "src/shiftmem/control/controller.py": "e03a15fa3338cf62ace41268b1da52bd46c9149c55b9fa9ecd85db0741379b5c",
+    "src/shiftmem/evaluation/qualification_run.py": "0b211aa3058ae6105a9cc5ae544d267c039f7155628d65b9c47120ab091a3f20",
+    "src/shiftmem/evaluation/strategy_qualification.py": "ed577108bdcdf441323c805bbfe2195f30b9ea79b166dd2ab1f2a29434eddfd1",
+    "src/shiftmem/providers/base.py": "891a658bcf7a76d2ef4be9b7ef79bee6bcfd647c4d001d842de3f8df08077a28",
+    "src/shiftmem/providers/compatible_api.py": "2b4032ac9cfbcc8237883e267ab6b1b7616ff0d512dbeefd805122f8d5545a8b",
+    "src/shiftmem/providers/inventory_prompt.py": "f118c87ca347555ada4faaa7e6dab089dcf221130a40a06d76a5479a96c27ff9",
+    "tests/unit/test_agent_schemas.py": "53d14fd3ea761a44d6964633c5ae628faa0c4c8943c92e7852e841653395978e",
+    "tests/unit/test_strategy_agent.py": "3e3616d27c7eaed5c9eac2a5198cfd1388cb5bab5fbcc82eaa6cb15613d25378",
+    "tests/unit/test_strategy_qualification.py": "6704f69000e9cdad7e5de9b0331afa01f45f2b1d529f262a02305cd04b895b03",
+    "tests/unit/test_strategy_qualification_runner.py": "25597889e36148f93d127f1ccff78e092e921d194f027cbc46b3b0e27e5eb474"
+  }
+}

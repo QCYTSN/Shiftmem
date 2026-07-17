@@ -1,0 +1,21 @@
+name: gradual_demand
+episode_length: 150
+initial_inventory: 60
+demand_model: negative_binomial
+demand:
+  base_level: 20
+  dispersion: 10
+supply:
+  lead_time: 2
+  fill_rate: 1.0
+costs:
+  purchase: 1.0
+  holding: 0.2
+  stockout: 5.0
+  fixed_order: 0.0
+shifts:
+  - type: gradual_demand
+    start_day: 60
+    end_day: 90
+    changes:
+      base_level_multiplier: 1.5

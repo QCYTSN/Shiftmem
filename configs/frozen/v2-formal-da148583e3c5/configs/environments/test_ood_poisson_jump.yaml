@@ -1,0 +1,11 @@
+name: test_ood_poisson_jump
+episode_length: 150
+initial_inventory: 60
+demand_model: poisson
+demand: {base_level: 20, dispersion: 10}
+supply: {lead_time: 2, fill_rate: 1.0}
+costs: {purchase: 1.0, holding: 0.2, stockout: 5.0, fixed_order: 0.0}
+shifts:
+  - type: sudden_demand
+    start_day: 45
+    changes: {base_level_multiplier: 2.0}
