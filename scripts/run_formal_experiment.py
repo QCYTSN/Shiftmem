@@ -156,14 +156,50 @@ def verify_config_bound_to_freeze(
         raise ValueError("formal config bytes do not match the verified freeze")
 
 
+def verify_file_bound_to_freeze(
+    path: Path,
+    freeze_dir: Path,
+    *,
+    workspace_root: Path | None = None,
+) -> None:
+    """Require a live-run input to match its byte-identical frozen copy."""
+
+    root = (workspace_root or Path.cwd()).resolve()
+    try:
+        relative = path.resolve().relative_to(root)
+    except ValueError as error:
+        raise ValueError("formal input must be inside the workspace") from error
+    frozen_path = freeze_dir / relative
+    if not frozen_path.is_file():
+        raise ValueError(f"formal input is not present in freeze: {relative}")
+    if frozen_path.read_bytes() != path.read_bytes():
+        raise ValueError(f"formal input bytes do not match the verified freeze: {relative}")
+
+
+def validate_v2_split_access(
+    split: str, *, execute_live: bool, freeze_verified: bool
+) -> None:
+    """Allow held-out splits only for a live run bound to a verified freeze."""
+
+    if split in {"Test-ID", "Test-OOD"} and not (
+        execute_live and freeze_verified
+    ):
+        raise ValueError(
+            f"{split} requires live execution with a verified replacement freeze"
+        )
+
+
 def build_v2_cell_plan(
     config: dict[str, Any],
     scenario_ids: list[str],
     seeds: list[int],
     tier: str,
+    *,
+    allow_held_out: bool = False,
 ) -> list[dict[str, Any]]:
     validate_v2_config(config)
-    _reject_test_scenarios(scenario_ids)
+    if not allow_held_out:
+        _reject_test_scenarios(scenario_ids)
     if tier == "primary":
         methods = config["primary_methods"]
         models = [str(model["label"]) for model in config["models"]]
@@ -289,22 +325,49 @@ def _main_v2(
 ) -> int:
     validate_v2_config(config)
     manifest = load_split_manifest(args.manifest)
-    if manifest.split not in {"Development", "Validation"}:
-        raise ValueError(
-            f"{manifest.split} manifests are prohibited before replacement freeze"
-        )
     freeze_id = "pre-freeze-offline-rehearsal"
+    freeze_verified = False
     if args.freeze_dir is not None:
         freeze_errors = verify_freeze(args.freeze_dir)
         if freeze_errors:
             raise ValueError(f"freeze verification failed: {freeze_errors}")
         freeze_id = args.freeze_dir.name
+        freeze_verified = True
+    validate_v2_split_access(
+        manifest.split,
+        execute_live=bool(args.execute_live),
+        freeze_verified=freeze_verified,
+    )
+
+    if args.execute_live:
+        validate_v2_live_gate_config(config)
+        if args.freeze_dir is None or args.journal is None or not args.run_id:
+            raise ValueError(
+                "formal live execution requires freeze-dir, journal, and run-id"
+            )
+        verify_config_bound_to_freeze(args.config, config_bytes, args.freeze_dir)
+        verify_file_bound_to_freeze(args.manifest, args.freeze_dir)
+        for entry in manifest.scenarios:
+            verify_file_bound_to_freeze(entry.path, args.freeze_dir)
 
     scenario_ids = [row.id for row in manifest.scenarios]
     primary_seeds = manifest.seeds[: int(config["primary_seeds"])]
     secondary_seeds = manifest.seeds[: int(config["secondary_seeds"])]
-    plan = build_v2_cell_plan(config, scenario_ids, primary_seeds, "primary")
-    plan += build_v2_cell_plan(config, scenario_ids, secondary_seeds, "secondary")
+    allow_held_out = manifest.split in {"Test-ID", "Test-OOD"}
+    plan = build_v2_cell_plan(
+        config,
+        scenario_ids,
+        primary_seeds,
+        "primary",
+        allow_held_out=allow_held_out,
+    )
+    plan += build_v2_cell_plan(
+        config,
+        scenario_ids,
+        secondary_seeds,
+        "secondary",
+        allow_held_out=allow_held_out,
+    )
     scenarios = {entry.id: load_scenario(entry.path) for entry in manifest.scenarios}
     estimated_reviews = sum(
         math.ceil(scenarios[row["scenario_id"]].episode_length / int(config["review_interval"]))
@@ -332,14 +395,6 @@ def _main_v2(
 
     journal: JsonlRunJournal | None = None
     if args.execute_live:
-        validate_v2_live_gate_config(config)
-        if args.freeze_dir is None or args.journal is None or not args.run_id:
-            raise ValueError(
-                "formal live execution requires freeze-dir, journal, and run-id"
-            )
-        verify_config_bound_to_freeze(
-            args.config, config_bytes, args.freeze_dir
-        )
         status = subprocess.run(
             ["git", "status", "--porcelain"],
             check=True,

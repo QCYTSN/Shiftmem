@@ -9,7 +9,9 @@ from scripts.run_formal_experiment import (
     validate_live_dry_run_config,
     validate_v2_config,
     validate_v2_live_gate_config,
+    validate_v2_split_access,
     verify_config_bound_to_freeze,
+    verify_file_bound_to_freeze,
 )
 
 
@@ -94,6 +96,27 @@ def test_v2_cell_plan_rejects_test_manifest() -> None:
         build_v2_cell_plan(v2_config(), ["test-ood-periodic"], [1], tier="primary")
 
 
+def test_v2_cell_plan_allows_held_out_only_after_live_freeze_gate() -> None:
+    validate_v2_split_access("Test-ID", execute_live=True, freeze_verified=True)
+    plan = build_v2_cell_plan(
+        v2_config(),
+        ["test-id-stable"],
+        [2000],
+        tier="primary",
+        allow_held_out=True,
+    )
+    assert len(plan) == 4
+
+    with pytest.raises(ValueError, match="verified replacement freeze"):
+        validate_v2_split_access(
+            "Test-ID", execute_live=False, freeze_verified=True
+        )
+    with pytest.raises(ValueError, match="verified replacement freeze"):
+        validate_v2_split_access(
+            "Test-OOD", execute_live=True, freeze_verified=False
+        )
+
+
 def test_v2_formal_live_gate_requires_approval_pricing_and_output_caps() -> None:
     candidate = v2_config()
     with pytest.raises(ValueError, match="not approved"):
@@ -145,6 +168,22 @@ def test_formal_config_must_match_copy_inside_verified_freeze(tmp_path: Path) ->
         verify_config_bound_to_freeze(
             config_path, config_path.read_bytes(), frozen, workspace_root=root
         )
+
+
+def test_live_manifest_and_scenario_inputs_must_match_freeze(tmp_path: Path) -> None:
+    root = tmp_path / "workspace"
+    manifest = root / "configs" / "splits" / "test_id.yaml"
+    frozen = root / "freeze"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text("split: Test-ID\n", encoding="utf-8")
+    frozen_manifest = frozen / "configs" / "splits" / "test_id.yaml"
+    frozen_manifest.parent.mkdir(parents=True)
+    frozen_manifest.write_bytes(manifest.read_bytes())
+
+    verify_file_bound_to_freeze(manifest, frozen, workspace_root=root)
+    manifest.write_text("split: altered\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="do not match"):
+        verify_file_bound_to_freeze(manifest, frozen, workspace_root=root)
 
 
 def config() -> dict:

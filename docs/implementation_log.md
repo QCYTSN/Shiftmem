@@ -169,3 +169,9 @@ Implementation decisions and deviations from the specification will be recorded 
 - Replaced the superseded CNY 360 envelope with fail-closed limits of 7,000 attempts, 25M input tokens, 3.2M billed output tokens, and CNY 100. Pilot-linear expected cost is CNY 75.42 before reserve.
 - Separated the 512-token generation cap from a 3,072-token billing reservation. The latter covers the Pilot-observed maximum of 2,352 billed output tokens, including provider accounting not constrained by the requested generation cap.
 - Finalized Protocol 2.0 with numbered Amendment 1. Budget approval still does not authorize execution until the exact config, code, tests, scenario definitions, evidence, and raw journals are inside a clean verified content-addressed v2 replacement freeze.
+
+## 2026-07-17 - Post-freeze held-out activation bug repair
+
+- The first formal-run preflight, before any provider call or Test outcome access, found that the v2 runner still rejected Test-ID/Test-OOD unconditionally after a verified replacement freeze. This contradicted Protocol 2.0's intended transition from pre-freeze prohibition to post-freeze formal execution.
+- Added regression coverage requiring held-out access to have both `--execute-live` and a verified freeze. Development/Validation dry-runs remain unchanged, and held-out dry-run/offline paths remain prohibited.
+- Bound the supplied live split manifest and every referenced scenario file byte-for-byte to the verified freeze, in addition to the existing formal-config binding. The repair changes no endpoint, controller, matrix, seeds, model, or budget and was made without reading held-out outcomes.
