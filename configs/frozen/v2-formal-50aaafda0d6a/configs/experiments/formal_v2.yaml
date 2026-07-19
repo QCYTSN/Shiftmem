@@ -1,0 +1,80 @@
+# Protocol v2 formal experiment matrix (hierarchical strategy-review design).
+#
+# Amendment 1 primary tier compares VectorMemory vs ShiftMem across eight
+# held-out scenarios, five paired seeds, and two core models = 160 cells.
+# The paid secondary tier is disabled to keep the approved hard cap at CNY 100.
+#
+# This config authorizes Development/Validation dry-runs only. Live execution
+# remains blocked until a completed v2 Pilot, an explicitly approved budget,
+# and a verified clean v2 freeze. Test-ID/Test-OOD scenarios are rejected by
+# the cell-plan builder.
+protocol: v2
+
+models:
+  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+
+primary_methods:
+  - {config_id: vector}
+  - {config_id: shiftmem}
+
+secondary_methods:
+  - {config_id: none}
+  - {config_id: full_history}
+  - {config_id: summary}
+  - {config_id: time_decay}
+
+secondary_model: deepseek
+
+primary_seeds: 5
+secondary_seeds: 0
+post_shift_days: 30
+
+# Review schedule, strategy bounds, and per-review caps are Validation-selected
+# fields intended for the protocol-v2 replacement freeze.
+review_interval: 5
+cooldown: 3
+controller_profile:
+  defaults: {forecast_window: 14, safety_stock_multiplier: 1.2, lead_time_buffer: 1}
+  bounds:
+    forecast_window: [1, 60]
+    safety_stock_multiplier: [0.0, 5.0]
+    lead_time_buffer: [0, 14]
+  max_review_deltas: {forecast_window: 7, safety_stock_multiplier: 1.0, lead_time_buffer: 1}
+shiftmem_profile:
+  memory:
+    detector_min_samples: 10
+    detector_delta: 0.1
+    detector_threshold: 48.0
+    validation_service_window: 3
+    dormancy_patience: 3
+  retrieval:
+    semantic: 0.75
+    confidence: 0.5
+    recency: 1.0
+    utility: 0.25
+    probation_penalty: 0.25
+    changed_variable_penalty: 0.5
+    recency_half_life: 30.0
+
+# Amendment 2 continuation keeps the 160-cell matrix and spends at most CNY 43
+# more on successful calls, leaving roughly CNY 7 of the reported balance.
+budget_approved: true
+continuation_from:
+  manifest_split: Test-ID
+  completed_cells: 47
+  prior_cells_sha256: c1ce9aba615c09e34e64e34592e85af100126ab15d5860e5a00ca740c1fa64db
+  run_identity:
+    run_id: v2-formal-test-20260717-da148583e3c5
+    freeze_id: v2-formal-da148583e3c5
+    git_commit: 8228e646005b1d41f51bee635c680ed252f7248c
+    config_hash: d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff
+budgets:
+  max_calls: 7000
+  # These reservation-ledger ceilings preserve failed-call uncertainty; they
+  # are not spending authorization.
+  max_input_tokens: 90000000
+  max_output_tokens: 12000000
+  max_cost_cny: 250
+  # Preflight stops before the next successful response can exceed this cap.
+  max_successful_cost_cny: 43

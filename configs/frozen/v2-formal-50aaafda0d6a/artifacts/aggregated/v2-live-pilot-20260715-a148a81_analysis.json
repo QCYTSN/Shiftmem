@@ -1,0 +1,42 @@
+{
+  "run_id": "v2-live-pilot-20260715-a148a81",
+  "evidence_status": "valid_cost_reliability_pilot_with_runtime_profile_limitation",
+  "test_outcomes_accessed": false,
+  "complete": true,
+  "cells": 8,
+  "reviews": 240,
+  "attempts": 272,
+  "successful_responses": 236,
+  "provider_failures": 36,
+  "schema_or_json_parse_failures": 0,
+  "fallbacks": 4,
+  "input_tokens": 915521,
+  "output_tokens": 114303,
+  "successful_response_cost_estimate_cny": 3.7709945,
+  "approved_limits": {
+    "max_calls": 350,
+    "max_input_tokens": 1500000,
+    "max_output_tokens": 500000,
+    "max_cost_cny": 6.0
+  },
+  "groups": [
+    {"model": "deepseek", "method": "vector", "reviews": 60, "attempts": 60, "provider_failures": 0, "fallbacks": 0, "input_tokens": 83979, "output_tokens": 4239, "estimated_cost_cny": 0.36135},
+    {"model": "deepseek", "method": "shiftmem", "reviews": 60, "attempts": 60, "provider_failures": 0, "fallbacks": 0, "input_tokens": 396917, "output_tokens": 6364, "estimated_cost_cny": 1.625852},
+    {"model": "minimax", "method": "vector", "reviews": 60, "attempts": 83, "provider_failures": 24, "fallbacks": 1, "input_tokens": 79765, "output_tokens": 56974, "estimated_cost_cny": 0.6460881},
+    {"model": "minimax", "method": "shiftmem", "reviews": 60, "attempts": 69, "provider_failures": 12, "fallbacks": 3, "input_tokens": 354860, "output_tokens": 46726, "estimated_cost_cny": 1.1377044}
+  ],
+  "semantic_note": "Frozen aggregate total_parse_failures counts all attempt errors. Raw evidence shows all 36 were provider failures and zero were JSON or schema parse failures.",
+  "runtime_profile_limitation": {
+    "observed_shiftmem_profile": "current make_memory defaults: Page-Hinkley threshold 5, dormancy patience 7, default retrieval weights",
+    "previous_validation_selection": "Page-Hinkley threshold 48, dormancy patience 3, recency-heavy retrieval",
+    "effect": "cost and reliability evidence remains valid; final ShiftMem performance and protocol freeze remain blocked"
+  },
+  "provisional_formal_planning_envelope": {
+    "basis": "observed per-review rates, explicit-profile offline cadence of 30.0 reviews for baselines and 34.1 for ShiftMem, highest DeepSeek ShiftMem rate for secondary cells, and 20 percent reserve",
+    "max_calls": 20000,
+    "max_input_tokens": 90000000,
+    "max_output_tokens": 7000000,
+    "max_cost_cny": 360,
+    "approved": false
+  }
+}
