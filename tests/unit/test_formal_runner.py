@@ -128,6 +128,7 @@ def test_v2_formal_live_gate_requires_approval_pricing_and_output_caps() -> None
         "max_input_tokens": 10000,
         "max_output_tokens": 10000,
         "max_cost_cny": 10,
+        "max_successful_cost_cny": 8,
     }
     with pytest.raises(ValueError, match="pricing and output cap"):
         validate_v2_live_gate_config(candidate)

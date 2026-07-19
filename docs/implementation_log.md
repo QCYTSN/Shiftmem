@@ -175,3 +175,9 @@ Implementation decisions and deviations from the specification will be recorded 
 - The first formal-run preflight, before any provider call or Test outcome access, found that the v2 runner still rejected Test-ID/Test-OOD unconditionally after a verified replacement freeze. This contradicted Protocol 2.0's intended transition from pre-freeze prohibition to post-freeze formal execution.
 - Added regression coverage requiring held-out access to have both `--execute-live` and a verified freeze. Development/Validation dry-runs remain unchanged, and held-out dry-run/offline paths remain prohibited.
 - Bound the supplied live split manifest and every referenced scenario file byte-for-byte to the verified freeze, in addition to the existing formal-config binding. The repair changes no endpoint, controller, matrix, seeds, model, or budget and was made without reading held-out outcomes.
+
+## 2026-07-19 - Balance-bounded formal continuation
+
+- The formal run stopped safely after 47 Test-ID cells when conservative failed-attempt reservations reached the 3.2M output-token ledger. Official billing was about CNY 26; the journal's successful-call estimate was CNY 27.12, while failed reservations raised ledger cost to CNY 68.87.
+- Amendment 2 keeps all 160 cells and binds the immutable 47-cell prefix by SHA-256 and original run identity. Continuation uses a new freeze, run identity, journal, and output file; already completed cells are skipped without rewriting their provenance.
+- The user reported about CNY 50 remaining and authorized continuation until near depletion. The new successful-call ceiling is CNY 43, leaving roughly CNY 7 reserve. Higher token/cost ledger limits retain failed-call uncertainty for audit and do not authorize additional spending.

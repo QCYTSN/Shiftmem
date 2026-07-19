@@ -110,6 +110,7 @@ def validate_v2_live_gate_config(config: dict[str, Any]) -> None:
         "max_input_tokens",
         "max_output_tokens",
         "max_cost_cny",
+        "max_successful_cost_cny",
     }
     if not required_budgets.issubset(budgets) or any(
         float(budgets[field]) <= 0 for field in required_budgets
@@ -279,6 +280,7 @@ def main() -> int:
     parser.add_argument("--journal", type=Path)
     parser.add_argument("--run-id")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--prior-cells", type=Path)
     args = parser.parse_args()
     if sum((args.dry_run, args.execute_offline, args.execute_live)) > 1:
         raise ValueError("choose one execution mode")
@@ -423,12 +425,32 @@ def _main_v2(
         f"{args.output.stem}_cells.jsonl"
     )
     completed = load_completed_cells(raw_path)
+    prior: dict[str, Any] = {}
+    if args.prior_cells is not None:
+        if not args.execute_live:
+            raise ValueError("prior cells are allowed only for formal live continuation")
+        continuation = config.get("continuation_from")
+        if not continuation:
+            raise ValueError("formal config does not declare a prior continuation")
+        if manifest.split != continuation.get("manifest_split"):
+            raise ValueError("prior cells do not belong to this manifest split")
+        prior_bytes = args.prior_cells.read_bytes()
+        if hashlib.sha256(prior_bytes).hexdigest() != continuation.get(
+            "prior_cells_sha256"
+        ):
+            raise ValueError("prior cells hash does not match frozen continuation")
+        prior = load_completed_cells(args.prior_cells)
+        if len(prior) != int(continuation.get("completed_cells", -1)):
+            raise ValueError("prior completed cell count does not match continuation")
+        declared_identity = continuation.get("run_identity")
+        if any(cell.run_identity != declared_identity for cell in prior.values()):
+            raise ValueError("prior cells do not match declared run identity")
     if args.execute_live and not args.resume:
         existing_paths = [path for path in (raw_path, args.output, args.journal) if path and path.exists()]
         if existing_paths:
             raise FileExistsError(f"formal live outputs already exist: {existing_paths}")
     expected_ids = {row["cell_id"] for row in plan}
-    unexpected = sorted(set(completed) - expected_ids)
+    unexpected = sorted((set(completed) | set(prior)) - expected_ids)
     if unexpected:
         raise ValueError(f"resume file contains cells outside this plan: {unexpected}")
     if journal is not None:
@@ -443,9 +465,13 @@ def _main_v2(
                 "completed cells do not match formal run identity: "
                 f"{mismatched_identity}"
             )
+    overlap = sorted(set(completed) & set(prior))
+    if overlap:
+        raise ValueError(f"continuation outputs duplicate prior cells: {overlap}")
+    all_completed = {**prior, **completed}
     oracle_cache: dict[tuple[str, int], list[dict[str, Any]]] = {}
     for row in plan:
-        if row["cell_id"] in completed:
+        if row["cell_id"] in all_completed:
             continue
         key = (str(row["scenario_id"]), int(row["seed"]))
         if key not in oracle_cache:
@@ -465,7 +491,8 @@ def _main_v2(
             )
         append_completed_cell(raw_path, cell)
         completed[cell.cell_id] = cell
-    ordered = [completed[row["cell_id"]] for row in plan]
+        all_completed[cell.cell_id] = cell
+    ordered = [all_completed[row["cell_id"]] for row in plan]
     result = {
         **base,
         **aggregate_results(
@@ -476,6 +503,7 @@ def _main_v2(
         "dry_run": False,
         "offline_integration_only": journal is None,
         "raw_cells": str(raw_path),
+        "prior_cells": str(args.prior_cells) if args.prior_cells else None,
     }
     _write_json(args.output, result)
     print(json.dumps(result, sort_keys=True))

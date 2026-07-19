@@ -117,7 +117,9 @@ def test_v2_candidate_package_covers_code_contract_configs_and_raw_evidence() ->
     assert required.issubset(paths)
     candidate = build_v2_candidate(root, ["budget blocked"])
     assert candidate["ready"] is False
-    assert candidate["test_outcomes_accessed"] is False
+    assert candidate["test_outcomes_accessed"] is True
+    assert candidate["outcome_analysis_accessed"] is False
+    assert candidate["continuation_amendment"] is True
     assert len(candidate["git_commit"]) == 40
     assert candidate["blockers"] == ["budget blocked"]
     assert candidate["file_count"] == len(paths)

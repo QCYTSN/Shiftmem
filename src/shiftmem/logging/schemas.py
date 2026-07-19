@@ -21,6 +21,9 @@ class BudgetLimits(BaseModel):
     max_input_tokens: int = Field(ge=0)
     max_output_tokens: int = Field(ge=0)
     max_cost_cny: float = Field(ge=0, allow_inf_nan=False)
+    max_successful_cost_cny: float | None = Field(
+        default=None, ge=0, allow_inf_nan=False
+    )
 
 
 class DecisionJournalEntry(BaseModel):

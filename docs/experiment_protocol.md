@@ -37,6 +37,22 @@ This amendment reduces precision and widens confidence intervals relative to
 the superseded ten-seed plan. It preserves the primary estimand and cross-model
 RQ4 but does not support a confirmatory paid six-method H2 conclusion.
 
+### Amendment 2: balance-bounded continuation after safety stop
+
+On 2026-07-19, before any outcome-based analysis or matrix change, the user
+authorized continuation using the reported remaining balance of approximately
+CNY 50 and requested a stop near depletion. The first run stopped after 47
+Test-ID cells because failed provider attempts retained conservative 3,072-token
+reservations and exhausted the 3.2M output-token ledger; official billing was
+approximately CNY 26 while successful-call estimation was CNY 27.12.
+
+The 160-cell matrix, models, seeds, controller, endpoints, and analysis remain
+unchanged. The continuation freeze binds the immutable 47-cell prefix by hash
+and original run identity. A new journal records only remaining calls and caps
+successful-call cost at CNY 43, leaving approximately CNY 7 balance reserve.
+Separate higher reservation-ledger ceilings preserve failed-call uncertainty
+for audit but are not spending authorization. No completed cell is reissued.
+
 ## Research questions and hypotheses
 
 - **RQ1:** Does ShiftMem reduce cumulative excess cost after a regime change and shorten recovery?

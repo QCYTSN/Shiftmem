@@ -224,12 +224,19 @@ def _load_json(root: Path, relative: Path) -> dict[str, Any]:
 
 def _accidental_test_outcomes(root: Path) -> list[str]:
     found: list[str] = []
+    config = yaml.safe_load((root / V2_FORMAL_CONFIG).read_text(encoding="utf-8"))
+    continuation = config.get("continuation_from") or {}
+    declared_hash = continuation.get("prior_cells_sha256")
     raw_root = root / "artifacts/raw_runs"
     if not raw_root.exists():
         return found
     for path in raw_root.rglob("*"):
         normalized = path.name.lower().replace("-", "_")
         if path.is_file() and ("test_id" in normalized or "test_ood" in normalized):
+            if continuation and path.suffix.lower() in {".log", ".ps1"}:
+                continue
+            if declared_hash and _sha256(path) == declared_hash:
+                continue
             found.append(str(path.relative_to(root)))
     return sorted(found)
 
@@ -318,13 +325,17 @@ def build_v2_candidate(root: Path, errors: list[str]) -> dict[str, Any]:
         ["git", "rev-parse", "HEAD"], cwd=root, check=True,
         capture_output=True, text=True,
     ).stdout.strip()
+    config = yaml.safe_load((root / V2_FORMAL_CONFIG).read_text(encoding="utf-8"))
+    continuation = bool(config.get("continuation_from"))
     return {
         "schema": "protocol-v2-replacement-freeze-candidate",
         "generated_date": date.today().isoformat(),
         "git_commit": git_commit,
         "ready": not errors,
         "freeze_id": freeze_id,
-        "test_outcomes_accessed": False,
+        "test_outcomes_accessed": continuation,
+        "outcome_analysis_accessed": False,
+        "continuation_amendment": continuation,
         "blockers": errors,
         "file_count": len(paths),
         "files": {
@@ -341,7 +352,12 @@ def verify_v2_candidate(root: Path, candidate_path: Path) -> list[str]:
     errors: list[str] = []
     if candidate.get("schema") != "protocol-v2-replacement-freeze-candidate":
         errors.append("candidate schema is invalid")
-    if candidate.get("test_outcomes_accessed") is not False:
+    if candidate.get("continuation_amendment") is True:
+        if candidate.get("test_outcomes_accessed") is not True:
+            errors.append("continuation candidate must disclose Test access")
+        if candidate.get("outcome_analysis_accessed") is not False:
+            errors.append("continuation candidate does not prove analysis isolation")
+    elif candidate.get("test_outcomes_accessed") is not False:
         errors.append("candidate does not prove Test outcome isolation")
     commit = str(candidate.get("git_commit", ""))
     if len(commit) != 40 or any(character not in "0123456789abcdef" for character in commit):

@@ -57,11 +57,24 @@ shiftmem_profile:
     changed_variable_penalty: 0.5
     recency_half_life: 30.0
 
-# Explicitly approved by the user on 2026-07-16 under Protocol 2.0 Amendment 1.
-# Spending remains blocked until the exact config is inside a verified v2 freeze.
+# Amendment 2 continuation keeps the 160-cell matrix and spends at most CNY 43
+# more on successful calls, leaving roughly CNY 7 of the reported balance.
 budget_approved: true
+continuation_from:
+  manifest_split: Test-ID
+  completed_cells: 47
+  prior_cells_sha256: c1ce9aba615c09e34e64e34592e85af100126ab15d5860e5a00ca740c1fa64db
+  run_identity:
+    run_id: v2-formal-test-20260717-da148583e3c5
+    freeze_id: v2-formal-da148583e3c5
+    git_commit: 8228e646005b1d41f51bee635c680ed252f7248c
+    config_hash: d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff
 budgets:
   max_calls: 7000
-  max_input_tokens: 25000000
-  max_output_tokens: 3200000
-  max_cost_cny: 100
+  # These reservation-ledger ceilings preserve failed-call uncertainty; they
+  # are not spending authorization.
+  max_input_tokens: 90000000
+  max_output_tokens: 12000000
+  max_cost_cny: 250
+  # Preflight stops before the next successful response can exceed this cap.
+  max_successful_cost_cny: 43

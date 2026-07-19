@@ -78,6 +78,57 @@ def test_journal_fails_closed_before_budget_is_exceeded(tmp_path: Path) -> None:
         journal.append(entry("cell-1-day-1"))
 
 
+def test_successful_cost_cap_releases_failed_reservations(tmp_path: Path) -> None:
+    journal = JsonlRunJournal(
+        tmp_path / "run.jsonl",
+        identity(),
+        limits(max_calls=10, max_cost_cny=10, max_successful_cost_cny=0.03),
+    )
+    journal.reserve(
+        entry(
+            status="reserved",
+            provider_response=None,
+            input_tokens=20,
+            output_tokens=5,
+            estimated_cost_cny=0.02,
+        )
+    )
+    journal.finalize(
+        entry(
+            status="failed",
+            provider_response=None,
+            error_type="ProviderError",
+            input_tokens=20,
+            output_tokens=5,
+            estimated_cost_cny=0.02,
+        )
+    )
+    journal.reserve(
+        entry(
+            "cell-1-day-1",
+            status="reserved",
+            provider_response=None,
+            input_tokens=20,
+            output_tokens=5,
+            estimated_cost_cny=0.02,
+        )
+    )
+    journal.finalize(entry("cell-1-day-1", estimated_cost_cny=0.01))
+    assert journal.totals()["successful_cost_cny"] == pytest.approx(0.01)
+
+    with pytest.raises(ValueError, match="max_successful_cost_cny"):
+        journal.reserve(
+            entry(
+                "cell-1-day-2",
+                status="reserved",
+                provider_response=None,
+                input_tokens=20,
+                output_tokens=5,
+                estimated_cost_cny=0.03,
+            )
+        )
+
+
 def test_journal_rejects_secret_shaped_response_fields(tmp_path: Path) -> None:
     journal = JsonlRunJournal(tmp_path / "run.jsonl", identity(), limits())
 

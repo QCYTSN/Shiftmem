@@ -131,6 +131,11 @@ class JsonlRunJournal:
             "cost_cny": sum(
                 entry.estimated_cost_cny for entry in self._entries.values()
             ),
+            "successful_cost_cny": sum(
+                entry.estimated_cost_cny
+                for entry in self._entries.values()
+                if entry.status == "complete"
+            ),
         }
 
     def _check_budget(self, prospective: DecisionJournalEntry | None) -> None:
@@ -140,6 +145,9 @@ class JsonlRunJournal:
             totals["input_tokens"] += prospective.input_tokens
             totals["output_tokens"] += prospective.output_tokens
             totals["cost_cny"] += prospective.estimated_cost_cny
+        successful_cost = totals["successful_cost_cny"]
+        if prospective is not None and prospective.status != "failed":
+            successful_cost += prospective.estimated_cost_cny
         checks = {
             "max_calls": (totals["calls"], self.limits.max_calls),
             "max_input_tokens": (
@@ -155,6 +163,14 @@ class JsonlRunJournal:
         for field, (actual, limit) in checks.items():
             if actual > limit:
                 raise ValueError(f"journal would exceed {field}: {actual} > {limit}")
+        if (
+            self.limits.max_successful_cost_cny is not None
+            and successful_cost > self.limits.max_successful_cost_cny
+        ):
+            raise ValueError(
+                "journal would exceed max_successful_cost_cny: "
+                f"{successful_cost} > {self.limits.max_successful_cost_cny}"
+            )
 
     def append(self, entry: DecisionJournalEntry) -> None:
         if entry.identity != self.identity:
