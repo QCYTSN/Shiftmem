@@ -181,3 +181,9 @@ Implementation decisions and deviations from the specification will be recorded 
 - The formal run stopped safely after 47 Test-ID cells when conservative failed-attempt reservations reached the 3.2M output-token ledger. Official billing was about CNY 26; the journal's successful-call estimate was CNY 27.12, while failed reservations raised ledger cost to CNY 68.87.
 - Amendment 2 keeps all 160 cells and binds the immutable 47-cell prefix by SHA-256 and original run identity. Continuation uses a new freeze, run identity, journal, and output file; already completed cells are skipped without rewriting their provenance.
 - The user reported about CNY 50 remaining and authorized continuation until near depletion. The new successful-call ceiling is CNY 43, leaving roughly CNY 7 reserve. Higher token/cost ledger limits retain failed-call uncertainty for audit and do not authorize additional spending.
+
+## 2026-07-19 - Reservation-underestimate continuation repair
+
+- Amendment 2 completed three more Test-ID cells and spent an estimated CNY 2.67 on successful calls before a response reported 3,207 billed output tokens, exceeding the frozen 3,072-token reservation. No Test-OOD cell ran.
+- Added an explicit operator reconciliation path that can terminalize a confirmed reservation underestimate as failed without reissuing the external call. The known overrun is recorded as `ReservationUnderestimate`; normal automatic finalization remains bounded by its reservation.
+- Amendment 3 binds both prior files (47 plus 3 completed cells), raises the per-call billed-output reservation to 4,096, and caps the next successful-call spend at CNY 40 to preserve about CNY 7 balance reserve. The 160-cell matrix and endpoints are unchanged.

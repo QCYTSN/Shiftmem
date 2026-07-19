@@ -226,7 +226,9 @@ def _accidental_test_outcomes(root: Path) -> list[str]:
     found: list[str] = []
     config = yaml.safe_load((root / V2_FORMAL_CONFIG).read_text(encoding="utf-8"))
     continuation = config.get("continuation_from") or {}
-    declared_hash = continuation.get("prior_cells_sha256")
+    declared_hashes = {
+        source.get("sha256") for source in continuation.get("prior_sources", [])
+    }
     raw_root = root / "artifacts/raw_runs"
     if not raw_root.exists():
         return found
@@ -235,7 +237,7 @@ def _accidental_test_outcomes(root: Path) -> list[str]:
         if path.is_file() and ("test_id" in normalized or "test_ood" in normalized):
             if continuation and path.suffix.lower() in {".log", ".ps1"}:
                 continue
-            if declared_hash and _sha256(path) == declared_hash:
+            if _sha256(path) in declared_hashes:
                 continue
             found.append(str(path.relative_to(root)))
     return sorted(found)

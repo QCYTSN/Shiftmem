@@ -202,6 +202,23 @@ class JsonlRunJournal:
         self._write(entry)
         self._entries[entry.decision_id] = entry
 
+    def reconcile_failed_overrun(self, entry: DecisionJournalEntry) -> None:
+        """Terminalize a confirmed reservation underestimate without reissuing."""
+
+        if entry.status != "failed":
+            raise ValueError("overrun reconciliation requires a failed entry")
+        previous = self._entries.get(entry.decision_id)
+        if previous is None or previous.status != "reserved":
+            raise ValueError("overrun reconciliation requires an open reservation")
+        if (
+            previous.identity != entry.identity
+            or previous.cell_id != entry.cell_id
+            or previous.request_hash != entry.request_hash
+        ):
+            raise ValueError("reconciliation entry does not match reservation")
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
     def _write(self, entry: DecisionJournalEntry) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.path.open("a", encoding="utf-8", newline="\n") as stream:

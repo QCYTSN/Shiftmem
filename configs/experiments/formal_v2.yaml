@@ -11,8 +11,8 @@
 protocol: v2
 
 models:
-  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
-  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 3072}
+  - {label: deepseek, provider: siliconflow, model_name: deepseek-ai/DeepSeek-V3.2, input_cny_per_million: 4.0, output_cny_per_million: 6.0, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 4096}
+  - {label: minimax, provider: siliconflow, model_name: MiniMaxAI/MiniMax-M2.5, input_cny_per_million: 2.1, output_cny_per_million: 8.4, max_output_tokens_per_call: 512, max_billed_output_tokens_per_call: 4096}
 
 primary_methods:
   - {config_id: vector}
@@ -57,18 +57,19 @@ shiftmem_profile:
     changed_variable_penalty: 0.5
     recency_half_life: 30.0
 
-# Amendment 2 continuation keeps the 160-cell matrix and spends at most CNY 43
-# more on successful calls, leaving roughly CNY 7 of the reported balance.
+# Amendment 3 continuation keeps the 160-cell matrix and spends at most CNY 40
+# more on successful calls, leaving roughly CNY 7 after the latest 3 cells.
 budget_approved: true
 continuation_from:
-  manifest_split: Test-ID
-  completed_cells: 47
-  prior_cells_sha256: c1ce9aba615c09e34e64e34592e85af100126ab15d5860e5a00ca740c1fa64db
-  run_identity:
-    run_id: v2-formal-test-20260717-da148583e3c5
-    freeze_id: v2-formal-da148583e3c5
-    git_commit: 8228e646005b1d41f51bee635c680ed252f7248c
-    config_hash: d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff
+  prior_sources:
+    - manifest_split: Test-ID
+      completed_cells: 47
+      sha256: c1ce9aba615c09e34e64e34592e85af100126ab15d5860e5a00ca740c1fa64db
+      run_identity: {run_id: v2-formal-test-20260717-da148583e3c5, freeze_id: v2-formal-da148583e3c5, git_commit: 8228e646005b1d41f51bee635c680ed252f7248c, config_hash: d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff}
+    - manifest_split: Test-ID
+      completed_cells: 3
+      sha256: 5c1fae2a3874c2e595373107e5623d44686515965a259a70568772c5893de599
+      run_identity: {run_id: v2-formal-cont-20260719-50aaafda0d6a, freeze_id: v2-formal-50aaafda0d6a, git_commit: 2cf2b5afd9268a2e0cc89ac8f4be9e488314d2bf, config_hash: e623fa1e0d84a6d4bcf098145b1af69a0be692a876866d5ddc27cddf02b7ff66}
 budgets:
   max_calls: 7000
   # These reservation-ledger ceilings preserve failed-call uncertainty; they
@@ -77,4 +78,4 @@ budgets:
   max_output_tokens: 12000000
   max_cost_cny: 250
   # Preflight stops before the next successful response can exceed this cap.
-  max_successful_cost_cny: 43
+  max_successful_cost_cny: 40

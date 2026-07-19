@@ -280,7 +280,7 @@ def main() -> int:
     parser.add_argument("--journal", type=Path)
     parser.add_argument("--run-id")
     parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--prior-cells", type=Path)
+    parser.add_argument("--prior-cells", type=Path, action="append")
     args = parser.parse_args()
     if sum((args.dry_run, args.execute_offline, args.execute_live)) > 1:
         raise ValueError("choose one execution mode")
@@ -426,25 +426,35 @@ def _main_v2(
     )
     completed = load_completed_cells(raw_path)
     prior: dict[str, Any] = {}
-    if args.prior_cells is not None:
+    if args.prior_cells:
         if not args.execute_live:
             raise ValueError("prior cells are allowed only for formal live continuation")
-        continuation = config.get("continuation_from")
-        if not continuation:
+        continuation = config.get("continuation_from") or {}
+        declared_sources = continuation.get("prior_sources")
+        if not declared_sources:
             raise ValueError("formal config does not declare a prior continuation")
-        if manifest.split != continuation.get("manifest_split"):
-            raise ValueError("prior cells do not belong to this manifest split")
-        prior_bytes = args.prior_cells.read_bytes()
-        if hashlib.sha256(prior_bytes).hexdigest() != continuation.get(
-            "prior_cells_sha256"
-        ):
-            raise ValueError("prior cells hash does not match frozen continuation")
-        prior = load_completed_cells(args.prior_cells)
-        if len(prior) != int(continuation.get("completed_cells", -1)):
-            raise ValueError("prior completed cell count does not match continuation")
-        declared_identity = continuation.get("run_identity")
-        if any(cell.run_identity != declared_identity for cell in prior.values()):
-            raise ValueError("prior cells do not match declared run identity")
+        declared_by_hash = {source["sha256"]: source for source in declared_sources}
+        for prior_path in args.prior_cells:
+            digest = hashlib.sha256(prior_path.read_bytes()).hexdigest()
+            source = declared_by_hash.get(digest)
+            if source is None:
+                raise ValueError("prior cells hash does not match frozen continuation")
+            if manifest.split != source.get("manifest_split"):
+                raise ValueError("prior cells do not belong to this manifest split")
+            loaded = load_completed_cells(prior_path)
+            if len(loaded) != int(source.get("completed_cells", -1)):
+                raise ValueError("prior completed cell count does not match continuation")
+            if any(
+                cell.run_identity != source.get("run_identity")
+                for cell in loaded.values()
+            ):
+                raise ValueError("prior cells do not match declared run identity")
+            overlap = set(prior) & set(loaded)
+            if overlap:
+                raise ValueError(f"prior sources contain duplicate cells: {sorted(overlap)}")
+            prior.update(loaded)
+        if len(args.prior_cells) != len(declared_sources):
+            raise ValueError("all frozen prior cell sources are required")
     if args.execute_live and not args.resume:
         existing_paths = [path for path in (raw_path, args.output, args.journal) if path and path.exists()]
         if existing_paths:
@@ -503,7 +513,7 @@ def _main_v2(
         "dry_run": False,
         "offline_integration_only": journal is None,
         "raw_cells": str(raw_path),
-        "prior_cells": str(args.prior_cells) if args.prior_cells else None,
+        "prior_cells": [str(path) for path in args.prior_cells] if args.prior_cells else [],
     }
     _write_json(args.output, result)
     print(json.dumps(result, sort_keys=True))

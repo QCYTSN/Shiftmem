@@ -53,6 +53,19 @@ successful-call cost at CNY 43, leaving approximately CNY 7 balance reserve.
 Separate higher reservation-ledger ceilings preserve failed-call uncertainty
 for audit but are not spending authorization. No completed cell is reissued.
 
+### Amendment 3: reservation underestimate reconciliation
+
+The first Amendment 2 continuation stopped after three additional Test-ID
+cells when SiliconFlow reported 3,207 billed output tokens for one response,
+exceeding the frozen 3,072-token reservation. The response is not reissued: its
+open reservation is terminalized as `ReservationUnderestimate` with the known
+billed token count. The per-call billed-output reservation increases to 4,096.
+
+Both immutable Test-ID prefixes, totaling 50 cells, are independently bound by
+hash and original run identity. The matrix and analysis remain unchanged. The
+next journal caps additional successful-call cost at CNY 40, preserving roughly
+CNY 7 of the user-reported remaining balance after the latest successful spend.
+
 ## Research questions and hypotheses
 
 - **RQ1:** Does ShiftMem reduce cumulative excess cost after a regime change and shorten recovery?

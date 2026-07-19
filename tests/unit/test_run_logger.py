@@ -170,3 +170,28 @@ def test_terminal_cannot_exceed_preflight_reservation(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="input_tokens exceeds reservation"):
         journal.finalize(entry(input_tokens=10))
     assert journal.lookup("cell-1-day-0").status == "reserved"
+
+
+def test_operator_can_reconcile_confirmed_failed_overrun(tmp_path: Path) -> None:
+    journal = JsonlRunJournal(tmp_path / "run.jsonl", identity(), limits())
+    journal.reserve(
+        entry(
+            status="reserved",
+            provider_response=None,
+            input_tokens=20,
+            output_tokens=5,
+            estimated_cost_cny=0.02,
+        )
+    )
+    journal.reconcile_failed_overrun(
+        entry(
+            status="failed",
+            provider_response=None,
+            error_type="ReservationUnderestimate",
+            input_tokens=20,
+            output_tokens=6,
+            estimated_cost_cny=0.021,
+        )
+    )
+    assert journal.lookup("cell-1-day-0").status == "failed"
+    assert journal.totals()["reserved_attempts"] == 0
