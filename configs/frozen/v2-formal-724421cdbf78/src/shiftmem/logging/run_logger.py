@@ -1,0 +1,230 @@
+"""Append-only, per-decision journal with replay and fail-closed budgets."""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+from typing import Any
+
+from pydantic import ValidationError
+
+from .schemas import BudgetLimits, DecisionJournalEntry, RunIdentity
+
+
+_SECRET_FIELDS = {"api_key", "authorization", "password", "secret"}
+
+
+def _secret_field(value: Any) -> str | None:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if str(key).lower() in _SECRET_FIELDS:
+                return str(key)
+            found = _secret_field(nested)
+            if found:
+                return found
+    elif isinstance(value, list):
+        for nested in value:
+            found = _secret_field(nested)
+            if found:
+                return found
+    return None
+
+
+class JsonlRunJournal:
+    """Durably store exactly one completed response per decision identity."""
+
+    def __init__(
+        self,
+        path: str | Path,
+        identity: RunIdentity,
+        limits: BudgetLimits,
+    ) -> None:
+        self.path = Path(path)
+        self.identity = identity
+        self.limits = limits
+        self._entries: dict[str, DecisionJournalEntry] = {}
+        self._load()
+
+    def _load(self) -> None:
+        if not self.path.exists():
+            return
+        lines = self.path.read_text(encoding="utf-8").splitlines()
+        rewrite = False
+        for index, line in enumerate(lines):
+            if not line.strip():
+                continue
+            try:
+                entry = DecisionJournalEntry.model_validate_json(line)
+            except (ValidationError, ValueError):
+                if index != len(lines) - 1:
+                    raise ValueError("journal contains malformed non-final line")
+                rewrite = True
+                break
+            self._accept_loaded(entry)
+        self._check_budget(None)
+        if rewrite:
+            self.path.write_text(
+                "".join(
+                    entry.model_dump_json() + "\n"
+                    for entry in self._entries.values()
+                ),
+                encoding="utf-8",
+            )
+
+    def _accept_loaded(self, entry: DecisionJournalEntry) -> None:
+        if entry.identity != self.identity:
+            raise ValueError("journal identity does not match requested run identity")
+        previous = self._entries.get(entry.decision_id)
+        if previous is not None:
+            self._validate_transition(previous, entry)
+        self._entries[entry.decision_id] = entry
+
+    @staticmethod
+    def _validate_transition(
+        previous: DecisionJournalEntry, entry: DecisionJournalEntry
+    ) -> None:
+        if previous.status != "reserved" or entry.status == "reserved":
+            raise ValueError(f"decision already journaled: {entry.decision_id}")
+        if (
+            previous.identity != entry.identity
+            or previous.cell_id != entry.cell_id
+            or previous.request_hash != entry.request_hash
+        ):
+            raise ValueError("journal terminal entry does not match reservation")
+        bounded = (
+            (entry.calls, previous.calls, "calls"),
+            (entry.input_tokens, previous.input_tokens, "input_tokens"),
+            (entry.output_tokens, previous.output_tokens, "output_tokens"),
+            (
+                entry.estimated_cost_cny,
+                previous.estimated_cost_cny,
+                "estimated_cost_cny",
+            ),
+        )
+        for actual, reserved, field in bounded:
+            if actual > reserved:
+                raise ValueError(
+                    f"journal terminal {field} exceeds reservation: {actual} > {reserved}"
+                )
+
+    def lookup(self, decision_id: str) -> DecisionJournalEntry | None:
+        return self._entries.get(decision_id)
+
+    def _totals(self) -> dict[str, float | int]:
+        return {
+            "calls": sum(entry.calls for entry in self._entries.values()),
+            "successful_responses": sum(
+                entry.status == "complete" for entry in self._entries.values()
+            ),
+            "failed_attempts": sum(
+                entry.status == "failed" for entry in self._entries.values()
+            ),
+            "reserved_attempts": sum(
+                entry.status == "reserved" for entry in self._entries.values()
+            ),
+            "input_tokens": sum(
+                entry.input_tokens for entry in self._entries.values()
+            ),
+            "output_tokens": sum(
+                entry.output_tokens for entry in self._entries.values()
+            ),
+            "cost_cny": sum(
+                entry.estimated_cost_cny for entry in self._entries.values()
+            ),
+            "successful_cost_cny": sum(
+                entry.estimated_cost_cny
+                for entry in self._entries.values()
+                if entry.status == "complete"
+            ),
+        }
+
+    def _check_budget(self, prospective: DecisionJournalEntry | None) -> None:
+        totals = self._totals()
+        if prospective is not None:
+            totals["calls"] += prospective.calls
+            totals["input_tokens"] += prospective.input_tokens
+            totals["output_tokens"] += prospective.output_tokens
+            totals["cost_cny"] += prospective.estimated_cost_cny
+        successful_cost = totals["successful_cost_cny"]
+        if prospective is not None and prospective.status != "failed":
+            successful_cost += prospective.estimated_cost_cny
+        checks = {
+            "max_calls": (totals["calls"], self.limits.max_calls),
+            "max_input_tokens": (
+                totals["input_tokens"],
+                self.limits.max_input_tokens,
+            ),
+            "max_output_tokens": (
+                totals["output_tokens"],
+                self.limits.max_output_tokens,
+            ),
+            "max_cost_cny": (totals["cost_cny"], self.limits.max_cost_cny),
+        }
+        for field, (actual, limit) in checks.items():
+            if actual > limit:
+                raise ValueError(f"journal would exceed {field}: {actual} > {limit}")
+        if (
+            self.limits.max_successful_cost_cny is not None
+            and successful_cost > self.limits.max_successful_cost_cny
+        ):
+            raise ValueError(
+                "journal would exceed max_successful_cost_cny: "
+                f"{successful_cost} > {self.limits.max_successful_cost_cny}"
+            )
+
+    def append(self, entry: DecisionJournalEntry) -> None:
+        if entry.identity != self.identity:
+            raise ValueError("entry identity does not match journal identity")
+        if entry.decision_id in self._entries:
+            raise ValueError(f"decision already journaled: {entry.decision_id}")
+        secret = _secret_field(entry.provider_response)
+        if secret:
+            raise ValueError(f"provider response contains secret field: {secret}")
+        self._check_budget(entry)
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
+    def reserve(self, entry: DecisionJournalEntry) -> None:
+        if entry.status != "reserved":
+            raise ValueError("reserve requires a reserved journal entry")
+        self.append(entry)
+
+    def finalize(self, entry: DecisionJournalEntry) -> None:
+        if entry.status == "reserved":
+            raise ValueError("finalize requires a terminal journal entry")
+        previous = self._entries.get(entry.decision_id)
+        if previous is None:
+            raise ValueError(f"decision was not reserved: {entry.decision_id}")
+        self._validate_transition(previous, entry)
+        secret = _secret_field(entry.provider_response)
+        if secret:
+            raise ValueError(f"provider response contains secret field: {secret}")
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
+    def reconcile_failed_overrun(self, entry: DecisionJournalEntry) -> None:
+        """Terminalize a confirmed reservation underestimate without reissuing."""
+
+        if entry.status != "failed":
+            raise ValueError("overrun reconciliation requires a failed entry")
+        previous = self._entries.get(entry.decision_id)
+        if previous is None or previous.status != "reserved":
+            raise ValueError("overrun reconciliation requires an open reservation")
+        if (
+            previous.identity != entry.identity
+            or previous.cell_id != entry.cell_id
+            or previous.request_hash != entry.request_hash
+        ):
+            raise ValueError("reconciliation entry does not match reservation")
+        self._write(entry)
+        self._entries[entry.decision_id] = entry
+
+    def _write(self, entry: DecisionJournalEntry) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self.path.open("a", encoding="utf-8", newline="\n") as stream:
+            stream.write(entry.model_dump_json() + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+
+    def totals(self) -> dict[str, float | int]:
+        return self._totals().copy()

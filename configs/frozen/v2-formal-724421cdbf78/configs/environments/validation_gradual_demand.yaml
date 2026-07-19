@@ -1,0 +1,12 @@
+name: validation_gradual_demand
+episode_length: 150
+initial_inventory: 65
+demand_model: negative_binomial
+demand: {base_level: 22, dispersion: 9}
+supply: {lead_time: 2, fill_rate: 1.0}
+costs: {purchase: 1.0, holding: 0.2, stockout: 5.0, fixed_order: 0.0}
+shifts:
+  - type: gradual_demand
+    start_day: 55
+    end_day: 95
+    changes: {base_level_multiplier: 1.6}

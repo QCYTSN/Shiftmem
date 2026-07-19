@@ -1,0 +1,65 @@
+{
+  "budget_usage": {
+    "cny_per_call": 0.00894,
+    "estimated_cost_cny": 0.2146,
+    "max_calls": 48,
+    "max_cost_cny": 0.5,
+    "provider_calls": 24
+  },
+  "models": [
+    {
+      "applicable_memory_citation_count": 2,
+      "attempt_count": 12,
+      "attempt_parse_failure_count": 0,
+      "corrected_case_count": 0,
+      "fallback_count": 0,
+      "inapplicable_memory_citation_count": 0,
+      "invalid_memory_citation_count": 0,
+      "label": "deepseek_v3_2",
+      "model_id": "deepseek-ai/DeepSeek-V3.2",
+      "monotonicity_checks": 4,
+      "monotonicity_passes": 4,
+      "parse_failure_count": 0,
+      "profile": "siliconflow",
+      "qualifies": true,
+      "result_count": 12,
+      "total_input_tokens": 12298,
+      "total_latency_ms": 62840.03210021183,
+      "total_output_tokens": 863,
+      "unresolved_parse_failure_count": 0
+    },
+    {
+      "applicable_memory_citation_count": 2,
+      "attempt_count": 12,
+      "attempt_parse_failure_count": 0,
+      "corrected_case_count": 0,
+      "fallback_count": 0,
+      "inapplicable_memory_citation_count": 0,
+      "invalid_memory_citation_count": 0,
+      "label": "minimax_m2_5",
+      "model_id": "MiniMaxAI/MiniMax-M2.5",
+      "monotonicity_checks": 4,
+      "monotonicity_passes": 4,
+      "parse_failure_count": 0,
+      "profile": "siliconflow",
+      "qualifies": true,
+      "result_count": 12,
+      "total_input_tokens": 11846,
+      "total_latency_ms": 209705.31160058454,
+      "total_output_tokens": 9725,
+      "unresolved_parse_failure_count": 0
+    }
+  ],
+  "qualification_date": "2026-07-15",
+  "run_metadata": {
+    "config_sha256": "97361de55788cd4c7f342b19f6de8590b7814a9f28829492a73a4911e75e69c6",
+    "git_dirty": false,
+    "git_revision": "64e51aee272bce91748245e69cad943375ae89d7",
+    "run_id": "v2-qual-live-20260715-739bc99",
+    "schema_name": "strategy",
+    "started_at_utc": "2026-07-15T03:25:02.597197+00:00",
+    "system_prompt_sha256": "554c30d33d353049dde84fb1d03e5220b76768c29433606e1ca84709ae28cb38",
+    "user_message_builder": "build_strategy_review_user_message"
+  },
+  "schema": "strategy"
+}
