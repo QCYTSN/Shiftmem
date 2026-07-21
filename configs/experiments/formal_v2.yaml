@@ -57,8 +57,9 @@ shiftmem_profile:
     changed_variable_penalty: 0.5
     recency_half_life: 30.0
 
-# Amendment 3 continuation keeps the 160-cell matrix and spends at most CNY 40
-# more on successful calls, leaving roughly CNY 7 after the latest 3 cells.
+# Amendment 4 continuation keeps the 160-cell matrix and spends at most CNY 50
+# more on successful calls. The user reported CNY 9.4 remaining before the
+# approved CNY 50 top-up, preserving roughly CNY 9.4 if the full cap is used.
 budget_approved: true
 continuation_from:
   prior_sources:
@@ -70,6 +71,17 @@ continuation_from:
       completed_cells: 3
       sha256: 5c1fae2a3874c2e595373107e5623d44686515965a259a70568772c5893de599
       run_identity: {run_id: v2-formal-cont-20260719-50aaafda0d6a, freeze_id: v2-formal-50aaafda0d6a, git_commit: 2cf2b5afd9268a2e0cc89ac8f4be9e488314d2bf, config_hash: e623fa1e0d84a6d4bcf098145b1af69a0be692a876866d5ddc27cddf02b7ff66}
+    - manifest_split: Test-ID
+      completed_cells: 30
+      sha256: 738623df6eb2ccc88549d0d4dff2fef110fa649f149e1ef5beabbc18bcbf6285
+      run_identity: {run_id: v2-formal-cont2-20260719-724421cdbf78, freeze_id: v2-formal-724421cdbf78, git_commit: bd29aa875001fb416e15bda948c34ca3073c0805, config_hash: c692e10b4ea5400dd6c681933538300f6092fe5bde7f09c32ed025fbde192c1b}
+    - manifest_split: Test-OOD
+      completed_cells: 23
+      sha256: f0101fc3650ee25061f81a7b542cb9a9a26e04590981e0051b6d321d6dd7c791
+      run_identity: {run_id: v2-formal-cont2-20260719-724421cdbf78, freeze_id: v2-formal-724421cdbf78, git_commit: bd29aa875001fb416e15bda948c34ca3073c0805, config_hash: c692e10b4ea5400dd6c681933538300f6092fe5bde7f09c32ed025fbde192c1b}
+  evidence_sources:
+    - path: artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_id_summary.json
+      sha256: a0cb7ef956296a87e0d253bc0b7d6814b9550caf9a098a1c79a29952de466e62
 budgets:
   max_calls: 7000
   # These reservation-ledger ceilings preserve failed-call uncertainty; they
@@ -78,4 +90,4 @@ budgets:
   max_output_tokens: 12000000
   max_cost_cny: 250
   # Preflight stops before the next successful response can exceed this cap.
-  max_successful_cost_cny: 40
+  max_successful_cost_cny: 50

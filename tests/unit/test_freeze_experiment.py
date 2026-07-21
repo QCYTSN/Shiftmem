@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from scripts.freeze_experiment import (
+    _accidental_test_outcomes,
     build_v2_candidate,
     build_manifest,
     canonical_v2_paths,
@@ -129,6 +130,30 @@ def test_v2_candidate_package_covers_code_contract_configs_and_raw_evidence() ->
 def test_approved_protocol_v2_package_passes_replacement_freeze_gates() -> None:
     errors = collect_v2_gate_errors(Path.cwd(), git_status="")
     assert errors == []
+
+
+def test_declared_test_evidence_requires_exact_path_and_hash(tmp_path: Path) -> None:
+    import hashlib
+
+    raw = tmp_path / "artifacts/raw_runs/formal_test_ood_summary.json"
+    raw.parent.mkdir(parents=True)
+    raw.write_text('{"complete": false}\n', encoding="utf-8")
+    digest = hashlib.sha256(raw.read_bytes()).hexdigest()
+    config = tmp_path / "configs/experiments/formal_v2.yaml"
+    config.parent.mkdir(parents=True)
+    config.write_text(
+        "continuation_from:\n"
+        "  evidence_sources:\n"
+        "    - path: artifacts/raw_runs/formal_test_ood_summary.json\n"
+        f"      sha256: {digest}\n",
+        encoding="utf-8",
+    )
+
+    assert _accidental_test_outcomes(tmp_path) == []
+    raw.write_text('{"complete": true}\n', encoding="utf-8")
+    assert _accidental_test_outcomes(tmp_path) == [
+        str(Path("artifacts/raw_runs/formal_test_ood_summary.json"))
+    ]
 
 
 def test_v2_candidate_verifier_detects_hash_tampering(tmp_path: Path) -> None:

@@ -5,6 +5,7 @@ import pytest
 from scripts.run_formal_experiment import (
     build_cell_plan,
     build_v2_cell_plan,
+    select_prior_sources,
     validate_formal_config,
     validate_live_dry_run_config,
     validate_v2_config,
@@ -115,6 +116,33 @@ def test_v2_cell_plan_allows_held_out_only_after_live_freeze_gate() -> None:
         validate_v2_split_access(
             "Test-OOD", execute_live=True, freeze_verified=False
         )
+
+
+def test_continuation_selects_only_sources_for_requested_split() -> None:
+    candidate = v2_config()
+    candidate["continuation_from"] = {
+        "prior_sources": [
+            {"manifest_split": "Test-ID", "sha256": "a" * 64},
+            {"manifest_split": "Test-OOD", "sha256": "b" * 64},
+        ]
+    }
+
+    assert select_prior_sources(candidate, "Test-OOD") == [
+        {"manifest_split": "Test-OOD", "sha256": "b" * 64}
+    ]
+
+
+def test_continuation_rejects_duplicate_hashes_within_split() -> None:
+    candidate = v2_config()
+    candidate["continuation_from"] = {
+        "prior_sources": [
+            {"manifest_split": "Test-OOD", "sha256": "a" * 64},
+            {"manifest_split": "Test-OOD", "sha256": "a" * 64},
+        ]
+    }
+
+    with pytest.raises(ValueError, match="duplicate hashes"):
+        select_prior_sources(candidate, "Test-OOD")
 
 
 def test_v2_formal_live_gate_requires_approval_pricing_and_output_caps() -> None:

@@ -229,6 +229,10 @@ def _accidental_test_outcomes(root: Path) -> list[str]:
     declared_hashes = {
         source.get("sha256") for source in continuation.get("prior_sources", [])
     }
+    declared_evidence = {
+        Path(source["path"]).as_posix(): source["sha256"]
+        for source in continuation.get("evidence_sources", [])
+    }
     raw_root = root / "artifacts/raw_runs"
     if not raw_root.exists():
         return found
@@ -237,7 +241,11 @@ def _accidental_test_outcomes(root: Path) -> list[str]:
         if path.is_file() and ("test_id" in normalized or "test_ood" in normalized):
             if continuation and path.suffix.lower() in {".log", ".ps1"}:
                 continue
-            if _sha256(path) in declared_hashes:
+            digest = _sha256(path)
+            relative = path.relative_to(root).as_posix()
+            if digest in declared_hashes:
+                continue
+            if declared_evidence.get(relative) == digest:
                 continue
             found.append(str(path.relative_to(root)))
     return sorted(found)

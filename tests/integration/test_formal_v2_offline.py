@@ -75,6 +75,9 @@ def test_offline_rehearsal_exercises_all_six_methods_and_oracle_pairing() -> Non
     assert summary["cells"] == 6
     assert summary["provider_calls"] == 0
     assert summary["test_outcomes_accessed"] is False
+
+    held_out = aggregate_results(plan, results, test_outcomes_accessed=True)
+    assert held_out["test_outcomes_accessed"] is True
     assert set(summary["methods"]) == set(methods)
     assert all(row.post_shift_cumulative_regret_30 is not None for row in results)
 

@@ -226,11 +226,12 @@ def aggregate_results(
     results: list[FormalV2CellResult],
     *,
     journal_totals: dict[str, float | int] | None = None,
+    test_outcomes_accessed: bool = False,
 ) -> dict[str, Any]:
     validate_plan_completeness(plan, results)
     return {
         "complete": True,
-        "test_outcomes_accessed": False,
+        "test_outcomes_accessed": test_outcomes_accessed,
         "cells": len(results),
         "tiers": dict(Counter(row.tier for row in results)),
         "methods": dict(Counter(row.method for row in results)),

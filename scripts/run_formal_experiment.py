@@ -177,6 +177,26 @@ def verify_file_bound_to_freeze(
         raise ValueError(f"formal input bytes do not match the verified freeze: {relative}")
 
 
+def select_prior_sources(
+    config: dict[str, Any], manifest_split: str
+) -> list[dict[str, Any]]:
+    """Return exactly the frozen continuation sources for one split."""
+
+    continuation = config.get("continuation_from") or {}
+    sources = continuation.get("prior_sources") or []
+    selected = [
+        source
+        for source in sources
+        if source.get("manifest_split") == manifest_split
+    ]
+    hashes = [str(source.get("sha256", "")) for source in selected]
+    if any(len(digest) != 64 for digest in hashes):
+        raise ValueError("frozen prior cell source hash is invalid")
+    if len(set(hashes)) != len(hashes):
+        raise ValueError("frozen prior cell sources contain duplicate hashes")
+    return selected
+
+
 def validate_v2_split_access(
     split: str, *, execute_live: bool, freeze_verified: bool
 ) -> None:
@@ -426,15 +446,16 @@ def _main_v2(
     )
     completed = load_completed_cells(raw_path)
     prior: dict[str, Any] = {}
-    if args.prior_cells:
+    continuation = config.get("continuation_from") or {}
+    all_declared_sources = continuation.get("prior_sources") or []
+    declared_sources = select_prior_sources(config, manifest.split)
+    if args.prior_cells or declared_sources:
         if not args.execute_live:
             raise ValueError("prior cells are allowed only for formal live continuation")
-        continuation = config.get("continuation_from") or {}
-        declared_sources = continuation.get("prior_sources")
-        if not declared_sources:
+        if not all_declared_sources:
             raise ValueError("formal config does not declare a prior continuation")
         declared_by_hash = {source["sha256"]: source for source in declared_sources}
-        for prior_path in args.prior_cells:
+        for prior_path in args.prior_cells or []:
             digest = hashlib.sha256(prior_path.read_bytes()).hexdigest()
             source = declared_by_hash.get(digest)
             if source is None:
@@ -453,8 +474,10 @@ def _main_v2(
             if overlap:
                 raise ValueError(f"prior sources contain duplicate cells: {sorted(overlap)}")
             prior.update(loaded)
-        if len(args.prior_cells) != len(declared_sources):
-            raise ValueError("all frozen prior cell sources are required")
+        if len(args.prior_cells or []) != len(declared_sources):
+            raise ValueError(
+                "all frozen prior cell sources for this manifest are required"
+            )
     if args.execute_live and not args.resume:
         existing_paths = [path for path in (raw_path, args.output, args.journal) if path and path.exists()]
         if existing_paths:
@@ -509,6 +532,7 @@ def _main_v2(
             plan,
             ordered,
             journal_totals=journal.totals() if journal is not None else None,
+            test_outcomes_accessed=manifest.split in {"Test-ID", "Test-OOD"},
         ),
         "dry_run": False,
         "offline_integration_only": journal is None,

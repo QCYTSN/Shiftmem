@@ -66,6 +66,24 @@ hash and original run identity. The matrix and analysis remain unchanged. The
 next journal caps additional successful-call cost at CNY 40, preserving roughly
 CNY 7 of the user-reported remaining balance after the latest successful spend.
 
+### Amendment 4: Test-OOD balance continuation
+
+On 2026-07-21, without outcome-based comparison or tuning, the user reported
+that the previously recommended CNY 50 top-up had arrived. The Amendment 3
+journal had stopped before a prospective successful-call cost of CNY 40.0011,
+with CNY 39.9178 successful-call cost, no unresolved reservation, all 80
+Test-ID cells complete, and 23 of 80 Test-OOD cells complete. The user had
+reported CNY 9.4 remaining before the top-up.
+
+The 160-cell matrix, models, methods, scenarios, seeds, controller, endpoint,
+and analysis remain unchanged. The continuation binds all immutable Test-ID
+prefixes (47, 3, and 30 cells) and the 23-cell Test-OOD prefix by SHA-256 and
+original run identity. At execution, only prior sources matching the requested
+manifest split are required. The new journal caps additional successful-call
+cost at CNY 50, preserving approximately CNY 9.4 if the full cap is consumed.
+Conservative failed-attempt ledger ceilings remain audit bounds rather than
+spending authority. No completed cell is reissued.
+
 ## Research questions and hypotheses
 
 - **RQ1:** Does ShiftMem reduce cumulative excess cost after a regime change and shorten recovery?

@@ -187,3 +187,10 @@ Implementation decisions and deviations from the specification will be recorded 
 - Amendment 2 completed three more Test-ID cells and spent an estimated CNY 2.67 on successful calls before a response reported 3,207 billed output tokens, exceeding the frozen 3,072-token reservation. No Test-OOD cell ran.
 - Added an explicit operator reconciliation path that can terminalize a confirmed reservation underestimate as failed without reissuing the external call. The known overrun is recorded as `ReservationUnderestimate`; normal automatic finalization remains bounded by its reservation.
 - Amendment 3 binds both prior files (47 plus 3 completed cells), raises the per-call billed-output reservation to 4,096, and caps the next successful-call spend at CNY 40 to preserve about CNY 7 balance reserve. The 160-cell matrix and endpoints are unchanged.
+
+## 2026-07-21 - Test-OOD balance continuation
+
+- Amendment 3 completed the remaining 30 Test-ID cells and 23 Test-OOD cells before the successful-call gate stopped safely at CNY 39.9178; the next prospective reservation would have reached CNY 40.0011. The journal has no unresolved reservation.
+- The user reported CNY 9.4 remaining and then confirmed that the recommended CNY 50 top-up had arrived. Amendment 4 authorizes at most CNY 50 of additional successful-call cost, leaving approximately CNY 9.4 reserve if fully consumed.
+- The continuation binds the immutable 47-, 3-, and 30-cell Test-ID prefixes plus the 23-cell Test-OOD prefix by hash and original run identity. The runner now selects required prior sources by manifest split, so the Test-OOD continuation cannot omit its prefix or require unrelated Test-ID inputs.
+- The post-Test freeze gate accepts only explicitly declared evidence paths with matching hashes, and held-out summaries disclose Test outcome access. No model, method, scenario, seed, controller, endpoint, or analysis rule changes.
