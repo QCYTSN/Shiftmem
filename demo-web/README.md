@@ -4,6 +4,8 @@ This directory contains the official browser Demo for the frozen ShiftMem
 formal experiment. It is an evidence replay and audit interface, not a live
 model playground.
 
+**Live Demo:** https://qcytsn.github.io/Shiftmem/
+
 ## Run locally
 
 Requirements:

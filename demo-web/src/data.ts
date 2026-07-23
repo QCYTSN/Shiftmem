@@ -1,6 +1,7 @@
 import type { CellEvidence, EvidenceIndex } from "./types";
 
 const cellCache = new Map<string, Promise<CellEvidence>>();
+const evidenceBase = `${import.meta.env.BASE_URL}evidence`;
 
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(path);
@@ -11,13 +12,13 @@ async function fetchJson<T>(path: string): Promise<T> {
 }
 
 export function loadEvidenceIndex(): Promise<EvidenceIndex> {
-  return fetchJson<EvidenceIndex>("/evidence/index.json");
+  return fetchJson<EvidenceIndex>(`${evidenceBase}/index.json`);
 }
 
 export function loadCell(id: string): Promise<CellEvidence> {
   const cached = cellCache.get(id);
   if (cached) return cached;
-  const request = fetchJson<CellEvidence>(`/evidence/cells/${id}.json`);
+  const request = fetchJson<CellEvidence>(`${evidenceBase}/cells/${id}.json`);
   cellCache.set(id, request);
   return request;
 }

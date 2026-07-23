@@ -23,8 +23,8 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 > 交互式回放完整的 160-cell 冻结实验，对比 ShiftMem 与 VectorMemory，
 > 检查记忆生命周期，并将界面中的结果追溯到经过校验的正式证据。
 >
-> **[进入 Demo 使用说明 →](demo-web/README.md)**<br>
-> [本地启动](#运行-demo) ·
+> **[打开在线 Demo →](https://qcytsn.github.io/Shiftmem/)**<br>
+> [本地启动](#运行-demo) · [Demo 使用说明](demo-web/README.md) ·
 > [产品与证据完整性规范](docs/demo_design_spec.md) ·
 > [正式实验审计](docs/v2_formal_post_test_audit.md)
 

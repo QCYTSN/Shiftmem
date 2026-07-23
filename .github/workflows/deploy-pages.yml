@@ -1,0 +1,77 @@
+name: Deploy Evidence Lab to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/deploy-pages.yml"
+      - "demo/**"
+      - "demo-web/**"
+      - "artifacts/aggregated/v2_formal_evidence_manifest.json"
+      - "artifacts/aggregated/v2_formal_statistical_analysis.json"
+      - "artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip"
+      - "artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.sha256.json"
+      - "scripts/verify_release_archive.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify frozen release archive
+        run: python scripts/verify_release_archive.py
+
+      - name: Export verified browser evidence
+        run: python -m demo.export_web
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.9.0 --activate
+
+      - name: Install Demo dependencies
+        working-directory: demo-web
+        run: pnpm install --frozen-lockfile
+
+      - name: Build GitHub Pages site
+        working-directory: demo-web
+        run: pnpm exec tsc -b && pnpm exec vite build --mode github-pages
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: demo-web/dist
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

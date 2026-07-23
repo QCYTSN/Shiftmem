@@ -23,8 +23,8 @@ revise, or retire operational experience after its environment changes.
 > Replay the frozen 160-cell experiment, compare ShiftMem with VectorMemory,
 > inspect memory lifecycles, and trace every result back to verified evidence.
 >
-> **[Open the Demo guide →](demo-web/README.md)**<br>
-> [Run locally](#run-the-demo) ·
+> **[Launch the live Demo →](https://qcytsn.github.io/Shiftmem/)**<br>
+> [Run locally](#run-the-demo) · [Demo guide](demo-web/README.md) ·
 > [Product and integrity specification](docs/demo_design_spec.md) ·
 > [Formal evidence audit](docs/v2_formal_post_test_audit.md)
 
