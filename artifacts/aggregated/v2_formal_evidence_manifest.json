@@ -1,7 +1,7 @@
 {
   "cells": 160,
   "complete": true,
-  "evidence_freeze_id": "v2-formal-results-b70e28f0fa8c",
+  "evidence_freeze_id": "v2-formal-results-f4ab41daacf3",
   "files": [
     {
       "bytes": 187566,
@@ -110,6 +110,12 @@
       "sha256": "217a1f3b569055d1c3ff1dd3db1ffdc40474bf2b74650d4abae96e4d28018507"
     },
     {
+      "bytes": 2307,
+      "kind": "analysis_code",
+      "path": "scripts/verify_freeze.py",
+      "sha256": "859f850e86264ef26ccae3f84beb74ef2138d0953c7138c181c2a450b710beba"
+    },
+    {
       "bytes": 38275,
       "kind": "analysis_code",
       "path": "src/shiftmem/evaluation/post_test.py",
@@ -140,7 +146,7 @@
       "valid": true
     }
   },
-  "manifest_sha256": "b70e28f0fa8c48bce527f65a96b62f45960f81ed079230bd265121a72971c993",
+  "manifest_sha256": "f4ab41daacf380aa1d59c7af6abf4374c282c14547ae3fe45874c4ae516697c0",
   "raw_evidence_mutated": false,
   "reproducibility": {
     "analysis_code_identity": "SHA-256-bound by the evidence manifest",

@@ -7,7 +7,7 @@ matrix contains 160 unique complete cells: 80 Test-ID and 80 Test-OOD. The
 confirmatory non-stable population contains 70 paired ShiftMem-versus-
 VectorMemory units. No exclusion or rerun was introduced during closure.
 
-The current evidence-closure identity is `v2-formal-results-b70e28f0fa8c`. The
+The current evidence-closure identity is `v2-formal-results-f4ab41daacf3`. The
 five cell files, four journals, and two summaries are byte-identical to the
 first closure; the identity changed because the manifest also binds the
 post-Test analysis code, which now includes the sensitivity analyses below. Run
@@ -158,7 +158,7 @@ specific lifecycle mechanism.
 - `artifacts/aggregated/v2_formal_reliability_audit.json`
 
 The 11 immutable raw evidence files also have a read-only convenience archive
-at `artifacts/releases/v2-formal-results-b70e28f0fa8c-raw-evidence.zip` (2,735,947
+at `artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip` (2,735,947
 bytes; SHA-256
 `3f462721f6bc025043ac262c0e06724ac6b1a5479372ddc54a006834fa94e49f`).
 The archive does not replace the authoritative per-file hashes in the evidence

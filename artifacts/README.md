@@ -1,0 +1,38 @@
+# Artifacts
+
+ShiftMem separates immutable raw evidence from tracked derived results.
+
+## `aggregated/`
+
+Tracked machine-readable summaries and audits. The three authoritative
+Protocol-v2 closure outputs are:
+
+- `v2_formal_evidence_manifest.json`
+- `v2_formal_statistical_analysis.json`
+- `v2_formal_reliability_audit.json`
+
+## `raw_runs/`
+
+Local run outputs are ignored by default because they can be large and may
+contain provider responses. A small number of historical fixtures were tracked
+before that rule and remain for reproducibility. Formal raw evidence must never
+be edited in place; the evidence manifest records its expected SHA-256 hashes.
+
+## `releases/`
+
+Read-only convenience packages and their checksums. The current package is
+`v2-formal-results-f4ab41daacf3-raw-evidence.zip`. It contains the five formal
+cell files, four journals, and two split summaries. The per-file evidence
+manifest—not the ZIP container—is authoritative.
+
+## `figures/`
+
+Tracked generated figures. Paper-specific figures may be added later, but they
+must be derived from the frozen aggregate outputs rather than manually edited
+values.
+
+## Verification
+
+```powershell
+.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify
+```

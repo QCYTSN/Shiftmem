@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# These files are byte-hash-bound by the Protocol-v2 closure manifest. Keep
+# their worktree representation stable across GitHub Desktop and CLI checkouts.
+src/shiftmem/evaluation/post_test.py text eol=lf
+src/shiftmem/evaluation/statistics.py text eol=lf
+scripts/finalize_formal_results.py text eol=lf
+scripts/verify_freeze.py text eol=lf
+configs/experiments/formal_v2.yaml text eol=lf
+configs/experiments/formal_v2_post_test.yaml text eol=lf

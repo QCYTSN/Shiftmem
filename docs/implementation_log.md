@@ -211,3 +211,9 @@ Implementation decisions and deviations from the specification will be recorded 
 - Added an append-order audit across the four journals. All 70 applicable pairs ran VectorMemory before ShiftMem; early/late and run-segment summaries diagnose possible drift but explicitly cannot remove the non-randomized execution-order limitation. The journals contain no wall-clock timestamps, so no timestamp claim is made.
 - Retained the serialized `post_shift_cumulative_regret_30` field while defining its reporting label as `oracle-relative cost gap`; the shared parameter-aware heuristic Oracle cancels from the paired method difference.
 - Added exact Python, dependency, platform, provider/model, source-commit, and config-hash metadata to every derived aggregate. The resulting SHA-bound post-Test closure identity is `v2-formal-results-b70e28f0fa8c`.
+
+## 2026-07-23 - Public repository and cross-platform closure
+
+- Replaced the construction-era README with a result-first public overview, documentation index, completed evaluation model card, artifact guide, architecture diagram, reproducibility commands, and explicit claim limits.
+- Hardened `.gitattributes` for the SHA-bound analysis files and taught the freeze verifier to accept only CRLF/LF transport equivalence for UTF-8 text. Semantic text changes and all binary changes still fail verification.
+- Added `verify_freeze.py` itself to the post-Test analysis-code manifest. Raw evidence and statistical values are unchanged; the resulting closure identity is `v2-formal-results-f4ab41daacf3`.

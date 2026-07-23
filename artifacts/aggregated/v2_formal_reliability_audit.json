@@ -303,7 +303,7 @@
       "split": "Test-OOD"
     }
   ],
-  "evidence_freeze_id": "v2-formal-results-b70e28f0fa8c",
+  "evidence_freeze_id": "v2-formal-results-f4ab41daacf3",
   "execution_order_audit": {
     "by_run_pair": {
       "cross-run-or-multiple": {

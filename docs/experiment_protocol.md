@@ -93,7 +93,7 @@ provider call is authorized.
 
 All five cell prefixes, four journals, and two final split summaries are kept
 byte-for-byte immutable and bound by the post-Test evidence manifest. The
-current closure identity is `v2-formal-results-b70e28f0fa8c`; the earlier
+current closure identity is `v2-formal-results-f4ab41daacf3`; the earlier
 `v2-formal-results-bf7b57070da2` remains in Git history and differs only because
 the SHA-bound analysis code was extended after Test with explicitly post-hoc
 sensitivity analyses. The pre-Test accidental-outcome gate remains

@@ -1,4 +1,9 @@
-"""Verify hashes and file membership of a frozen experiment package."""
+"""Verify hashes and file membership of a frozen experiment package.
+
+Text files accept only CRLF/LF transport normalization as byte-equivalent.
+This keeps manifests portable across GitHub Desktop and CLI checkouts while
+still rejecting every semantic content change and every binary-byte change.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +12,20 @@ import hashlib
 from pathlib import Path
 
 
-def _hash(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def _matches_hash(path: Path, expected: str) -> bool:
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() == expected:
+        return True
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    canonical = text.replace("\r\n", "\n").replace("\r", "\n")
+    variants = (
+        canonical.encode("utf-8"),
+        canonical.replace("\n", "\r\n").encode("utf-8"),
+    )
+    return any(hashlib.sha256(value).hexdigest() == expected for value in variants)
 
 
 def verify_freeze(freeze: Path) -> list[str]:
@@ -28,7 +45,7 @@ def verify_freeze(freeze: Path) -> list[str]:
         target = freeze / relative
         if not target.is_file():
             errors.append(f"missing file: {name}")
-        elif _hash(target) != expected:
+        elif not _matches_hash(target, expected):
             errors.append(f"hash mismatch: {name}")
     actual = {
         path.relative_to(freeze)

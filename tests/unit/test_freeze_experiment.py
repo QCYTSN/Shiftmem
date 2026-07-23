@@ -62,6 +62,24 @@ def test_write_and_verify_detects_tampering(tmp_path: Path) -> None:
     assert any("hash mismatch" in error for error in verify_freeze(freeze))
 
 
+def test_verify_freeze_accepts_only_text_line_ending_transport_changes(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    path = source / "config.yaml"
+    path.write_bytes(b"first: 1\nsecond: 2\n")
+    freeze = tmp_path / "freeze"
+    write_freeze(source, freeze, [Path("config.yaml")])
+
+    frozen = freeze / "config.yaml"
+    frozen.write_bytes(b"first: 1\r\nsecond: 2\r\n")
+    assert verify_freeze(freeze) == []
+
+    frozen.write_bytes(b"first: 1\r\nsecond: 3\r\n")
+    assert any("hash mismatch" in error for error in verify_freeze(freeze))
+
+
 def passing_v2_gate_kwargs() -> dict:
     return {
         "git_status": "",

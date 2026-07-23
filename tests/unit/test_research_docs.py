@@ -64,9 +64,13 @@ def test_live_research_docs_report_post_freeze_status() -> None:
     pilot = (ROOT / "docs/phase4_pilot_report.md").read_text(encoding="utf-8")
     audit = audit_path.read_text(encoding="utf-8")
 
-    assert "phase4-20260713-b99c0d3e4d27" in readme
-    assert "MiniMax-M2.5" in readme
-    assert "v1.1" in readme
+    docs_index = (ROOT / "docs/README.md").read_text(encoding="utf-8")
+    model_card = (ROOT / "docs/model_card.md").read_text(encoding="utf-8")
+
+    assert "v2-formal-results-f4ab41daacf3" in readme
+    assert "H1 not supported" in readme
+    assert "MiniMaxAI/MiniMax-M2.5" in model_card
+    assert "Protocol v1.1 live Validation report" in docs_index
     assert "fixed-policy pre-shift warm-up" in pilot
     assert "pre-seeded memories" in pilot
     assert "Detector-selection/runtime mismatch" in audit
@@ -74,6 +78,7 @@ def test_live_research_docs_report_post_freeze_status() -> None:
     assert "Test-ID and Test-OOD outcomes must not be generated or read" in audit
     assert "Post-freeze readiness audit" in implementation_log
     assert "the planned two-model formal design is not yet frozen" not in readme
+    assert "Planned structure" not in readme
 
 
 def test_v1_1_docs_preserve_live_validation_limit_and_budget_blocker() -> None:

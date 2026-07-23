@@ -1,95 +1,162 @@
 # ShiftMem
 
-Change-aware conditional memory for inventory agents under regime shifts.
+**Change-aware conditional memory for inventory agents under regime shifts.**
 
-ShiftMem is a research project investigating whether condition-aware memory can help inventory agents adapt when demand or supply regimes change. In the v2 architecture, an LLM performs bounded strategy review every five days or after a detected change, while a shared deterministic controller computes exact daily orders. This separates memory-assisted adaptation from high-frequency arithmetic and output noise.
+ShiftMem studies whether an LLM agent should keep treating past strategy
+experience as valid after demand or supply conditions change. The system gives
+the LLM a deliberately narrow role: it reviews three bounded strategy
+parameters at scheduled intervals or detected changes, while a shared
+deterministic controller executes every daily inventory order.
 
-The authoritative project scope, research questions, experimental design, and phased implementation requirements are documented in [ShiftMem_Implementation_Spec.md](ShiftMem_Implementation_Spec.md).
+The Protocol-v2 held-out experiment is complete. Its primary result is a
+carefully preserved negative result: under the tested models, scenarios, and
+provider conditions, ShiftMem did **not** outperform VectorMemory overall.
 
-## Planned structure
+## Headline result
 
-- `src/shiftmem/envs/`: inventory environment, demand, supply, and shift models
-- `src/shiftmem/agents/`: shared agent interfaces and baselines
-- `src/shiftmem/memory/`: ShiftMem schemas, storage, retrieval, validation, and lifecycle
-- `src/shiftmem/detection/`: online regime-change detectors
-- `src/shiftmem/evaluation/`: metrics, statistics, and plots
-- `src/shiftmem/providers/`: model-provider abstractions
-- `configs/`, `scripts/`, and `tests/`: reproducible configuration, entry points, and verification
-- `artifacts/`: raw, aggregated, and figure outputs with different tracking policies
+The formal matrix contains 160 complete cells: two models, two methods, eight
+held-out scenarios, and five paired environment seeds. Stable scenarios are
+descriptive; the declared change-adaptation endpoint contains 70 paired units.
 
-## Credentials
+| Analysis | ShiftMem − VectorMemory | 95% interval | p-value | Status |
+| --- | ---: | ---: | ---: | --- |
+| Predeclared primary analysis | +45.44 | [-2.72, 93.60] | 0.203 | H1 not supported |
+| Clustered mean sensitivity | +45.44 | [11.26, 79.09] | 0.041 | Post-hoc; unfavorable to ShiftMem |
 
-Copy `.env.example` to `.env` for local configuration. Keep `.env` local and never commit API keys or other credentials. The repository template contains variable names only and no secret values.
+Positive values mean a higher 30-day **oracle-relative cost gap** for ShiftMem.
+ShiftMem won 25 pairs, tied 11, and lost 34. Test-ID was approximately neutral
+(-2.67), while Test-OOD was unfavorable (+81.53). DeepSeek and MiniMax showed
+opposite method-effect directions, so the evidence supports a conditional,
+model-dependent interpretation rather than a universal memory advantage.
 
-## Classical pilot
+The predeclared result remains authoritative. The clustered analysis is a
+mean-aligned sensitivity analysis and is not presented as a replacement
+confirmatory test. See the [formal post-Test audit](docs/v2_formal_post_test_audit.md)
+for the full interpretation and claim boundaries.
 
-Run the network-free development pilot and aggregate its results with:
+## System design
 
-```powershell
-python scripts/run_experiment.py --config configs/experiments/classical_pilot.yaml --output artifacts/raw_runs/classical_pilot.jsonl
-python scripts/aggregate_results.py --input artifacts/raw_runs/classical_pilot.jsonl --output artifacts/aggregated/classical_pilot_summary.csv
+```mermaid
+flowchart LR
+    A["Public inventory history"] --> B["Change detector"]
+    A --> C["Review scheduler"]
+    B --> C
+    C --> D["Condition-aware memory retrieval"]
+    A --> E["Bounded LLM strategy review"]
+    D --> E
+    E --> F["Schema and bounds validation"]
+    F --> G["Deterministic daily controller"]
+    A --> G
+    G --> H["Inventory environment"]
+    H --> A
+    H --> I["Delayed experience validation"]
+    I --> D
 ```
 
-The committed pilot contains five synthetic scenarios, five classical policies, and ten paired environment seeds. Raw daily records are ignored by Git; aggregate CSV results remain trackable.
+The LLM may propose only:
 
-## Offline Agent pipeline
+- demand forecast window;
+- safety-stock multiplier;
+- lead-time buffer.
 
-Validate the structured Agent, retry/fallback, decision logging, and a selected memory baseline without a model or network connection:
+It cannot emit daily orders, change the controller, see future demand, access
+the hidden regime label, or use Oracle context. Invalid model output receives
+one repair attempt; otherwise the previous valid strategy remains active and
+the failure stays in the business outcome.
 
-```powershell
-python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --seed 42 --output artifacts/raw_runs/vector_agent.json
-```
+## Reproduce the closure
 
-Available offline memory baselines are `none`, `full_history`, `summary`, `vector`, and `time_decay`. The deterministic provider validates interfaces only; its output is not a model-performance result.
-
-The Phase 3 deterministic ShiftMem loop is also available offline:
-
-```powershell
-.venv\Scripts\python.exe scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory shiftmem --provider deterministic --max-days 30 --output artifacts/raw_runs/shiftmem_offline.json
-```
-
-This path extracts delayed decision experiences, monitors public demand and lost-sales signals with Page-Hinkley, updates Beta-Bernoulli confidence and lifecycle state, and performs condition-aware retrieval. Its default semantic component is lexical cosine so development and tests require neither a GPU nor an embedding API. The current detector thresholds, lifecycle thresholds, and retrieval weights are development defaults that must be selected on validation scenarios before formal tests. A deterministic-provider run verifies integration and auditability only; it is not evidence that ShiftMem improves inventory performance.
-
-The local `.env` is preconfigured for Alibaba Cloud Model Studio (Bailian) and SiliconFlow. Fill only the matching blank API key, then select the provider explicitly. The CLI remains deterministic by default so an ordinary offline command cannot spend API credit accidentally.
+Python 3.12 or newer is required. Evidence verification is network-free and
+does not require provider credentials.
 
 ```powershell
-python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider bailian --max-days 10 --output artifacts/raw_runs/bailian_smoke.json
-python scripts/run_agent_episode.py --config configs/environments/stable.yaml --memory vector --provider siliconflow --model-name Pro/zai-org/GLM-5.1 --max-days 10 --output artifacts/raw_runs/siliconflow_glm_smoke.json
+py -3.12 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -e ".[test]"
+python -m pytest -q
+python scripts/finalize_formal_results.py --verify
 ```
 
-The configured defaults are the version-pinned `qwen3.5-flash-2026-02-23` for low-cost Bailian smoke tests and `deepseek-ai/DeepSeek-V3.2` for SiliconFlow comparisons. Use `--model-name qwen3.7-plus-2026-05-26` only for an explicitly designed commercial upper-bound run. Never commit `.env`, and do not make a live call until the selected key is filled and the account's billing and quota settings have been checked.
+Expected verification status:
 
-## Inventory model qualification
+- 160/160 formal cells;
+- 70 primary paired units;
+- zero unresolved reservations;
+- all source-freeze and SHA-256 checks valid;
+- current closure identity: `v2-formal-results-f4ab41daacf3`.
 
-Run the fixed eight-case, two-repetition qualification matrix with:
+## Evidence and outputs
 
-```powershell
-.venv\Scripts\python.exe scripts/qualify_models.py --config configs/experiments/model_qualification.yaml --raw-output artifacts/raw_runs/model_qualification.jsonl --summary-output artifacts/aggregated/model_qualification_summary.json
-```
+- [Evidence manifest](artifacts/aggregated/v2_formal_evidence_manifest.json)
+- [Formal statistical analysis](artifacts/aggregated/v2_formal_statistical_analysis.json)
+- [Reliability and execution-order audit](artifacts/aggregated/v2_formal_reliability_audit.json)
+- [Read-only raw-evidence archive](artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip)
+- [Archive checksum](artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.sha256.json)
 
-The 2026-07-13 qualification and second-core gate selected `deepseek-ai/DeepSeek-V3.2` as Core A and `MiniMaxAI/MiniMax-M2.5` as Core B. `Pro/zai-org/GLM-5.1` remains supplementary. Both tested Qwen candidates produced valid, monotonic decisions but cited an explicitly dormant, mismatched memory in both repetitions and therefore failed the fixed applicability gate. See [the qualification report](docs/model_qualification.md) and the trackable [aggregate JSON](artifacts/aggregated/model_qualification_summary.json).
+The raw formal inputs were not rewritten during post-Test analysis. The closure
+manifest binds five cell files, four journals, two summaries, analysis code,
+contracts, and four source freezes. The release archive is only a convenience
+copy; the per-file manifest remains authoritative.
 
-## Research freeze and current readiness
+## Reliability context
 
-The Phase 4 v1 audit snapshot is `phase4-20260713-b99c0d3e4d27`. It preserves the protocol, split manifests, selected Validation settings, qualified core models, and bounded Pilot evidence as they stood at the freeze. Verify it without network access:
+The evaluation intentionally retains provider and parsing failures:
 
-```powershell
-.venv\Scripts\python.exe scripts/verify_freeze.py configs/frozen/phase4-20260713-b99c0d3e4d27
-.venv\Scripts\python.exe -m pytest -q
-```
+- 5,176 strategy reviews;
+- 6,189 cell-recorded attempts;
+- 1,680 parse failures (27.1%);
+- 667 retained-strategy fallbacks (12.9% of reviews);
+- 1,705 terminal provider failures;
+- zero unresolved reservations.
 
-The v1 snapshot is verified but was **never authorized for formal Test execution**. A post-freeze audit found a detector-selection/runtime signal mismatch, missing held-out stable and periodic coverage for H3/H4, incomplete formal statistics and result logging, and insufficiently idempotent live-run recovery. Protocol v1.1 engineering corrected those implementation blockers and completed a CNY 3.2184 Validation-only dry-run, but its direct-daily-order matrix was not frozen or run on held-out outcomes.
+These results estimate the tested systems as deployed, including fallback
+behavior. They do not isolate a pure memory mechanism from model compliance or
+provider reliability. All 70 applicable pairs also ran VectorMemory before
+ShiftMem, an execution-order limitation that the post-hoc audit can diagnose
+but cannot remove.
 
-Protocol v2 is implemented and its paid held-out matrix completed on 2026-07-22. The LLM proposes a bounded strategy vector at five-day reviews or detector events, while a deterministic controller executes every daily order. The final Amendment 1 matrix contains VectorMemory versus ShiftMem across two core models, eight held-out scenarios, and five paired seeds: 80 Test-ID plus 80 Test-OOD cells. No paid secondary tier was run.
+## Repository map
 
-The immutable raw Test inputs remain byte-for-byte unchanged. The current post-Test closure identity is `v2-formal-results-b70e28f0fa8c`; it supersedes the first closure analysis identity after adding post-hoc clustered-mean and execution-order sensitivity analyses. Reproduce and verify the machine-readable evidence, statistics, and reliability outputs without making a provider call:
+| Path | Purpose |
+| --- | --- |
+| `src/shiftmem/` | Environment, agents, memory lifecycle, detection, control, providers, and evaluation |
+| `configs/` | Experiment, environment, split, validation, and immutable freeze configurations |
+| `scripts/` | Network-free verification plus explicit experiment entry points |
+| `tests/` | Unit and integration tests |
+| `artifacts/aggregated/` | Tracked machine-readable results |
+| `artifacts/releases/` | Release evidence packages and checksums |
+| `docs/` | Protocol, audits, reports, model card, and implementation history |
+| `paper/` | Manuscript workspace; paper claims are not yet finalized |
 
-```powershell
-.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify
-```
+Start with the [documentation index](docs/README.md). The original
+[implementation specification](ShiftMem_Implementation_Spec.md) is retained as
+historical design context; the amended Protocol-v2 document and post-Test audit
+are authoritative for the completed experiment.
 
-The archived v1 package remains immutable. The v1.1 CNY 1,506.22 projection and proposed CNY 1,810 cap are retired historical estimates, not v2 costs. See the [post-Test audit](docs/v2_formal_post_test_audit.md), [v2 protocol](docs/experiment_protocol.md), and historical [v1.1 Validation report](docs/v1_1_live_validation_report.md).
+## Scope and limitations
+
+Current evidence covers a synthetic, single-item lost-sales inventory setting,
+two provider-hosted model families, one bounded three-parameter controller, and
+five environment seeds per scenario. It does not establish:
+
+- general superiority over every memory baseline;
+- equivalence in stable environments;
+- a causal benefit from dormancy/reactivation;
+- superiority of statistical detection over LLM-only detection;
+- transfer to real enterprise, multi-item, or multi-supplier systems.
+
+Those claims require experiments that were not part of the paid 160-cell
+matrix. They are documented as future work rather than inferred from the
+current data.
+
+## Credentials and live calls
+
+No credential is needed for tests or evidence verification. Live provider
+experiments require an explicit provider selection and a local `.env` created
+from `.env.example`. Never commit API keys. Review the configured budget and
+run identity before using any live runner.
 
 ## License
 
-No license has been selected yet.
+No open-source license has been selected yet. Until one is added, the repository
+is publicly visible but does not grant reuse rights beyond applicable law.
