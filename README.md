@@ -82,7 +82,7 @@ The v1 snapshot is verified but was **never authorized for formal Test execution
 
 Protocol v2 is implemented and its paid held-out matrix completed on 2026-07-22. The LLM proposes a bounded strategy vector at five-day reviews or detector events, while a deterministic controller executes every daily order. The final Amendment 1 matrix contains VectorMemory versus ShiftMem across two core models, eight held-out scenarios, and five paired seeds: 80 Test-ID plus 80 Test-OOD cells. No paid secondary tier was run.
 
-The immutable post-Test evidence manifest is `v2-formal-results-bf7b57070da2`. Reproduce and verify the machine-readable evidence, statistics, and reliability outputs without making a provider call:
+The immutable raw Test inputs remain byte-for-byte unchanged. The current post-Test closure identity is `v2-formal-results-b70e28f0fa8c`; it supersedes the first closure analysis identity after adding post-hoc clustered-mean and execution-order sensitivity analyses. Reproduce and verify the machine-readable evidence, statistics, and reliability outputs without making a provider call:
 
 ```powershell
 .venv\Scripts\python.exe scripts/finalize_formal_results.py --verify

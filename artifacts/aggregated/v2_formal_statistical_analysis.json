@@ -1,6 +1,6 @@
 {
   "analysis_status": "final_machine_readable",
-  "evidence_freeze_id": "v2-formal-results-bf7b57070da2",
+  "evidence_freeze_id": "v2-formal-results-b70e28f0fa8c",
   "paper_claims_finalized": false,
   "primary_endpoint": {
     "by_model": {
@@ -232,7 +232,47 @@
       }
     },
     "by_split_inference": "predeclared split decomposition; p-values are unadjusted",
+    "clustered_mean_sensitivity": {
+      "cells_per_cluster": 4,
+      "cluster_count": 35,
+      "cluster_definition": "manifest split x scenario x environment seed",
+      "confirmatory_primary_result_changed": false,
+      "model_heterogeneity": {
+        "ci_method": "environment-seed bootstrap within fixed scenario strata",
+        "cluster_bootstrap_ci_high": 216.05171428571427,
+        "cluster_bootstrap_ci_low": 38.59342857142858,
+        "cluster_sign_flip_p_value": 0.015419691606167877,
+        "contrast": "DeepSeek method difference minus MiniMax method difference",
+        "mean_difference": 124.57714285714287,
+        "multiplicity_adjusted": false,
+        "n_clusters": 35,
+        "n_fixed_scenario_strata": 7,
+        "random_seed": 20260733,
+        "resamples": 50000,
+        "status": "post_hoc_exploratory_interaction",
+        "test_method": "two-sided Monte Carlo cluster sign-flip test of the equal-scenario mean"
+      },
+      "models": [
+        "deepseek",
+        "minimax"
+      ],
+      "overall": {
+        "ci_method": "environment-seed bootstrap within fixed scenario strata",
+        "cluster_bootstrap_ci_high": 79.08585714285715,
+        "cluster_bootstrap_ci_low": 11.259999999999998,
+        "cluster_sign_flip_p_value": 0.04143917121657567,
+        "mean_difference": 45.44285714285714,
+        "n_clusters": 35,
+        "n_fixed_scenario_strata": 7,
+        "random_seed": 20260723,
+        "resamples": 50000,
+        "test_method": "two-sided Monte Carlo cluster sign-flip test of the equal-scenario mean"
+      },
+      "reason": "The two model cells in each cluster share the deterministic demand and supply realization; resampling clusters avoids treating them as independent.",
+      "status": "post_hoc_mean_aligned_sensitivity"
+    },
     "confirmatory_population": "declared non-stable Test-ID and Test-OOD groups",
+    "construct_note": "OraclePolicy is a parameter-aware base-stock heuristic, not a proof of globally optimal control; the shared Oracle term cancels from the paired ShiftMem-minus-VectorMemory difference.",
     "difference_direction": "ShiftMem minus VectorMemory; negative favors ShiftMem",
     "equal_group_weighted_mean_difference": 45.44285714285714,
     "equal_group_weighting": true,
@@ -259,7 +299,49 @@
       "ties": 11,
       "two_sided": true,
       "vector_mean": 157.67142857142858
-    }
+    },
+    "reporting_label": "30-day oracle-relative cost gap"
+  },
+  "reproducibility": {
+    "analysis_code_identity": "SHA-256-bound by the evidence manifest",
+    "dependency_versions": {
+      "PyYAML": "6.0.3",
+      "matplotlib": "3.11.0",
+      "numpy": "2.5.1",
+      "pydantic": "2.13.4",
+      "pytest": "8.4.2"
+    },
+    "device_class": "local CPU orchestration with remote SiliconFlow inference",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "provider_models": [
+      {
+        "label": "deepseek",
+        "model_name": "deepseek-ai/DeepSeek-V3.2",
+        "provider": "siliconflow"
+      },
+      {
+        "label": "minimax",
+        "model_name": "MiniMaxAI/MiniMax-M2.5",
+        "provider": "siliconflow"
+      }
+    ],
+    "python": "3.12.7",
+    "python_implementation": "CPython",
+    "raw_source_dirty_state": false,
+    "raw_source_mutation_allowed": false,
+    "release_commit_policy": "The aggregate files are committed and release-tagged after deterministic network-free generation; embedding that commit would be self-referential.",
+    "source_run_config_hashes": [
+      "458ceaf2abb4f93ef3889f788f569cfdbb74d07f0463f9c9f8824276199eea65",
+      "c692e10b4ea5400dd6c681933538300f6092fe5bde7f09c32ed025fbde192c1b",
+      "d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff",
+      "e623fa1e0d84a6d4bcf098145b1af69a0be692a876866d5ddc27cddf02b7ff66"
+    ],
+    "source_run_git_commits": [
+      "2cf2b5afd9268a2e0cc89ac8f4be9e488314d2bf",
+      "8228e646005b1d41f51bee635c680ed252f7248c",
+      "8426e96283cc1d4beafa8e0ac78ef266c3753018",
+      "bd29aa875001fb416e15bda948c34ca3073c0805"
+    ]
   },
   "schema": "shiftmem-formal-v2-statistical-analysis-v1",
   "stable_environment_descriptive": {

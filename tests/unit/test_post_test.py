@@ -5,6 +5,8 @@ from pathlib import Path
 import pytest
 
 from shiftmem.evaluation.post_test import (
+    build_clustered_primary_sensitivity,
+    build_execution_order_audit,
     build_reliability_outcome_impact,
     evidence_identity,
     load_declared_cells,
@@ -154,3 +156,58 @@ def test_reliability_outcome_impact_keeps_primary_result_unchanged() -> None:
         ["zero_event_pair_sensitivity"]["n"]
         == 2
     )
+
+
+def test_clustered_primary_sensitivity_resamples_environment_clusters() -> None:
+    cells = []
+    differences = {
+        (1, "deepseek"): 1.0,
+        (1, "minimax"): 3.0,
+        (2, "deepseek"): 5.0,
+        (2, "minimax"): 7.0,
+    }
+    for (seed, model), difference in differences.items():
+        for method, value in (("vector", 10.0), ("shiftmem", 10.0 + difference)):
+            cell = _cell(f"{seed}-{model}-{method}", method, value, seed=seed)
+            cell["model"] = model
+            cell["manifest_split"] = "Test-ID"
+            cells.append(cell)
+
+    first = build_clustered_primary_sensitivity(cells, resamples=200, seed=7)
+    second = build_clustered_primary_sensitivity(cells, resamples=200, seed=7)
+
+    assert first == second
+    assert first["cluster_count"] == 2
+    assert first["overall"]["n_clusters"] == 2
+    assert first["overall"]["mean_difference"] == pytest.approx(4.0)
+    assert first["model_heterogeneity"]["mean_difference"] == pytest.approx(-2.0)
+    assert first["confirmatory_primary_result_changed"] is False
+
+
+def test_execution_order_audit_reports_fixed_method_order() -> None:
+    cells = []
+    by_cell = {}
+    order = 0
+    for seed, difference in ((1, -2.0), (2, 4.0)):
+        for method, value in (("vector", 10.0), ("shiftmem", 10.0 + difference)):
+            cell = _cell(f"{seed}-{method}", method, value, seed=seed)
+            cell["manifest_split"] = "Test-ID"
+            cells.append(cell)
+            by_cell[cell["cell_id"]] = {
+                "terminal_attempts": 1,
+                "successful_responses": 1,
+                "failed_attempts": 0,
+                "run_ids": ["run"],
+                "first_terminal_order": order,
+                "last_terminal_order": order,
+            }
+            order += 1
+
+    result = build_execution_order_audit(cells, {"by_cell": by_cell})
+
+    assert result["paired_units"] == 2
+    assert result["method_order"]["shiftmem_after_vector_pairs"] == 2
+    assert result["method_order"]["vector_after_shiftmem_pairs"] == 0
+    assert result["execution_halves"]["early"]["mean_outcome_difference"] == -2.0
+    assert result["execution_halves"]["late"]["mean_outcome_difference"] == 4.0
+    assert result["causal_interpretation_allowed"] is False

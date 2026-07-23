@@ -7,6 +7,7 @@ from hashlib import sha256
 import json
 from math import sqrt
 from pathlib import Path
+from random import Random
 from statistics import median
 from typing import Any, Callable, Iterable
 
@@ -169,6 +170,135 @@ def paired_result(
 ) -> dict[str, Any]:
     pairs = _paired_rows(cells, metric)
     return summarize_pairs(pairs)
+
+
+def _quantile(values: list[float], probability: float) -> float:
+    if not values:
+        raise ValueError("quantile requires non-empty values")
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * probability
+    lower = int(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    fraction = position - lower
+    return ordered[lower] * (1 - fraction) + ordered[upper] * fraction
+
+
+def _stratified_resampled_mean_inference(
+    strata: dict[str, list[float]], *, resamples: int, seed: int
+) -> dict[str, Any]:
+    """Resample environment seeds within fixed scenario strata at equal weight."""
+
+    if not strata or any(len(values) < 2 for values in strata.values()):
+        raise ValueError("stratified inference requires at least two values per stratum")
+    ordered = [(name, strata[name]) for name in sorted(strata)]
+    observed = sum(sum(values) / len(values) for _, values in ordered) / len(ordered)
+    bootstrap_rng = Random(seed)
+    bootstrap_means = []
+    for _ in range(resamples):
+        stratum_means = [
+            sum(values[bootstrap_rng.randrange(len(values))] for _ in values)
+            / len(values)
+            for _, values in ordered
+        ]
+        bootstrap_means.append(sum(stratum_means) / len(stratum_means))
+    sign_rng = Random(seed + 1)
+    extreme = 0
+    for _ in range(resamples):
+        candidate = sum(
+            sum(value if sign_rng.getrandbits(1) else -value for value in values)
+            / len(values)
+            for _, values in ordered
+        ) / len(ordered)
+        if abs(candidate) >= abs(observed) - 1e-12:
+            extreme += 1
+    return {
+        "n_clusters": sum(len(values) for _, values in ordered),
+        "n_fixed_scenario_strata": len(ordered),
+        "mean_difference": observed,
+        "cluster_bootstrap_ci_low": _quantile(bootstrap_means, 0.025),
+        "cluster_bootstrap_ci_high": _quantile(bootstrap_means, 0.975),
+        "cluster_sign_flip_p_value": (extreme + 1) / (resamples + 1),
+        "resamples": resamples,
+        "random_seed": seed,
+        "ci_method": "environment-seed bootstrap within fixed scenario strata",
+        "test_method": (
+            "two-sided Monte Carlo cluster sign-flip test of the equal-scenario mean"
+        ),
+    }
+
+
+def build_clustered_primary_sensitivity(
+    cells: list[dict[str, Any]], *, resamples: int = 50000, seed: int = 20260723
+) -> dict[str, Any]:
+    """Use scenario-seed clusters without replacing the frozen cell-level result."""
+
+    applicable = [row for row in cells if row["endpoint_applicable"]]
+    units: dict[tuple[str, str, int], dict[str, dict[str, float]]] = defaultdict(
+        lambda: defaultdict(dict)
+    )
+    for row in applicable:
+        key = (
+            str(row["manifest_split"]),
+            str(row["scenario_id"]),
+            int(row["seed"]),
+        )
+        model = str(row["model"])
+        method = str(row["method"])
+        units[key][model][method] = float(row["post_shift_cumulative_regret_30"])
+
+    expected_models = sorted({str(row["model"]) for row in applicable})
+    cluster_means_by_scenario: dict[str, list[float]] = defaultdict(list)
+    model_contrasts_by_scenario: dict[str, list[float]] = defaultdict(list)
+    cluster_rows: list[dict[str, Any]] = []
+    for key, models in sorted(units.items()):
+        if sorted(models) != expected_models:
+            raise ValueError(f"incomplete model cluster: {key}")
+        differences = {}
+        for model in expected_models:
+            methods = models[model]
+            if set(methods) != {"shiftmem", "vector"}:
+                raise ValueError(f"incomplete method cluster: {key}: {model}")
+            difference = methods["shiftmem"] - methods["vector"]
+            differences[model] = difference
+        cluster_mean = sum(differences.values()) / len(differences)
+        cluster_means_by_scenario[key[1]].append(cluster_mean)
+        cluster_rows.append(
+            {
+                "split": key[0],
+                "scenario": key[1],
+                "seed": key[2],
+                "mean_model_difference": cluster_mean,
+            }
+        )
+        if expected_models == ["deepseek", "minimax"]:
+            contrast = differences["deepseek"] - differences["minimax"]
+            model_contrasts_by_scenario[key[1]].append(contrast)
+
+    result = {
+        "status": "post_hoc_mean_aligned_sensitivity",
+        "confirmatory_primary_result_changed": False,
+        "cluster_definition": "manifest split x scenario x environment seed",
+        "reason": (
+            "The two model cells in each cluster share the deterministic demand and "
+            "supply realization; resampling clusters avoids treating them as independent."
+        ),
+        "overall": _stratified_resampled_mean_inference(
+            cluster_means_by_scenario, resamples=resamples, seed=seed
+        ),
+        "cluster_count": len(cluster_rows),
+        "cells_per_cluster": len(expected_models) * 2,
+        "models": expected_models,
+    }
+    if model_contrasts_by_scenario:
+        result["model_heterogeneity"] = {
+            **_stratified_resampled_mean_inference(
+                model_contrasts_by_scenario, resamples=resamples, seed=seed + 10
+            ),
+            "contrast": "DeepSeek method difference minus MiniMax method difference",
+            "status": "post_hoc_exploratory_interaction",
+            "multiplicity_adjusted": False,
+        }
+    return result
 
 
 def summarize_pairs(pairs: list[tuple[float, float]]) -> dict[str, Any]:
@@ -393,6 +523,135 @@ def build_reliability_outcome_impact(
     }
 
 
+def build_execution_order_audit(
+    cells: list[dict[str, Any]], journal: dict[str, Any]
+) -> dict[str, Any]:
+    """Audit fixed method order using append order because journals lack timestamps."""
+
+    journal_by_cell = journal["by_cell"]
+    units: dict[tuple[str, str, str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for row in cells:
+        if row["endpoint_applicable"]:
+            key = (
+                str(row["manifest_split"]),
+                str(row["scenario_id"]),
+                str(row["model"]),
+                int(row["seed"]),
+            )
+            units[key][str(row["method"])] = row
+
+    def rate(numerator: int, denominator: int) -> float:
+        return numerator / denominator if denominator else 0.0
+
+    records: list[dict[str, Any]] = []
+    for key, methods in sorted(units.items()):
+        if set(methods) != {"shiftmem", "vector"}:
+            raise ValueError(f"incomplete execution-order paired unit: {key}")
+        shiftmem = methods["shiftmem"]
+        vector = methods["vector"]
+        shift_journal = journal_by_cell[str(shiftmem["cell_id"])]
+        vector_journal = journal_by_cell[str(vector["cell_id"])]
+        shift_order = int(shift_journal["first_terminal_order"])
+        vector_order = int(vector_journal["first_terminal_order"])
+        shift_runs = tuple(shift_journal["run_ids"])
+        vector_runs = tuple(vector_journal["run_ids"])
+        run_pair = (
+            f"same:{shift_runs[0]}"
+            if shift_runs == vector_runs and len(shift_runs) == 1
+            else "cross-run-or-multiple"
+        )
+        records.append(
+            {
+                "split": key[0],
+                "scenario": key[1],
+                "model": key[2],
+                "seed": key[3],
+                "outcome_difference": float(
+                    shiftmem["post_shift_cumulative_regret_30"]
+                    - vector["post_shift_cumulative_regret_30"]
+                ),
+                "pair_terminal_midpoint": (shift_order + vector_order) / 2,
+                "shiftmem_after_vector": shift_order > vector_order,
+                "run_pair": run_pair,
+                "parse_burden_difference": rate(
+                    int(shiftmem["parse_failures"]), int(shiftmem["provider_attempts"])
+                )
+                - rate(int(vector["parse_failures"]), int(vector["provider_attempts"])),
+                "fallback_burden_difference": rate(
+                    int(shiftmem["fallback_count"]), len(shiftmem["review_logs"])
+                )
+                - rate(int(vector["fallback_count"]), len(vector["review_logs"])),
+                "provider_failure_burden_difference": rate(
+                    int(shift_journal["failed_attempts"]),
+                    int(shift_journal["terminal_attempts"]),
+                )
+                - rate(
+                    int(vector_journal["failed_attempts"]),
+                    int(vector_journal["terminal_attempts"]),
+                ),
+            }
+        )
+
+    median_position = median([row["pair_terminal_midpoint"] for row in records])
+
+    def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
+        def average(field: str) -> float | None:
+            return (
+                sum(float(row[field]) for row in rows) / len(rows) if rows else None
+            )
+
+        return {
+            "n": len(rows),
+            "mean_outcome_difference": average("outcome_difference"),
+            "mean_parse_burden_difference": average("parse_burden_difference"),
+            "mean_fallback_burden_difference": average("fallback_burden_difference"),
+            "mean_provider_failure_burden_difference": average(
+                "provider_failure_burden_difference"
+            ),
+        }
+
+    run_pairs = sorted({str(row["run_pair"]) for row in records})
+    return {
+        "status": "post_hoc_descriptive_execution_order_audit",
+        "causal_interpretation_allowed": False,
+        "confirmatory_primary_result_changed": False,
+        "sequence_basis": "terminal record append order across the four declared journals",
+        "wall_clock_timestamps_available": False,
+        "paired_units": len(records),
+        "method_order": {
+            "shiftmem_after_vector_pairs": sum(
+                bool(row["shiftmem_after_vector"]) for row in records
+            ),
+            "vector_after_shiftmem_pairs": sum(
+                not bool(row["shiftmem_after_vector"]) for row in records
+            ),
+            "interpretation": (
+                "Method execution was not randomized or counterbalanced; append order "
+                "can diagnose trends but cannot remove this design limitation."
+            ),
+        },
+        "outcome_vs_execution_position": _association(
+            [float(row["outcome_difference"]) for row in records],
+            [float(row["pair_terminal_midpoint"]) for row in records],
+        ),
+        "execution_halves": {
+            "median_terminal_midpoint": median_position,
+            "early": summarize(
+                [row for row in records if row["pair_terminal_midpoint"] <= median_position]
+            ),
+            "late": summarize(
+                [row for row in records if row["pair_terminal_midpoint"] > median_position]
+            ),
+        },
+        "by_run_pair": {
+            run_pair: summarize(
+                [row for row in records if row["run_pair"] == run_pair]
+            )
+            for run_pair in run_pairs
+        },
+    }
+
+
 def build_statistical_analysis(cells: list[dict[str, Any]], evidence_id: str) -> dict[str, Any]:
     applicable = [row for row in cells if row["endpoint_applicable"]]
     endpoint = lambda row: row["post_shift_cumulative_regret_30"]
@@ -427,6 +686,12 @@ def build_statistical_analysis(cells: list[dict[str, Any]], evidence_id: str) ->
         "paper_claims_finalized": False,
         "primary_endpoint": {
             "field": "post_shift_cumulative_regret_30",
+            "reporting_label": "30-day oracle-relative cost gap",
+            "construct_note": (
+                "OraclePolicy is a parameter-aware base-stock heuristic, not a proof "
+                "of globally optimal control; the shared Oracle term cancels from "
+                "the paired ShiftMem-minus-VectorMemory difference."
+            ),
             "difference_direction": "ShiftMem minus VectorMemory; negative favors ShiftMem",
             "confirmatory_population": "declared non-stable Test-ID and Test-OOD groups",
             "equal_group_weighting": True,
@@ -446,6 +711,7 @@ def build_statistical_analysis(cells: list[dict[str, Any]], evidence_id: str) ->
             "by_model_inference": "heterogeneity decomposition; p-values are unadjusted",
             "by_scenario": by_scenario,
             "by_scenario_inference": "descriptive subgroup decomposition; p-values are unadjusted",
+            "clustered_mean_sensitivity": build_clustered_primary_sensitivity(cells),
         },
         "stable_environment_descriptive": {
             "status": "descriptive_only",
@@ -493,15 +759,23 @@ def summarize_journals(
     cell_by_id = {str(row["cell_id"]): row for row in cells}
     terminal: list[dict[str, Any]] = []
     latest: dict[tuple[str, str], dict[str, Any]] = {}
-    for source in sources:
+    terminal_order = 0
+    for source_order, source in enumerate(sources):
         if source["kind"] != "journal":
             continue
-        for row in load_jsonl(root / source["path"]):
+        for record_order, raw_row in enumerate(load_jsonl(root / source["path"])):
+            row = dict(raw_row)
             identity = row.get("identity") or {}
             key = (str(identity.get("run_id", "")), str(row["decision_id"]))
             latest[key] = row
             if row.get("status") in {"complete", "failed"}:
+                row["_source_path"] = Path(source["path"]).as_posix()
+                row["_source_order"] = source_order
+                row["_record_order"] = record_order
+                row["_terminal_order"] = terminal_order
+                row["_run_id"] = str(identity.get("run_id", ""))
                 terminal.append(row)
+                terminal_order += 1
     unresolved = [row for row in latest.values() if row.get("status") == "reserved"]
     if unresolved:
         raise ValueError(
@@ -551,6 +825,17 @@ def summarize_journals(
             for value in values
         }
 
+    def cell_attempt_summary(cell_id: str) -> dict[str, Any]:
+        rows = [row for row in terminal if str(row["cell_id"]) == cell_id]
+        orders = [int(row["_terminal_order"]) for row in rows]
+        return {
+            **attempt_summary(rows),
+            "run_ids": sorted({str(row["_run_id"]) for row in rows}),
+            "journal_sources": sorted({str(row["_source_path"]) for row in rows}),
+            "first_terminal_order": min(orders) if orders else None,
+            "last_terminal_order": max(orders) if orders else None,
+        }
+
     detail = []
     for split in sorted({str(row["manifest_split"]) for row in cells}):
         for model in sorted({str(row["model"]) for row in cells}):
@@ -576,9 +861,7 @@ def summarize_journals(
         "by_method": grouped("method"),
         "by_split_model_method": detail,
         "by_cell": {
-            cell_id: attempt_summary(
-                [row for row in terminal if str(row["cell_id"]) == cell_id]
-            )
+            cell_id: cell_attempt_summary(cell_id)
             for cell_id in sorted(cell_by_id)
         },
     }
@@ -627,6 +910,7 @@ def build_reliability_audit(
         "by_method": grouped("method"),
         "by_split_model_method": detail,
         "outcome_impact": build_reliability_outcome_impact(cells, journal),
+        "execution_order_audit": build_execution_order_audit(cells, journal),
     }
 
 

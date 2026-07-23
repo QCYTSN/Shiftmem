@@ -303,16 +303,91 @@
       "split": "Test-OOD"
     }
   ],
-  "evidence_freeze_id": "v2-formal-results-bf7b57070da2",
+  "evidence_freeze_id": "v2-formal-results-b70e28f0fa8c",
+  "execution_order_audit": {
+    "by_run_pair": {
+      "cross-run-or-multiple": {
+        "mean_fallback_burden_difference": -0.00392156862745098,
+        "mean_outcome_difference": -91.40000000000003,
+        "mean_parse_burden_difference": -0.015479876160990724,
+        "mean_provider_failure_burden_difference": -0.020074696545284793,
+        "n": 1
+      },
+      "same:v2-formal-cont2-20260719-724421cdbf78": {
+        "mean_fallback_burden_difference": 0.0023747382078872564,
+        "mean_outcome_difference": 107.6,
+        "mean_parse_burden_difference": 0.0017643657671886901,
+        "mean_provider_failure_burden_difference": 0.0006029255813582606,
+        "n": 21
+      },
+      "same:v2-formal-cont3-20260721-5925ef7f1614": {
+        "mean_fallback_burden_difference": -0.025886536039609366,
+        "mean_outcome_difference": 42.157142857142865,
+        "mean_parse_burden_difference": -0.026285496048372,
+        "mean_provider_failure_burden_difference": -0.022943277965230012,
+        "n": 28
+      },
+      "same:v2-formal-test-20260717-da148583e3c5": {
+        "mean_fallback_burden_difference": 0.024429484631690517,
+        "mean_outcome_difference": -8.379999999999999,
+        "mean_parse_burden_difference": -0.009681147488479666,
+        "mean_provider_failure_burden_difference": -0.00825257605990824,
+        "n": 20
+      }
+    },
+    "causal_interpretation_allowed": false,
+    "confirmatory_primary_result_changed": false,
+    "execution_halves": {
+      "early": {
+        "mean_fallback_burden_difference": 0.016604750701389358,
+        "mean_outcome_difference": 58.582857142857144,
+        "mean_parse_burden_difference": -0.0041014010603154915,
+        "mean_provider_failure_burden_difference": -0.003285074529703247,
+        "n": 35
+      },
+      "late": {
+        "mean_fallback_burden_difference": -0.022041475922448515,
+        "mean_outcome_difference": 32.30285714285715,
+        "mean_parse_burden_difference": -0.021842742773228438,
+        "mean_provider_failure_burden_difference": -0.019997113000621507,
+        "n": 35
+      },
+      "median_terminal_midpoint": 3540.25
+    },
+    "method_order": {
+      "interpretation": "Method execution was not randomized or counterbalanced; append order can diagnose trends but cannot remove this design limitation.",
+      "shiftmem_after_vector_pairs": 70,
+      "vector_after_shiftmem_pairs": 0
+    },
+    "outcome_vs_execution_position": {
+      "interpretation": "descriptive association, not a causal effect",
+      "n": 70,
+      "p_values_reported": false,
+      "pearson_correlation": 0.15933406998832358,
+      "spearman_correlation": 0.17528299745709316
+    },
+    "paired_units": 70,
+    "sequence_basis": "terminal record append order across the four declared journals",
+    "status": "post_hoc_descriptive_execution_order_audit",
+    "wall_clock_timestamps_available": false
+  },
   "journal": {
     "by_cell": {
       "005cce6a8289af5992d7": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.28448490000000004,
+        "first_terminal_order": 6058,
         "input_tokens": 254940,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6090,
         "latency_observations": 29,
         "mean_success_latency_ms": 115722.23231379295,
         "output_tokens": 42098,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6045123,
         "successful_responses": 29,
         "terminal_attempts": 33
@@ -320,10 +395,18 @@
       "014e2602408ead42eda4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 295,
         "input_tokens": 181307,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 324,
         "latency_observations": 30,
         "mean_success_latency_ms": 8881.35200330677,
         "output_tokens": 3016,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.743324,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -331,10 +414,18 @@
       "02c53610ace2da0bbb5b": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.2804067,
+        "first_terminal_order": 222,
         "input_tokens": 282131,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 256,
         "latency_observations": 31,
         "mean_success_latency_ms": 20893.28438063873,
         "output_tokens": 42848,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.6719916,
         "successful_responses": 31,
         "terminal_attempts": 35
@@ -342,10 +433,18 @@
       "0348aebc28b97b6a916d": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 188,
         "input_tokens": 231533,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 221,
         "latency_observations": 34,
         "mean_success_latency_ms": 10844.478752943412,
         "output_tokens": 3195,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.945302,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -353,10 +452,18 @@
       "05b19e3c6f24aa73cae8": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.5939388,
+        "first_terminal_order": 3292,
         "input_tokens": 376336,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3336,
         "latency_observations": 37,
         "mean_success_latency_ms": 23642.24985947444,
         "output_tokens": 65251,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.7444752,
         "successful_responses": 37,
         "terminal_attempts": 45
@@ -364,10 +471,18 @@
       "061ff0d0c10da4b2fb24": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.961416,
+        "first_terminal_order": 4392,
         "input_tokens": 371714,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4451,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 245760,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -375,10 +490,18 @@
       "062a02b5a950bf8b5191": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.3123477,
+        "first_terminal_order": 3855,
         "input_tokens": 270111,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3888,
         "latency_observations": 30,
         "mean_success_latency_ms": 19156.183489999847,
         "output_tokens": 44587,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6294162,
         "successful_responses": 30,
         "terminal_attempts": 34
@@ -386,10 +509,18 @@
       "09ef2f9f15cca52c4850": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.7544439000000001,
+        "first_terminal_order": 3256,
         "input_tokens": 386957,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3291,
         "latency_observations": 27,
         "mean_success_latency_ms": 20311.458081464043,
         "output_tokens": 65058,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.604653,
         "successful_responses": 27,
         "terminal_attempts": 36
@@ -397,10 +528,18 @@
       "0a2dd6789c352dfb9ca9": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5138,
         "input_tokens": 181566,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5167,
         "latency_observations": 30,
         "mean_success_latency_ms": 7717.471966666623,
         "output_tokens": 3353,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.746382,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -408,10 +547,18 @@
       "0aae3ef8efb81f620c5e": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3048,
         "input_tokens": 203126,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3077,
         "latency_observations": 30,
         "mean_success_latency_ms": 10614.469406660646,
         "output_tokens": 2781,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.82919,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -419,10 +566,18 @@
       "0b28e2a2aa0d9a60ceb3": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.415748,
+        "first_terminal_order": 5880,
         "input_tokens": 304335,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5916,
         "latency_observations": 33,
         "mean_success_latency_ms": 21164.682281818277,
         "output_tokens": 19971,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.921418,
         "successful_responses": 33,
         "terminal_attempts": 37
@@ -430,10 +585,18 @@
       "0c7387b91c529948918b": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3367,
         "input_tokens": 239451,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3404,
         "latency_observations": 38,
         "mean_success_latency_ms": 7675.429647368446,
         "output_tokens": 3528,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.978972,
         "successful_responses": 38,
         "terminal_attempts": 38
@@ -441,10 +604,18 @@
       "0ecdd19d461eebff7447": {
         "failed_attempts": 14,
         "failed_reservation_ledger_cny": 1.283416,
+        "first_terminal_order": 720,
         "input_tokens": 417192,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 760,
         "latency_observations": 27,
         "mean_success_latency_ms": 11064.82089260869,
         "output_tokens": 45802,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.660164,
         "successful_responses": 27,
         "terminal_attempts": 41
@@ -452,10 +623,20 @@
       "10c82c865a36f310fcb8": {
         "failed_attempts": 32,
         "failed_reservation_ledger_cny": 1.3760985000000001,
+        "first_terminal_order": 1982,
         "input_tokens": 476835,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_journal.jsonl",
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 2046,
         "latency_observations": 33,
         "mean_success_latency_ms": 16518.773687876423,
         "output_tokens": 125889,
+        "run_ids": [
+          "v2-formal-cont-20260719-50aaafda0d6a",
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.6827226000000001,
         "successful_responses": 33,
         "terminal_attempts": 65
@@ -463,10 +644,18 @@
       "17826b9426ed4a0d7ee0": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 6128,
         "input_tokens": 201261,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6157,
         "latency_observations": 30,
         "mean_success_latency_ms": 10222.026943333427,
         "output_tokens": 3744,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.827508,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -474,10 +663,18 @@
       "1a4bb7739c4cfe330872": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2929,
         "input_tokens": 217606,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2964,
         "latency_observations": 36,
         "mean_success_latency_ms": 8053.928380541038,
         "output_tokens": 3603,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.892042,
         "successful_responses": 36,
         "terminal_attempts": 36
@@ -485,10 +682,18 @@
       "1b88db7bf5cf9ccc75af": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 604,
         "input_tokens": 215996,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 635,
         "latency_observations": 32,
         "mean_success_latency_ms": 8619.410081264505,
         "output_tokens": 3250,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.883484,
         "successful_responses": 32,
         "terminal_attempts": 32
@@ -496,10 +701,18 @@
       "1c096f632bc3ab91c7f4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4101,
         "input_tokens": 181662,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4130,
         "latency_observations": 30,
         "mean_success_latency_ms": 9660.725873333044,
         "output_tokens": 3075,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.745098,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -507,10 +720,20 @@
       "1cc89cdf0aabef42a085": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.6765927,
+        "first_terminal_order": 2111,
         "input_tokens": 449774,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_journal.jsonl",
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2165,
         "latency_observations": 46,
         "mean_success_latency_ms": 15638.880906530412,
         "output_tokens": 71316,
+        "run_ids": [
+          "v2-formal-cont-20260719-50aaafda0d6a",
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.8669871,
         "successful_responses": 46,
         "terminal_attempts": 55
@@ -518,10 +741,18 @@
       "1f660c6748234261e7a2": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5288,
         "input_tokens": 181725,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5317,
         "latency_observations": 30,
         "mean_success_latency_ms": 7940.674779999912,
         "output_tokens": 3028,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.745068,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -529,10 +760,18 @@
       "20029734da690dac8bae": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1085,
         "input_tokens": 181847,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1114,
         "latency_observations": 30,
         "mean_success_latency_ms": 9576.066089972543,
         "output_tokens": 3178,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.746456,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -540,10 +779,18 @@
       "20e222f04815c3fd37c4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1115,
         "input_tokens": 250021,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1151,
         "latency_observations": 37,
         "mean_success_latency_ms": 9461.109189197068,
         "output_tokens": 3812,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 1.022956,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -551,10 +798,18 @@
       "2137fd4e2493457b0e2a": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2202,
         "input_tokens": 181596,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2231,
         "latency_observations": 30,
         "mean_success_latency_ms": 8886.412880003141,
         "output_tokens": 3119,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.745098,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -562,10 +817,18 @@
       "222b77b7718fe2d14fee": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3218,
         "input_tokens": 236691,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3255,
         "latency_observations": 38,
         "mean_success_latency_ms": 8384.55414211402,
         "output_tokens": 3332,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.966756,
         "successful_responses": 38,
         "terminal_attempts": 38
@@ -573,10 +836,18 @@
       "223d682b9e9b33fae34e": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.31854060000000006,
+        "first_terminal_order": 5675,
         "input_tokens": 278453,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5708,
         "latency_observations": 30,
         "mean_success_latency_ms": 20061.825056666687,
         "output_tokens": 43286,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6298131,
         "successful_responses": 30,
         "terminal_attempts": 34
@@ -584,10 +855,18 @@
       "22ee813349dfed1879cb": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4131,
         "input_tokens": 230750,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4164,
         "latency_observations": 34,
         "mean_success_latency_ms": 7531.356538235153,
         "output_tokens": 3224,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.942344,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -595,10 +874,18 @@
       "27a6a67154ade1119cdb": {
         "failed_attempts": 3,
         "failed_reservation_ledger_cny": 0.21645750000000002,
+        "first_terminal_order": 2264,
         "input_tokens": 226739,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2296,
         "latency_observations": 30,
         "mean_success_latency_ms": 15123.27284666244,
         "output_tokens": 36931,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5699148,
         "successful_responses": 30,
         "terminal_attempts": 33
@@ -606,10 +893,18 @@
       "282440c03c5e692fd735": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.3799383,
+        "first_terminal_order": 3558,
         "input_tokens": 279896,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3590,
         "latency_observations": 28,
         "mean_success_latency_ms": 18618.11211785708,
         "output_tokens": 46029,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5944869,
         "successful_responses": 28,
         "terminal_attempts": 33
@@ -617,10 +912,18 @@
       "28c2fb0d94a81c2807f4": {
         "failed_attempts": 66,
         "failed_reservation_ledger_cny": 2.5638102000000003,
+        "first_terminal_order": 1604,
         "input_tokens": 409854,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1669,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 202752,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 66
@@ -628,10 +931,18 @@
       "2e64dd45a6b4a35bc33b": {
         "failed_attempts": 11,
         "failed_reservation_ledger_cny": 0.826056,
+        "first_terminal_order": 2399,
         "input_tokens": 382484,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2436,
         "latency_observations": 27,
         "mean_success_latency_ms": 17579.634351845554,
         "output_tokens": 69902,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5643372,
         "successful_responses": 27,
         "terminal_attempts": 38
@@ -639,10 +950,18 @@
       "307d529460ca2c43ee3f": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2756,
         "input_tokens": 181867,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2785,
         "latency_observations": 30,
         "mean_success_latency_ms": 8579.546729971966,
         "output_tokens": 2778,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.744136,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -650,10 +969,18 @@
       "324fc46d542e4dace729": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 30,
         "input_tokens": 216301,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 61,
         "latency_observations": 32,
         "mean_success_latency_ms": 16756.04084686347,
         "output_tokens": 3207,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.884446,
         "successful_responses": 32,
         "terminal_attempts": 32
@@ -661,10 +988,18 @@
       "32db2ce891f3acf8aaa9": {
         "failed_attempts": 11,
         "failed_reservation_ledger_cny": 0.8669325,
+        "first_terminal_order": 3002,
         "input_tokens": 432140,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3047,
         "latency_observations": 35,
         "mean_success_latency_ms": 18181.60358572911,
         "output_tokens": 78281,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6981219000000001,
         "successful_responses": 35,
         "terminal_attempts": 46
@@ -672,10 +1007,18 @@
       "334034457e65a90a3592": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2509,
         "input_tokens": 205621,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2542,
         "latency_observations": 34,
         "mean_success_latency_ms": 9979.263952946947,
         "output_tokens": 3248,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.8419719999999999,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -683,10 +1026,18 @@
       "348a02b926fab98754af": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5608,
         "input_tokens": 208534,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5638,
         "latency_observations": 31,
         "mean_success_latency_ms": 9108.17005161258,
         "output_tokens": 2936,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.851752,
         "successful_responses": 31,
         "terminal_attempts": 31
@@ -694,10 +1045,18 @@
       "34ae4e25f649456c34ae": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.3661266,
+        "first_terminal_order": 3745,
         "input_tokens": 312995,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3785,
         "latency_observations": 36,
         "mean_success_latency_ms": 18416.55557222238,
         "output_tokens": 53411,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.7398153000000001,
         "successful_responses": 36,
         "terminal_attempts": 41
@@ -705,10 +1064,18 @@
       "35579ea997cc5a91ea6d": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5739,
         "input_tokens": 216550,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5770,
         "latency_observations": 32,
         "mean_success_latency_ms": 11792.985515625332,
         "output_tokens": 3168,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.885208,
         "successful_responses": 32,
         "terminal_attempts": 32
@@ -716,10 +1083,18 @@
       "3777d2babbcf37dce7f4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3491,
         "input_tokens": 205563,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3520,
         "latency_observations": 30,
         "mean_success_latency_ms": 6968.513493333406,
         "output_tokens": 2625,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.838002,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -727,10 +1102,18 @@
       "37ef8d25b86a0ab37225": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1700,
         "input_tokens": 223821,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1732,
         "latency_observations": 33,
         "mean_success_latency_ms": 12242.901633345436,
         "output_tokens": 3296,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.91506,
         "successful_responses": 33,
         "terminal_attempts": 33
@@ -738,10 +1121,18 @@
       "3839d1f1a04b2ac51ab3": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.41543040000000003,
+        "first_terminal_order": 6091,
         "input_tokens": 323279,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6127,
         "latency_observations": 32,
         "mean_success_latency_ms": 17819.0188156251,
         "output_tokens": 48496,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6708219000000001,
         "successful_responses": 32,
         "terminal_attempts": 37
@@ -749,10 +1140,18 @@
       "3cc1e1e365e27a32a634": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.585186,
+        "first_terminal_order": 680,
         "input_tokens": 387114,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 719,
         "latency_observations": 32,
         "mean_success_latency_ms": 21795.713512503426,
         "output_tokens": 55246,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.6918198,
         "successful_responses": 32,
         "terminal_attempts": 40
@@ -760,10 +1159,18 @@
       "3d35b34696d714a553ce": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.2889411,
+        "first_terminal_order": 4751,
         "input_tokens": 264073,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4784,
         "latency_observations": 30,
         "mean_success_latency_ms": 20238.964693333157,
         "output_tokens": 47535,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6649062,
         "successful_responses": 30,
         "terminal_attempts": 34
@@ -771,10 +1178,18 @@
       "3e6dea9133d36878ec08": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5318,
         "input_tokens": 245603,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5353,
         "latency_observations": 36,
         "mean_success_latency_ms": 9440.286347222253,
         "output_tokens": 3495,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.003382,
         "successful_responses": 36,
         "terminal_attempts": 36
@@ -782,10 +1197,18 @@
       "3f2f49a2941aed98dc4f": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 6158,
         "input_tokens": 224897,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6190,
         "latency_observations": 33,
         "mean_success_latency_ms": 8468.22235757568,
         "output_tokens": 3396,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.919964,
         "successful_responses": 33,
         "terminal_attempts": 33
@@ -793,10 +1216,18 @@
       "405e6c32ca6d33f7953c": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3816,
         "input_tokens": 244391,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3854,
         "latency_observations": 39,
         "mean_success_latency_ms": 6982.8712512819775,
         "output_tokens": 3364,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.997748,
         "successful_responses": 39,
         "terminal_attempts": 39
@@ -804,10 +1235,18 @@
       "40face11379756552f6d": {
         "failed_attempts": 2,
         "failed_reservation_ledger_cny": 0.1429869,
+        "first_terminal_order": 6191,
         "input_tokens": 226760,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6222,
         "latency_observations": 30,
         "mean_success_latency_ms": 14748.722626666859,
         "output_tokens": 31208,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.5953563000000001,
         "successful_responses": 30,
         "terminal_attempts": 32
@@ -815,10 +1254,18 @@
       "414d67e87966fb8198bf": {
         "failed_attempts": 15,
         "failed_reservation_ledger_cny": 1.2240039,
+        "first_terminal_order": 3704,
         "input_tokens": 496838,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3744,
         "latency_observations": 26,
         "mean_success_latency_ms": 19458.707600000045,
         "output_tokens": 85988,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5416551000000001,
         "successful_responses": 26,
         "terminal_attempts": 41
@@ -826,10 +1273,18 @@
       "47428c4f127fea390d7b": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.2614668,
+        "first_terminal_order": 62,
         "input_tokens": 248495,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 95,
         "latency_observations": 30,
         "mean_success_latency_ms": 18967.22564001102,
         "output_tokens": 36573,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.5675859,
         "successful_responses": 30,
         "terminal_attempts": 34
@@ -837,10 +1292,18 @@
       "49908567ad8618f1fb37": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.6081894,
+        "first_terminal_order": 3405,
         "input_tokens": 350871,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3442,
         "latency_observations": 30,
         "mean_success_latency_ms": 19916.214456666665,
         "output_tokens": 59967,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6323625,
         "successful_responses": 30,
         "terminal_attempts": 38
@@ -848,10 +1311,18 @@
       "4aa1324ba382539a9b44": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4978,
         "input_tokens": 188426,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5008,
         "latency_observations": 31,
         "mean_success_latency_ms": 12511.73291290325,
         "output_tokens": 3334,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.773708,
         "successful_responses": 31,
         "terminal_attempts": 31
@@ -859,10 +1330,18 @@
       "4b7400d4b106b8e9ddbe": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.3287802,
+        "first_terminal_order": 5534,
         "input_tokens": 353145,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5577,
         "latency_observations": 40,
         "mean_success_latency_ms": 18126.819947499735,
         "output_tokens": 50842,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.8398971000000001,
         "successful_responses": 40,
         "terminal_attempts": 44
@@ -870,10 +1349,18 @@
       "4bbacb3cb32da7f8f943": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1670,
         "input_tokens": 201129,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1699,
         "latency_observations": 30,
         "mean_success_latency_ms": 14390.076459990814,
         "output_tokens": 2698,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.820704,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -881,10 +1368,18 @@
       "4c9aeb72d3b7a0524356": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.5829012,
+        "first_terminal_order": 500,
         "input_tokens": 358703,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 536,
         "latency_observations": 29,
         "mean_success_latency_ms": 18431.323037916343,
         "output_tokens": 50679,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.5960787000000001,
         "successful_responses": 29,
         "terminal_attempts": 37
@@ -892,10 +1387,18 @@
       "4dad857d41f3a6cb2d09": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4826,
         "input_tokens": 181338,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4855,
         "latency_observations": 30,
         "mean_success_latency_ms": 9272.135953332569,
         "output_tokens": 3122,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.744084,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -903,10 +1406,18 @@
       "5039fac1b03a5b96c495": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.42174720000000004,
+        "first_terminal_order": 2860,
         "input_tokens": 314036,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2898,
         "latency_observations": 34,
         "mean_success_latency_ms": 18485.171550022,
         "output_tokens": 53774,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.68943,
         "successful_responses": 34,
         "terminal_attempts": 39
@@ -914,10 +1425,18 @@
       "50a90c3c3486fe90bb6e": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.960784,
+        "first_terminal_order": 4644,
         "input_tokens": 371556,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4703,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 245760,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -925,10 +1444,18 @@
       "50b378dcc5fa60f1fd18": {
         "failed_attempts": 14,
         "failed_reservation_ledger_cny": 1.1122251,
+        "first_terminal_order": 5046,
         "input_tokens": 467246,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5087,
         "latency_observations": 28,
         "mean_success_latency_ms": 21842.625217857127,
         "output_tokens": 85032,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.5832603000000001,
         "successful_responses": 28,
         "terminal_attempts": 42
@@ -936,10 +1463,18 @@
       "5187485faed000ad300c": {
         "failed_attempts": 10,
         "failed_reservation_ledger_cny": 0.7728042,
+        "first_terminal_order": 2821,
         "input_tokens": 376880,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2859,
         "latency_observations": 29,
         "mean_success_latency_ms": 17806.582165488588,
         "output_tokens": 67761,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5878362,
         "successful_responses": 29,
         "terminal_attempts": 39
@@ -947,10 +1482,18 @@
       "51ba267347c726048bd5": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1319,
         "input_tokens": 228193,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1352,
         "latency_observations": 34,
         "mean_success_latency_ms": 13674.50892943067,
         "output_tokens": 3356,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.932908,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -958,10 +1501,18 @@
       "52c27ccc8bffb56fa190": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 892,
         "input_tokens": 201063,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 921,
         "latency_observations": 30,
         "mean_success_latency_ms": 10827.178903335394,
         "output_tokens": 2719,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.820566,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -969,10 +1520,18 @@
       "53d3bb867e1d94221ed0": {
         "failed_attempts": 2,
         "failed_reservation_ledger_cny": 0.097416,
+        "first_terminal_order": 5993,
         "input_tokens": 208669,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6023,
         "latency_observations": 29,
         "mean_success_latency_ms": 18763.225479311022,
         "output_tokens": 11701,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.807466,
         "successful_responses": 29,
         "terminal_attempts": 31
@@ -980,10 +1539,18 @@
       "54025c731f2fdee32aad": {
         "failed_attempts": 6,
         "failed_reservation_ledger_cny": 0.5004993,
+        "first_terminal_order": 4785,
         "input_tokens": 369440,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4825,
         "latency_observations": 35,
         "mean_success_latency_ms": 18893.924902858478,
         "output_tokens": 56270,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.7479927,
         "successful_responses": 35,
         "terminal_attempts": 41
@@ -991,10 +1558,18 @@
       "57e884cb1ce421c64379": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.3547887,
+        "first_terminal_order": 798,
         "input_tokens": 278757,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 831,
         "latency_observations": 29,
         "mean_success_latency_ms": 18956.937151696082,
         "output_tokens": 40221,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.5684574,
         "successful_responses": 29,
         "terminal_attempts": 34
@@ -1002,10 +1577,18 @@
       "58732b8b481e7d443747": {
         "failed_attempts": 21,
         "failed_reservation_ledger_cny": 0.951608,
+        "first_terminal_order": 147,
         "input_tokens": 275599,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 187,
         "latency_observations": 20,
         "mean_success_latency_ms": 10075.893124996219,
         "output_tokens": 66810,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.551648,
         "successful_responses": 20,
         "terminal_attempts": 41
@@ -1013,10 +1596,18 @@
       "58a8fc16030003ae5596": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.39451020000000003,
+        "first_terminal_order": 4004,
         "input_tokens": 289152,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 4037,
         "latency_observations": 29,
         "mean_success_latency_ms": 18942.034251724115,
         "output_tokens": 48672,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6215538,
         "successful_responses": 29,
         "terminal_attempts": 34
@@ -1024,10 +1615,18 @@
       "5a4984ae9b79d2b74a3a": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3637,
         "input_tokens": 192631,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3666,
         "latency_observations": 30,
         "mean_success_latency_ms": 9231.766799999907,
         "output_tokens": 2870,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.787744,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1035,10 +1634,18 @@
       "5e6b5d59732634943891": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2364,
         "input_tokens": 239501,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2398,
         "latency_observations": 35,
         "mean_success_latency_ms": 14796.405948558822,
         "output_tokens": 3517,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.979106,
         "successful_responses": 35,
         "terminal_attempts": 35
@@ -1046,10 +1653,18 @@
       "5ea11f7de4dbaa60db22": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2622,
         "input_tokens": 186101,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2651,
         "latency_observations": 30,
         "mean_success_latency_ms": 12480.780023344172,
         "output_tokens": 3963,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.768182,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1057,10 +1672,18 @@
       "5f7603f6ecf71163e26e": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1481,
         "input_tokens": 201062,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1510,
         "latency_observations": 30,
         "mean_success_latency_ms": 12222.883553345067,
         "output_tokens": 3283,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.823946,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1068,10 +1691,18 @@
       "5fcef5026fa766570276": {
         "failed_attempts": 6,
         "failed_reservation_ledger_cny": 0.4828257,
+        "first_terminal_order": 4304,
         "input_tokens": 323178,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4339,
         "latency_observations": 30,
         "mean_success_latency_ms": 46642.23742666642,
         "output_tokens": 49390,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6107241,
         "successful_responses": 30,
         "terminal_attempts": 36
@@ -1079,10 +1710,18 @@
       "60d3e1a20ac4387b82c2": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1889,
         "input_tokens": 224200,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1921,
         "latency_observations": 33,
         "mean_success_latency_ms": 10538.837300013807,
         "output_tokens": 3544,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.918064,
         "successful_responses": 33,
         "terminal_attempts": 33
@@ -1090,10 +1729,18 @@
       "6174938e0deab99cf43e": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2786,
         "input_tokens": 211027,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2820,
         "latency_observations": 35,
         "mean_success_latency_ms": 9915.18940284316,
         "output_tokens": 3524,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.865252,
         "successful_responses": 35,
         "terminal_attempts": 35
@@ -1101,10 +1748,18 @@
       "65308ba13f63c0e8fc43": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.3771243,
+        "first_terminal_order": 5354,
         "input_tokens": 282984,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5387,
         "latency_observations": 29,
         "mean_success_latency_ms": 18225.10165172414,
         "output_tokens": 49085,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6294561000000001,
         "successful_responses": 29,
         "terminal_attempts": 34
@@ -1112,10 +1767,18 @@
       "66bdb2cd142c14b5a586": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2232,
         "input_tokens": 216694,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2263,
         "latency_observations": 32,
         "mean_success_latency_ms": 8175.368493735732,
         "output_tokens": 3282,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.886468,
         "successful_responses": 32,
         "terminal_attempts": 32
@@ -1123,10 +1786,18 @@
       "6d954ab125104d8719e3": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 436,
         "input_tokens": 181392,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 465,
         "latency_observations": 30,
         "mean_success_latency_ms": 8950.755630014464,
         "output_tokens": 3822,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.7484999999999999,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1134,10 +1805,18 @@
       "7103bd1e4b4087f05f90": {
         "failed_attempts": 2,
         "failed_reservation_ledger_cny": 0.1621368,
+        "first_terminal_order": 4202,
         "input_tokens": 272955,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4238,
         "latency_observations": 35,
         "mean_success_latency_ms": 17762.052825714116,
         "output_tokens": 39929,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.7464723,
         "successful_responses": 35,
         "terminal_attempts": 37
@@ -1145,10 +1824,18 @@
       "7223f50348ff9d83c2d6": {
         "failed_attempts": 3,
         "failed_reservation_ledger_cny": 0.24959759999999998,
+        "first_terminal_order": 2719,
         "input_tokens": 268869,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2755,
         "latency_observations": 34,
         "mean_success_latency_ms": 18152.597735293537,
         "output_tokens": 43235,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6782013,
         "successful_responses": 34,
         "terminal_attempts": 37
@@ -1156,10 +1843,18 @@
       "72f7004f690d84c4011a": {
         "failed_attempts": 2,
         "failed_reservation_ledger_cny": 0.1668765,
+        "first_terminal_order": 2166,
         "input_tokens": 261773,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2201,
         "latency_observations": 34,
         "mean_success_latency_ms": 16123.353376498391,
         "output_tokens": 37107,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6945456,
         "successful_responses": 34,
         "terminal_attempts": 36
@@ -1167,10 +1862,18 @@
       "7398284bcf351e6e5813": {
         "failed_attempts": 3,
         "failed_reservation_ledger_cny": 0.32818400000000003,
+        "first_terminal_order": 5845,
         "input_tokens": 258649,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5879,
         "latency_observations": 32,
         "mean_success_latency_ms": 22871.18465625008,
         "output_tokens": 16114,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.803096,
         "successful_responses": 32,
         "terminal_attempts": 35
@@ -1178,10 +1881,18 @@
       "73fe49d84143053df7ed": {
         "failed_attempts": 3,
         "failed_reservation_ledger_cny": 0.24285870000000004,
+        "first_terminal_order": 2686,
         "input_tokens": 244051,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2718,
         "latency_observations": 30,
         "mean_success_latency_ms": 17806.66273997631,
         "output_tokens": 38481,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5928888,
         "successful_responses": 30,
         "terminal_attempts": 33
@@ -1189,10 +1900,18 @@
       "7609b2ac86038d34d9bf": {
         "failed_attempts": 10,
         "failed_reservation_ledger_cny": 0.7226142,
+        "first_terminal_order": 2580,
         "input_tokens": 364614,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2621,
         "latency_observations": 32,
         "mean_success_latency_ms": 17021.996046874847,
         "output_tokens": 69124,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6237168000000001,
         "successful_responses": 32,
         "terminal_attempts": 42
@@ -1200,10 +1919,18 @@
       "78ec322efb7f437c4160": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.629097,
+        "first_terminal_order": 5917,
         "input_tokens": 323912,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5953,
         "latency_observations": 28,
         "mean_success_latency_ms": 18550.813603571052,
         "output_tokens": 60538,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.5596374000000001,
         "successful_responses": 28,
         "terminal_attempts": 37
@@ -1211,10 +1938,18 @@
       "7d5c2ab4b17a625386c9": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.3333603,
+        "first_terminal_order": 3111,
         "input_tokens": 286160,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3144,
         "latency_observations": 30,
         "mean_success_latency_ms": 17205.700270016678,
         "output_tokens": 44121,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6381921,
         "successful_responses": 30,
         "terminal_attempts": 34
@@ -1222,10 +1957,18 @@
       "7f03faf20fe4135a5bd0": {
         "failed_attempts": 10,
         "failed_reservation_ledger_cny": 0.7425453,
+        "first_terminal_order": 5639,
         "input_tokens": 350774,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5674,
         "latency_observations": 26,
         "mean_success_latency_ms": 18102.10178846095,
         "output_tokens": 61766,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.5129145,
         "successful_responses": 26,
         "terminal_attempts": 36
@@ -1233,10 +1976,18 @@
       "7fe195a1c98d1e6df4cd": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.5108313,
+        "first_terminal_order": 359,
         "input_tokens": 300804,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 396,
         "latency_observations": 30,
         "mean_success_latency_ms": 17522.86667667795,
         "output_tokens": 49240,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.5344731,
         "successful_responses": 30,
         "terminal_attempts": 38
@@ -1244,10 +1995,18 @@
       "80c9e3fc0f1e32d23f12": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4856,
         "input_tokens": 260678,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4893,
         "latency_observations": 38,
         "mean_success_latency_ms": 8397.267797367884,
         "output_tokens": 3914,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.066196,
         "successful_responses": 38,
         "terminal_attempts": 38
@@ -1255,10 +2014,18 @@
       "82a8292c05f8dfe32f4a": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.329572,
+        "first_terminal_order": 1152,
         "input_tokens": 372040,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1211,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1266,10 +2033,18 @@
       "8330045c38cfcbd54fa0": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3667,
         "input_tokens": 237105,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3703,
         "latency_observations": 37,
         "mean_success_latency_ms": 8001.120624324357,
         "output_tokens": 3528,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.969588,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -1277,10 +2052,18 @@
       "8437c7af9fa0a756612c": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2899,
         "input_tokens": 183482,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2928,
         "latency_observations": 30,
         "mean_success_latency_ms": 8872.90352336131,
         "output_tokens": 3316,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.753824,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1288,10 +2071,18 @@
       "87d7b0b4beeb71587a42": {
         "failed_attempts": 66,
         "failed_reservation_ledger_cny": 2.5636338000000003,
+        "first_terminal_order": 1793,
         "input_tokens": 409770,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1858,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 202752,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 66
@@ -1299,10 +2090,18 @@
       "88675465f67e562ce5b7": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 0,
         "input_tokens": 181349,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 29,
         "latency_observations": 30,
         "mean_success_latency_ms": 13521.293003337147,
         "output_tokens": 3278,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.7450640000000001,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1310,10 +2109,18 @@
       "8cc86d08e1b1d16f0966": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.7533162,
+        "first_terminal_order": 2965,
         "input_tokens": 389370,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3001,
         "latency_observations": 28,
         "mean_success_latency_ms": 19945.41983570837,
         "output_tokens": 65817,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6172236,
         "successful_responses": 28,
         "terminal_attempts": 37
@@ -1321,10 +2128,18 @@
       "8ef1cfeacbc64e9646aa": {
         "failed_attempts": 2,
         "failed_reservation_ledger_cny": 0.21773199999999998,
+        "first_terminal_order": 6024,
         "input_tokens": 258622,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6057,
         "latency_observations": 32,
         "mean_success_latency_ms": 11990.172862500116,
         "output_tokens": 11363,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.884934,
         "successful_responses": 32,
         "terminal_attempts": 34
@@ -1332,10 +2147,20 @@
       "8f96fed69afb2a41c6ad": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.6057996,
+        "first_terminal_order": 4038,
         "input_tokens": 503273,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl",
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4100,
         "latency_observations": 55,
         "mean_success_latency_ms": 60941.64022181831,
         "output_tokens": 82104,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78",
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.1407473000000001,
         "successful_responses": 55,
         "terminal_attempts": 63
@@ -1343,10 +2168,18 @@
       "90c8c291b802c311d29a": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.7314657000000001,
+        "first_terminal_order": 3591,
         "input_tokens": 423441,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3636,
         "latency_observations": 37,
         "mean_success_latency_ms": 18996.15620270263,
         "output_tokens": 71035,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.7544544000000001,
         "successful_responses": 37,
         "terminal_attempts": 46
@@ -1354,10 +2187,18 @@
       "919632274cb81ca91a63": {
         "failed_attempts": 18,
         "failed_reservation_ledger_cny": 1.3174098,
+        "first_terminal_order": 636,
         "input_tokens": 563206,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 679,
         "latency_observations": 26,
         "mean_success_latency_ms": 18063.283365381023,
         "output_tokens": 76889,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.5111904,
         "successful_responses": 26,
         "terminal_attempts": 44
@@ -1365,10 +2206,18 @@
       "9862c83aa9a5863de10a": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.4036095,
+        "first_terminal_order": 2297,
         "input_tokens": 317464,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2333,
         "latency_observations": 32,
         "mean_success_latency_ms": 15660.823656267894,
         "output_tokens": 47186,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6594273,
         "successful_responses": 32,
         "terminal_attempts": 37
@@ -1376,10 +2225,18 @@
       "98f59eef770a6fae3091": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2077,
         "input_tokens": 224968,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_journal.jsonl"
+        ],
+        "last_terminal_order": 2110,
         "latency_observations": 34,
         "mean_success_latency_ms": 8318.421582376366,
         "output_tokens": 3537,
+        "run_ids": [
+          "v2-formal-cont-20260719-50aaafda0d6a"
+        ],
         "successful_cost_cny": 0.921094,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -1387,10 +2244,18 @@
       "99fbe63ead15827ec4d4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5168,
         "input_tokens": 251358,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5204,
         "latency_observations": 37,
         "mean_success_latency_ms": 8006.624378378326,
         "output_tokens": 3604,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.027056,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -1398,10 +2263,18 @@
       "9df6c3d677ea5d2394e6": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 4239,
         "input_tokens": 201010,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4268,
         "latency_observations": 30,
         "mean_success_latency_ms": 8411.363909999758,
         "output_tokens": 2856,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.821176,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1409,10 +2282,18 @@
       "9e8d618e1fad3566fe60": {
         "failed_attempts": 45,
         "failed_reservation_ledger_cny": 3.3280716,
+        "first_terminal_order": 832,
         "input_tokens": 1114440,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 891,
         "latency_observations": 15,
         "mean_success_latency_ms": 17250.38601338553,
         "output_tokens": 150126,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.2733108,
         "successful_responses": 15,
         "terminal_attempts": 60
@@ -1420,10 +2301,18 @@
       "9ee8623ba8b99f14edf3": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.3299374,
+        "first_terminal_order": 1353,
         "input_tokens": 372214,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1412,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1431,10 +2320,18 @@
       "9ff6928f3633acd331ca": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1859,
         "input_tokens": 200731,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1888,
         "latency_observations": 30,
         "mean_success_latency_ms": 11722.363760004131,
         "output_tokens": 2663,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.818902,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1442,10 +2339,18 @@
       "a0359cced6a13eab2d99": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3939,
         "input_tokens": 201350,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3968,
         "latency_observations": 30,
         "mean_success_latency_ms": 8892.075106666683,
         "output_tokens": 3338,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.825428,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1453,10 +2358,18 @@
       "a0752da51803f18087aa": {
         "failed_attempts": 7,
         "failed_reservation_ledger_cny": 0.5794635,
+        "first_terminal_order": 5954,
         "input_tokens": 368165,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5992,
         "latency_observations": 32,
         "mean_success_latency_ms": 20000.43518124971,
         "output_tokens": 58354,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6838566,
         "successful_responses": 32,
         "terminal_attempts": 39
@@ -1464,10 +2377,18 @@
       "a49c764f695534dd76f3": {
         "failed_attempts": 6,
         "failed_reservation_ledger_cny": 0.4838001,
+        "first_terminal_order": 5499,
         "input_tokens": 315755,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5533,
         "latency_observations": 29,
         "mean_success_latency_ms": 19180.54212758617,
         "output_tokens": 51984,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.615951,
         "successful_responses": 29,
         "terminal_attempts": 35
@@ -1475,10 +2396,18 @@
       "a6677ef0c8ca7cd93bd4": {
         "failed_attempts": 74,
         "failed_reservation_ledger_cny": 2.87679,
+        "first_terminal_order": 1212,
         "input_tokens": 460588,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1285,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 227328,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 74
@@ -1486,10 +2415,18 @@
       "a8131d3f8b3f794b446a": {
         "failed_attempts": 68,
         "failed_reservation_ledger_cny": 2.6433036000000003,
+        "first_terminal_order": 1017,
         "input_tokens": 423132,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1084,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 208896,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 68
@@ -1497,10 +2434,18 @@
       "a849c1a5072e1bc4afce": {
         "failed_attempts": 68,
         "failed_reservation_ledger_cny": 2.6416572,
+        "first_terminal_order": 1413,
         "input_tokens": 422348,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1480,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 208896,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 68
@@ -1508,10 +2453,18 @@
       "aa85d52a8d0ba2de921f": {
         "failed_attempts": 14,
         "failed_reservation_ledger_cny": 1.1106018,
+        "first_terminal_order": 3889,
         "input_tokens": 513279,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3938,
         "latency_observations": 36,
         "mean_success_latency_ms": 17520.21300277779,
         "output_tokens": 89170,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.7163121,
         "successful_responses": 36,
         "terminal_attempts": 50
@@ -1519,10 +2472,18 @@
       "ac1d97567ec4dc8d247d": {
         "failed_attempts": 16,
         "failed_reservation_ledger_cny": 1.2539415,
+        "first_terminal_order": 5088,
         "input_tokens": 553219,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5137,
         "latency_observations": 34,
         "mean_success_latency_ms": 19844.319638235123,
         "output_tokens": 96847,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.7213332,
         "successful_responses": 34,
         "terminal_attempts": 50
@@ -1530,10 +2491,18 @@
       "b32f2607d5722681797c": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5709,
         "input_tokens": 181037,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5738,
         "latency_observations": 30,
         "mean_success_latency_ms": 9867.698689999695,
         "output_tokens": 3079,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.742622,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1541,10 +2510,18 @@
       "b48a5e721b6ec8e28c36": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.6058248,
+        "first_terminal_order": 2543,
         "input_tokens": 332057,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2579,
         "latency_observations": 29,
         "mean_success_latency_ms": 16552.817234488462,
         "output_tokens": 57584,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.5752005,
         "successful_responses": 29,
         "terminal_attempts": 37
@@ -1552,10 +2529,18 @@
       "b53a5fec7238e0c89bd4": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.3282154000000004,
+        "first_terminal_order": 1544,
         "input_tokens": 371394,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1603,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1563,10 +2548,18 @@
       "b561538d34ef2a79c65a": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.3293578,
+        "first_terminal_order": 957,
         "input_tokens": 371938,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1016,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1574,10 +2567,18 @@
       "b720bc6ce4b74438fb2e": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2652,
         "input_tokens": 207651,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2685,
         "latency_observations": 34,
         "mean_success_latency_ms": 8537.355614709668,
         "output_tokens": 3281,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.85029,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -1585,10 +2586,18 @@
       "b7d68d21b6c49a5b7822": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.28483769999999997,
+        "first_terminal_order": 257,
         "input_tokens": 308213,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 294,
         "latency_observations": 34,
         "mean_success_latency_ms": 18850.836702930632,
         "output_tokens": 42154,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.7165032,
         "successful_responses": 34,
         "terminal_attempts": 38
@@ -1596,10 +2605,18 @@
       "b8176fe2d7692610cd1e": {
         "failed_attempts": 8,
         "failed_reservation_ledger_cny": 0.640836,
+        "first_terminal_order": 5806,
         "input_tokens": 373318,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5844,
         "latency_observations": 31,
         "mean_success_latency_ms": 17872.5382064514,
         "output_tokens": 57799,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6286434000000001,
         "successful_responses": 31,
         "terminal_attempts": 39
@@ -1607,10 +2624,18 @@
       "b884b49edc8199ceb8dc": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3337,
         "input_tokens": 186296,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3366,
         "latency_observations": 30,
         "mean_success_latency_ms": 11191.948003333317,
         "output_tokens": 2932,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.762776,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1618,10 +2643,18 @@
       "b8b331621613ffe57176": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3969,
         "input_tokens": 236463,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 4003,
         "latency_observations": 35,
         "mean_success_latency_ms": 9040.898351428614,
         "output_tokens": 3279,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.965526,
         "successful_responses": 35,
         "terminal_attempts": 35
@@ -1629,10 +2662,18 @@
       "b93f221367e44942e67f": {
         "failed_attempts": 14,
         "failed_reservation_ledger_cny": 1.1238318,
+        "first_terminal_order": 3443,
         "input_tokens": 505650,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3490,
         "latency_observations": 34,
         "mean_success_latency_ms": 18010.21677941178,
         "output_tokens": 87131,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6699336,
         "successful_responses": 34,
         "terminal_attempts": 48
@@ -1640,10 +2681,18 @@
       "bd926be7352216fc9aa7": {
         "failed_attempts": 4,
         "failed_reservation_ledger_cny": 0.22222,
+        "first_terminal_order": 1286,
         "input_tokens": 214266,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1318,
         "latency_observations": 29,
         "mean_success_latency_ms": 10890.934124115276,
         "output_tokens": 15034,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.725048,
         "successful_responses": 29,
         "terminal_attempts": 33
@@ -1651,10 +2700,18 @@
       "bfa312561901e3a4d379": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3078,
         "input_tokens": 198747,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3110,
         "latency_observations": 33,
         "mean_success_latency_ms": 8983.896651538089,
         "output_tokens": 3174,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.814032,
         "successful_responses": 33,
         "terminal_attempts": 33
@@ -1662,10 +2719,18 @@
       "c4b3980208c53d160091": {
         "failed_attempts": 3,
         "failed_reservation_ledger_cny": 0.2233665,
+        "first_terminal_order": 537,
         "input_tokens": 287601,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 573,
         "latency_observations": 34,
         "mean_success_latency_ms": 18551.999161752654,
         "output_tokens": 39397,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.7115304,
         "successful_responses": 34,
         "terminal_attempts": 37
@@ -1673,10 +2738,18 @@
       "c561e0fb8812dc00a2e1": {
         "failed_attempts": 6,
         "failed_reservation_ledger_cny": 0.4356219,
+        "first_terminal_order": 397,
         "input_tokens": 342255,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 435,
         "latency_observations": 33,
         "mean_success_latency_ms": 19727.418954575885,
         "output_tokens": 50944,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.7110432,
         "successful_responses": 33,
         "terminal_attempts": 39
@@ -1684,10 +2757,18 @@
       "c905c139f87ede374a42": {
         "failed_attempts": 14,
         "failed_reservation_ledger_cny": 1.1009187,
+        "first_terminal_order": 5205,
         "input_tokens": 442328,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5244,
         "latency_observations": 26,
         "mean_success_latency_ms": 18702.81544230777,
         "output_tokens": 79294,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.4940397,
         "successful_responses": 26,
         "terminal_attempts": 40
@@ -1695,10 +2776,18 @@
       "cbfeb044242dbe9002ae": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 1511,
         "input_tokens": 222862,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1543,
         "latency_observations": 33,
         "mean_success_latency_ms": 12819.289457567997,
         "output_tokens": 3212,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.91072,
         "successful_responses": 33,
         "terminal_attempts": 33
@@ -1706,10 +2795,18 @@
       "ccebce236d3122d6eb30": {
         "failed_attempts": 1,
         "failed_reservation_ledger_cny": 0.117844,
+        "first_terminal_order": 4269,
         "input_tokens": 252238,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4303,
         "latency_observations": 34,
         "mean_success_latency_ms": 8236.539735294655,
         "output_tokens": 7400,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.935508,
         "successful_responses": 34,
         "terminal_attempts": 35
@@ -1717,10 +2814,18 @@
       "cdc6a579ade76f33b452": {
         "failed_attempts": 7,
         "failed_reservation_ledger_cny": 0.5709753000000001,
+        "first_terminal_order": 5245,
         "input_tokens": 390941,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5287,
         "latency_observations": 36,
         "mean_success_latency_ms": 19395.01323611118,
         "output_tokens": 63865,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.7864668,
         "successful_responses": 36,
         "terminal_attempts": 43
@@ -1728,10 +2833,18 @@
       "cf6ac89432fc7ffc0823": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3521,
         "input_tokens": 231881,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3557,
         "latency_observations": 37,
         "mean_success_latency_ms": 8618.413651351393,
         "output_tokens": 3246,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.9470000000000001,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -1739,10 +2852,18 @@
       "cffba6e86ebe67e2fa60": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5459,
         "input_tokens": 274661,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5498,
         "latency_observations": 40,
         "mean_success_latency_ms": 8882.652927499794,
         "output_tokens": 4052,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.122956,
         "successful_responses": 40,
         "terminal_attempts": 40
@@ -1750,10 +2871,18 @@
       "d3be2953e814289e49af": {
         "failed_attempts": 10,
         "failed_reservation_ledger_cny": 0.8164695000000001,
+        "first_terminal_order": 2437,
         "input_tokens": 430679,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2478,
         "latency_observations": 32,
         "mean_success_latency_ms": 17946.159556231578,
         "output_tokens": 69759,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.673932,
         "successful_responses": 32,
         "terminal_attempts": 42
@@ -1761,10 +2890,18 @@
       "d4091099208033b5f8af": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.3282112,
+        "first_terminal_order": 1733,
         "input_tokens": 371392,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1792,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1772,10 +2909,18 @@
       "db6ae3c96647ace73de6": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 325,
         "input_tokens": 228530,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 358,
         "latency_observations": 34,
         "mean_success_latency_ms": 8994.332564700231,
         "output_tokens": 3450,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.93482,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -1783,10 +2928,18 @@
       "dd0484375c4a8a81c055": {
         "failed_attempts": 7,
         "failed_reservation_ledger_cny": 0.5795769000000001,
+        "first_terminal_order": 4933,
         "input_tokens": 409424,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4977,
         "latency_observations": 38,
         "mean_success_latency_ms": 20858.479223684182,
         "output_tokens": 64724,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.8238951,
         "successful_responses": 38,
         "terminal_attempts": 45
@@ -1794,10 +2947,18 @@
       "dd455cff4f977e8a54e4": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 466,
         "input_tokens": 228663,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 499,
         "latency_observations": 34,
         "mean_success_latency_ms": 9107.821791186272,
         "output_tokens": 3471,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.935478,
         "successful_responses": 34,
         "terminal_attempts": 34
@@ -1805,10 +2966,18 @@
       "df340f55c0eddc69c2bb": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2334,
         "input_tokens": 201307,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2363,
         "latency_observations": 30,
         "mean_success_latency_ms": 10386.316896664599,
         "output_tokens": 3070,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.823648,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1816,10 +2985,18 @@
       "df74e49eb3bd9918e156": {
         "failed_attempts": 12,
         "failed_reservation_ledger_cny": 0.9109296000000001,
+        "first_terminal_order": 3145,
         "input_tokens": 415666,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3187,
         "latency_observations": 31,
         "mean_success_latency_ms": 16705.395277409305,
         "output_tokens": 76751,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.6066774,
         "successful_responses": 31,
         "terminal_attempts": 43
@@ -1827,10 +3004,18 @@
       "df784c964455d791f1c7": {
         "failed_attempts": 1,
         "failed_reservation_ledger_cny": 0.108908,
+        "first_terminal_order": 922,
         "input_tokens": 251796,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 956,
         "latency_observations": 34,
         "mean_success_latency_ms": 10110.047820619964,
         "output_tokens": 6487,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.937198,
         "successful_responses": 34,
         "terminal_attempts": 35
@@ -1838,10 +3023,18 @@
       "e0754d7c317d88510896": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.3279928,
+        "first_terminal_order": 1922,
         "input_tokens": 371288,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 1981,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 184320,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1849,10 +3042,18 @@
       "e1444a38277e6efdf758": {
         "failed_attempts": 66,
         "failed_reservation_ledger_cny": 3.262424,
+        "first_terminal_order": 4452,
         "input_tokens": 410102,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4517,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 270336,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 66
@@ -1860,10 +3061,18 @@
       "e387e14d8b737eef9e92": {
         "failed_attempts": 34,
         "failed_reservation_ledger_cny": 2.7874119000000004,
+        "first_terminal_order": 4340,
         "input_tokens": 870396,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4391,
         "latency_observations": 18,
         "mean_success_latency_ms": 405250.1849222223,
         "output_tokens": 155904,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.3500133,
         "successful_responses": 18,
         "terminal_attempts": 52
@@ -1871,10 +3080,18 @@
       "e3c90c7ed0a61ef1a0d7": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3786,
         "input_tokens": 185974,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3815,
         "latency_observations": 30,
         "mean_success_latency_ms": 7923.290656666662,
         "output_tokens": 2876,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.761152,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1882,10 +3099,18 @@
       "e49776d95346abacd39a": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 574,
         "input_tokens": 200532,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 603,
         "latency_observations": 30,
         "mean_success_latency_ms": 8451.368613323817,
         "output_tokens": 2609,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.817782,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1893,10 +3118,18 @@
       "e7ef0d29bcf02bec83a4": {
         "failed_attempts": 7,
         "failed_reservation_ledger_cny": 0.5296998,
+        "first_terminal_order": 4165,
         "input_tokens": 329336,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4201,
         "latency_observations": 30,
         "mean_success_latency_ms": 16453.181940000166,
         "output_tokens": 53747,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6133806,
         "successful_responses": 30,
         "terminal_attempts": 37
@@ -1904,10 +3137,18 @@
       "e8637382500fb8d39481": {
         "failed_attempts": 23,
         "failed_reservation_ledger_cny": 1.181544,
+        "first_terminal_order": 4704,
         "input_tokens": 315254,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4750,
         "latency_observations": 24,
         "mean_success_latency_ms": 7352.301258331257,
         "output_tokens": 96497,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.658454,
         "successful_responses": 24,
         "terminal_attempts": 47
@@ -1915,10 +3156,18 @@
       "eb49032f922940faf900": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.7081662,
+        "first_terminal_order": 5771,
         "input_tokens": 336678,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5805,
         "latency_observations": 26,
         "mean_success_latency_ms": 16535.94285384623,
         "output_tokens": 56860,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.4764816,
         "successful_responses": 26,
         "terminal_attempts": 35
@@ -1926,10 +3175,18 @@
       "ed5e98868f864f43c05f": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2479,
         "input_tokens": 189649,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 2508,
         "latency_observations": 30,
         "mean_success_latency_ms": 9873.035106637204,
         "output_tokens": 3464,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.77938,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1937,10 +3194,18 @@
       "edf4083133bb5ca7ae3a": {
         "failed_attempts": 12,
         "failed_reservation_ledger_cny": 0.9551955,
+        "first_terminal_order": 4894,
         "input_tokens": 413849,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4932,
         "latency_observations": 27,
         "mean_success_latency_ms": 16946.723796295395,
         "output_tokens": 71729,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.5164110000000001,
         "successful_responses": 27,
         "terminal_attempts": 39
@@ -1948,10 +3213,18 @@
       "f12157949188a19af649": {
         "failed_attempts": 66,
         "failed_reservation_ledger_cny": 3.1316208000000003,
+        "first_terminal_order": 4578,
         "input_tokens": 409904,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4643,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 270336,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 66
@@ -1959,10 +3232,18 @@
       "f15916c33d0287f9af68": {
         "failed_attempts": 60,
         "failed_reservation_ledger_cny": 2.8446054000000003,
+        "first_terminal_order": 4518,
         "input_tokens": 371534,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 4577,
         "latency_observations": 0,
         "mean_success_latency_ms": null,
         "output_tokens": 245760,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0,
         "successful_responses": 0,
         "terminal_attempts": 60
@@ -1970,10 +3251,18 @@
       "f28eb79d78e29f8166b5": {
         "failed_attempts": 9,
         "failed_reservation_ledger_cny": 0.7262661,
+        "first_terminal_order": 6223,
         "input_tokens": 397826,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 6262,
         "latency_observations": 31,
         "mean_success_latency_ms": 17636.72751612842,
         "output_tokens": 63302,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.6409053,
         "successful_responses": 31,
         "terminal_attempts": 40
@@ -1981,10 +3270,18 @@
       "f36c765118adf2aa2b2c": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5429,
         "input_tokens": 181547,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5458,
         "latency_observations": 30,
         "mean_success_latency_ms": 11810.681426666755,
         "output_tokens": 3216,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.745484,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -1992,10 +3289,18 @@
       "f672b7565e147b920820": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 2047,
         "input_tokens": 181111,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_journal.jsonl"
+        ],
+        "last_terminal_order": 2076,
         "latency_observations": 30,
         "mean_success_latency_ms": 7626.942386672211,
         "output_tokens": 2963,
+        "run_ids": [
+          "v2-formal-cont-20260719-50aaafda0d6a"
+        ],
         "successful_cost_cny": 0.742222,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -2003,10 +3308,18 @@
       "f817a5b7e186b49bb9ec": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 3188,
         "input_tokens": 206766,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl"
+        ],
+        "last_terminal_order": 3217,
         "latency_observations": 30,
         "mean_success_latency_ms": 7180.693883371229,
         "output_tokens": 2513,
+        "run_ids": [
+          "v2-formal-cont2-20260719-724421cdbf78"
+        ],
         "successful_cost_cny": 0.842142,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -2014,10 +3327,18 @@
       "f96e83861619989a80dc": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5578,
         "input_tokens": 200151,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5607,
         "latency_observations": 30,
         "mean_success_latency_ms": 7648.435466666827,
         "output_tokens": 2616,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.8163,
         "successful_responses": 30,
         "terminal_attempts": 30
@@ -2025,10 +3346,18 @@
       "fa1cf2003a4a8684a88c": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 761,
         "input_tokens": 255589,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 797,
         "latency_observations": 37,
         "mean_success_latency_ms": 11463.32897296855,
         "output_tokens": 3858,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 1.045504,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -2036,10 +3365,18 @@
       "fb627c7685bcf99cccf7": {
         "failed_attempts": 0,
         "failed_reservation_ledger_cny": 0,
+        "first_terminal_order": 5009,
         "input_tokens": 251320,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5045,
         "latency_observations": 37,
         "mean_success_latency_ms": 7468.6558918918645,
         "output_tokens": 3562,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 1.026652,
         "successful_responses": 37,
         "terminal_attempts": 37
@@ -2047,10 +3384,18 @@
       "fca2d875df822b1d837e": {
         "failed_attempts": 36,
         "failed_reservation_ledger_cny": 2.6808159000000003,
+        "first_terminal_order": 96,
         "input_tokens": 916645,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl"
+        ],
+        "last_terminal_order": 146,
         "latency_observations": 15,
         "mean_success_latency_ms": 19762.204673296463,
         "output_tokens": 123064,
+        "run_ids": [
+          "v2-formal-test-20260717-da148583e3c5"
+        ],
         "successful_cost_cny": 0.2778762,
         "successful_responses": 15,
         "terminal_attempts": 51
@@ -2058,10 +3403,18 @@
       "fd61c8b5e2062b92fe11": {
         "failed_attempts": 5,
         "failed_reservation_ledger_cny": 0.41304480000000005,
+        "first_terminal_order": 5388,
         "input_tokens": 344444,
+        "journal_sources": [
+          "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl"
+        ],
+        "last_terminal_order": 5428,
         "latency_observations": 36,
         "mean_success_latency_ms": 18274.76915555568,
         "output_tokens": 54554,
+        "run_ids": [
+          "v2-formal-cont3-20260721-5925ef7f1614"
+        ],
         "successful_cost_cny": 0.7685412,
         "successful_responses": 36,
         "terminal_attempts": 41
@@ -2928,6 +4281,47 @@
     "recovered_cells": 61,
     "recovery_rate": 0.4357142857142857,
     "reviews": 5176
+  },
+  "reproducibility": {
+    "analysis_code_identity": "SHA-256-bound by the evidence manifest",
+    "dependency_versions": {
+      "PyYAML": "6.0.3",
+      "matplotlib": "3.11.0",
+      "numpy": "2.5.1",
+      "pydantic": "2.13.4",
+      "pytest": "8.4.2"
+    },
+    "device_class": "local CPU orchestration with remote SiliconFlow inference",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "provider_models": [
+      {
+        "label": "deepseek",
+        "model_name": "deepseek-ai/DeepSeek-V3.2",
+        "provider": "siliconflow"
+      },
+      {
+        "label": "minimax",
+        "model_name": "MiniMaxAI/MiniMax-M2.5",
+        "provider": "siliconflow"
+      }
+    ],
+    "python": "3.12.7",
+    "python_implementation": "CPython",
+    "raw_source_dirty_state": false,
+    "raw_source_mutation_allowed": false,
+    "release_commit_policy": "The aggregate files are committed and release-tagged after deterministic network-free generation; embedding that commit would be self-referential.",
+    "source_run_config_hashes": [
+      "458ceaf2abb4f93ef3889f788f569cfdbb74d07f0463f9c9f8824276199eea65",
+      "c692e10b4ea5400dd6c681933538300f6092fe5bde7f09c32ed025fbde192c1b",
+      "d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff",
+      "e623fa1e0d84a6d4bcf098145b1af69a0be692a876866d5ddc27cddf02b7ff66"
+    ],
+    "source_run_git_commits": [
+      "2cf2b5afd9268a2e0cc89ac8f4be9e488314d2bf",
+      "8228e646005b1d41f51bee635c680ed252f7248c",
+      "8426e96283cc1d4beafa8e0ac78ef266c3753018",
+      "bd29aa875001fb416e15bda948c34ca3073c0805"
+    ]
   },
   "schema": "shiftmem-formal-v2-reliability-audit-v1",
   "test_outcomes_accessed": true

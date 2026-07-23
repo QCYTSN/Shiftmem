@@ -1,7 +1,7 @@
 {
   "cells": 160,
   "complete": true,
-  "evidence_freeze_id": "v2-formal-results-bf7b57070da2",
+  "evidence_freeze_id": "v2-formal-results-b70e28f0fa8c",
   "files": [
     {
       "bytes": 187566,
@@ -104,16 +104,16 @@
       "sha256": "3615d5bdf49cdce445e8b1be24d39fba02044221679bb2cd5b440af4aee27a4a"
     },
     {
-      "bytes": 7306,
+      "bytes": 9117,
       "kind": "analysis_code",
       "path": "scripts/finalize_formal_results.py",
-      "sha256": "ccc83147c46a982c3e5c3920ea28ab163fd9616b63138a0c4e7552018ea53ef6"
+      "sha256": "217a1f3b569055d1c3ff1dd3db1ffdc40474bf2b74650d4abae96e4d28018507"
     },
     {
-      "bytes": 25905,
+      "bytes": 38275,
       "kind": "analysis_code",
       "path": "src/shiftmem/evaluation/post_test.py",
-      "sha256": "2ef6d3d85e75a4ba22925fc80d73938f0280aeca729a214d75e06ad92f6f13b6"
+      "sha256": "3de446efbe690549da4401f275f410790c70066253726d0f84989362219e1d00"
     },
     {
       "bytes": 7050,
@@ -140,8 +140,49 @@
       "valid": true
     }
   },
-  "manifest_sha256": "bf7b57070da22575d53156fd2358a34ef5122d87c9de5ec29cd71ef3ed0128ca",
+  "manifest_sha256": "b70e28f0fa8c48bce527f65a96b62f45960f81ed079230bd265121a72971c993",
   "raw_evidence_mutated": false,
+  "reproducibility": {
+    "analysis_code_identity": "SHA-256-bound by the evidence manifest",
+    "dependency_versions": {
+      "PyYAML": "6.0.3",
+      "matplotlib": "3.11.0",
+      "numpy": "2.5.1",
+      "pydantic": "2.13.4",
+      "pytest": "8.4.2"
+    },
+    "device_class": "local CPU orchestration with remote SiliconFlow inference",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "provider_models": [
+      {
+        "label": "deepseek",
+        "model_name": "deepseek-ai/DeepSeek-V3.2",
+        "provider": "siliconflow"
+      },
+      {
+        "label": "minimax",
+        "model_name": "MiniMaxAI/MiniMax-M2.5",
+        "provider": "siliconflow"
+      }
+    ],
+    "python": "3.12.7",
+    "python_implementation": "CPython",
+    "raw_source_dirty_state": false,
+    "raw_source_mutation_allowed": false,
+    "release_commit_policy": "The aggregate files are committed and release-tagged after deterministic network-free generation; embedding that commit would be self-referential.",
+    "source_run_config_hashes": [
+      "458ceaf2abb4f93ef3889f788f569cfdbb74d07f0463f9c9f8824276199eea65",
+      "c692e10b4ea5400dd6c681933538300f6092fe5bde7f09c32ed025fbde192c1b",
+      "d786ef9d22a894de5a7bb0fc357b981456614a7150a9b6887840bd1a7a5fd2ff",
+      "e623fa1e0d84a6d4bcf098145b1af69a0be692a876866d5ddc27cddf02b7ff66"
+    ],
+    "source_run_git_commits": [
+      "2cf2b5afd9268a2e0cc89ac8f4be9e488314d2bf",
+      "8228e646005b1d41f51bee635c680ed252f7248c",
+      "8426e96283cc1d4beafa8e0ac78ef266c3753018",
+      "bd29aa875001fb416e15bda948c34ca3073c0805"
+    ]
+  },
   "schema": "shiftmem-formal-v2-evidence-manifest-v1",
   "source_metadata_anomalies": {
     "affected_records": 161,

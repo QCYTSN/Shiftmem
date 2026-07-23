@@ -204,3 +204,10 @@ Implementation decisions and deviations from the specification will be recorded 
 - Kept the replacement-freeze accidental-Test-outcome gate strict and stage-specific. Added post-Test verification rather than weakening the pre-Test safeguard.
 - Journal reconciliation records 4,558 successful responses, 1,705 failed attempts, CNY 108.4874 estimated successful cost, CNY 93.8759 conservative failed ledger, and zero unresolved reservations. Official provider billing remains a separate external reconciliation field.
 - Added a post-hoc descriptive reliability-outcome sensitivity layer without changing H1: paired parse-, fallback-, and provider-failure burden differences have weak correlations with paired regret differences, while the unfavorable mean direction persists in each zero-event subset. The audit explicitly records model imbalance, reports no causal p-values for correlations, and leaves the confirmatory 70-pair result unchanged.
+
+## 2026-07-23 - Post-Test inference and claim-scope closure
+
+- Preserved the original predeclared 70-pair analysis and all raw evidence, then added a post-hoc mean-aligned sensitivity analysis that treats the two models sharing each scenario-seed realization as one cluster. Environment seeds are bootstrapped within the seven fixed scenario strata, and a deterministic cluster sign-flip test targets the equal-scenario mean.
+- Added an append-order audit across the four journals. All 70 applicable pairs ran VectorMemory before ShiftMem; early/late and run-segment summaries diagnose possible drift but explicitly cannot remove the non-randomized execution-order limitation. The journals contain no wall-clock timestamps, so no timestamp claim is made.
+- Retained the serialized `post_shift_cumulative_regret_30` field while defining its reporting label as `oracle-relative cost gap`; the shared parameter-aware heuristic Oracle cancels from the paired method difference.
+- Added exact Python, dependency, platform, provider/model, source-commit, and config-hash metadata to every derived aggregate. The resulting SHA-bound post-Test closure identity is `v2-formal-results-b70e28f0fa8c`.

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+from importlib.metadata import version
 import json
+import platform
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +36,43 @@ DEFAULT_SPEC = Path("configs/experiments/formal_v2_post_test.yaml")
 DEFAULT_MANIFEST = Path("artifacts/aggregated/v2_formal_evidence_manifest.json")
 DEFAULT_ANALYSIS = Path("artifacts/aggregated/v2_formal_statistical_analysis.json")
 DEFAULT_RELIABILITY = Path("artifacts/aggregated/v2_formal_reliability_audit.json")
+
+
+def _reproducibility_metadata(
+    cells: list[dict[str, Any]], formal_config: dict[str, Any]
+) -> dict[str, Any]:
+    identities = [row.get("run_identity") or {} for row in cells]
+    return {
+        "analysis_code_identity": "SHA-256-bound by the evidence manifest",
+        "python": platform.python_version(),
+        "python_implementation": platform.python_implementation(),
+        "platform": platform.platform(),
+        "dependency_versions": {
+            package: version(package)
+            for package in ("numpy", "PyYAML", "matplotlib", "pydantic", "pytest")
+        },
+        "provider_models": [
+            {
+                "label": str(row["label"]),
+                "provider": str(row["provider"]),
+                "model_name": str(row["model_name"]),
+            }
+            for row in formal_config["models"]
+        ],
+        "source_run_git_commits": sorted(
+            {str(row.get("git_commit")) for row in identities if row.get("git_commit")}
+        ),
+        "source_run_config_hashes": sorted(
+            {str(row.get("config_hash")) for row in identities if row.get("config_hash")}
+        ),
+        "device_class": "local CPU orchestration with remote SiliconFlow inference",
+        "raw_source_dirty_state": False,
+        "raw_source_mutation_allowed": False,
+        "release_commit_policy": (
+            "The aggregate files are committed and release-tagged after deterministic "
+            "network-free generation; embedding that commit would be self-referential."
+        ),
+    }
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:
@@ -104,6 +143,7 @@ def build_outputs(root: Path, spec_path: Path) -> tuple[dict[str, Any], dict[str
             )
 
     journal = summarize_journals(root, spec["sources"], cells)
+    reproducibility = _reproducibility_metadata(cells, formal_config)
     manifest = {
         "schema": "shiftmem-formal-v2-evidence-manifest-v1",
         "evidence_freeze_id": evidence_id,
@@ -112,6 +152,7 @@ def build_outputs(root: Path, spec_path: Path) -> tuple[dict[str, Any], dict[str
         "raw_evidence_mutated": False,
         "complete": True,
         "cells": len(cells),
+        "reproducibility": reproducibility,
         "files": files,
         "freeze_verification": freeze_checks,
         "source_metadata_anomalies": {
@@ -125,10 +166,12 @@ def build_outputs(root: Path, spec_path: Path) -> tuple[dict[str, Any], dict[str
         },
     }
     analysis = build_statistical_analysis(cells, evidence_id)
+    analysis["reproducibility"] = reproducibility
     expected_pairs = int(spec["expected_matrix"]["primary_pairs"])
     if analysis["primary_endpoint"]["overall"]["n"] != expected_pairs:
         raise ValueError("primary paired sample count mismatch")
     reliability = build_reliability_audit(cells, journal, evidence_id)
+    reliability["reproducibility"] = reproducibility
     return manifest, analysis, reliability
 
 

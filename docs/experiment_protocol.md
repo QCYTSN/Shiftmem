@@ -92,8 +92,11 @@ method, model, scenario, seed, controller field, or statistical rule. No new
 provider call is authorized.
 
 All five cell prefixes, four journals, and two final split summaries are kept
-byte-for-byte immutable and bound by the post-Test evidence manifest
-`v2-formal-results-bf7b57070da2`. The pre-Test accidental-outcome gate remains
+byte-for-byte immutable and bound by the post-Test evidence manifest. The
+current closure identity is `v2-formal-results-b70e28f0fa8c`; the earlier
+`v2-formal-results-bf7b57070da2` remains in Git history and differs only because
+the SHA-bound analysis code was extended after Test with explicitly post-hoc
+sensitivity analyses. The pre-Test accidental-outcome gate remains
 strictly valid for constructing a new replacement freeze. A separate post-Test
 closure command verifies the authorized evidence hashes, all four source
 freezes, the exact 160-cell plan, 70 primary paired units, zero unresolved
@@ -106,6 +109,13 @@ are provenance metadata defects, not outcome defects: raw bytes are not edited,
 and the derived evidence manifest records all 161 affected source records with
 the corrected interpretation `test_outcomes_accessed=true`. Future held-out
 serialization sets the cell field explicitly.
+
+The serialized endpoint name `post_shift_cumulative_regret_30` is retained for
+protocol and data compatibility. Post-Test reporting calls its value the
+30-day **oracle-relative cost gap** because `OraclePolicy` is a parameter-aware
+base-stock heuristic rather than a proof of globally optimal control. This
+terminology correction changes neither the stored endpoint nor the paired
+ShiftMem-minus-VectorMemory contrast, in which the shared Oracle term cancels.
 
 Across the four journals, successful-response cost estimation totals CNY
 108.4874 and the conservative failed-attempt reservation ledger totals CNY
