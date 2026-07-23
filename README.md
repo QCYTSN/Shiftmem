@@ -10,6 +10,7 @@ revise, or retire operational experience after its environment changes.
 [English](README.md) · [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
+[![Web Demo](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![Frozen evidence](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
@@ -18,12 +19,14 @@ revise, or retire operational experience after its environment changes.
 
 ---
 
-> ## 🔬 ShiftMem Evidence Lab
+> ## 🔬 ShiftMem Evidence Lab · Live Web App
 >
 > Replay the frozen 160-cell experiment, compare ShiftMem with VectorMemory,
 > inspect memory lifecycles, and trace every result back to verified evidence.
 >
-> **[Launch the live Demo →](https://qcytsn.github.io/Shiftmem/)**<br>
+> **[Open the Evidence Lab in your browser →](https://qcytsn.github.io/Shiftmem/)**<br>
+> No installation, API key, or provider access is required.
+>
 > [Run locally](#run-the-demo) · [Demo guide](demo-web/README.md) ·
 > [Product and integrity specification](docs/demo_design_spec.md) ·
 > [Formal evidence audit](docs/v2_formal_post_test_audit.md)
@@ -77,8 +80,13 @@ flowchart LR
 
 ## Run the Demo
 
-The Demo is a local, read-only evidence application. It makes no provider
-calls and requires no API key.
+The public, read-only web application is available at
+**[qcytsn.github.io/Shiftmem](https://qcytsn.github.io/Shiftmem/)**. It is
+deployed from the frozen evidence package by GitHub Actions and makes no
+provider calls.
+
+For local inspection or development, use the steps below. The local and hosted
+versions are generated from the same verified evidence export.
 
 Requirements: Python 3.12+, Node.js 22+, and pnpm.
 

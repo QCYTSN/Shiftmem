@@ -10,6 +10,7 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 [English](README.md) · [简体中文](README.zh-CN.md)
 
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
+[![在线网页端](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![冻结证据](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
@@ -18,12 +19,14 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 
 ---
 
-> ## 🔬 ShiftMem Evidence Lab
+> ## 🔬 ShiftMem Evidence Lab · 在线网页端
 >
 > 交互式回放完整的 160-cell 冻结实验，对比 ShiftMem 与 VectorMemory，
 > 检查记忆生命周期，并将界面中的结果追溯到经过校验的正式证据。
 >
-> **[打开在线 Demo →](https://qcytsn.github.io/Shiftmem/)**<br>
+> **[在浏览器中打开 Evidence Lab →](https://qcytsn.github.io/Shiftmem/)**<br>
+> 无需安装、无需 API Key，也不会调用模型服务。
+>
 > [本地启动](#运行-demo) · [Demo 使用说明](demo-web/README.md) ·
 > [产品与证据完整性规范](docs/demo_design_spec.md) ·
 > [正式实验审计](docs/v2_formal_post_test_audit.md)
@@ -77,8 +80,12 @@ flowchart LR
 
 ## 运行 Demo
 
-Demo 是一个本地、只读的正式证据应用，不会调用模型服务，也不需要
-API Key。
+公开的只读网页端已经上线：
+**[qcytsn.github.io/Shiftmem](https://qcytsn.github.io/Shiftmem/)**。网页由
+GitHub Actions 从冻结证据包自动部署，不会调用模型服务。
+
+如需本地检查或开发，可按下面的步骤启动。本地版与网页端使用同一份经过
+校验的证据导出。
 
 环境要求：Python 3.12+、Node.js 22+ 和 pnpm。
 
