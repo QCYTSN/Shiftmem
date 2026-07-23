@@ -13,6 +13,9 @@ and engineering records.
    and limits.
 4. [Evidence manifest](../artifacts/aggregated/v2_formal_evidence_manifest.json)
    — authoritative source hashes and closure identity.
+5. [Demo design specification](demo_design_spec.md) — evidence-first product
+   scope, interaction model, visual system, and implementation acceptance
+   criteria for AI Inventory Manager Lab.
 
 ## Current Protocol-v2 reports
 
@@ -30,11 +33,31 @@ From the repository root:
 
 ```powershell
 .venv\Scripts\python.exe -m pytest -q
-.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify
+.venv\Scripts\python.exe scripts/verify_release_archive.py
 ```
 
 The current closure identity is `v2-formal-results-f4ab41daacf3`. Verification
-is deterministic and network-free.
+is deterministic and network-free. The public command verifies the release
+archive and every manifest-declared raw source. In the original workspace,
+where ignored raw sources remain at their declared paths, run
+`.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify` to
+reconstruct and compare all aggregate outputs as well.
+
+## Local evidence Demo
+
+```powershell
+.venv\Scripts\python.exe -m demo.export_web
+cd demo-web
+pnpm install
+pnpm dev
+```
+
+Then open `http://127.0.0.1:5173`. Python verifies and exports the frozen
+evidence package; the TypeScript client is a read-only browser over that
+derived contract and does not make model-provider calls. A clean clone uses
+the tracked, checksummed release archive when local raw-run files are absent.
+See the [browser guide](../demo-web/README.md) and
+[Python evidence adapter](../demo/README.md).
 
 ## Historical records
 

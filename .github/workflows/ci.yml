@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.9.0 --activate
+
+      - name: Install Python project
+        run: python -m pip install -e ".[test]"
+
+      - name: Run Python tests
+        run: python -m pytest -q
+
+      - name: Verify frozen release archive
+        run: python scripts/verify_release_archive.py
+
+      - name: Export verified Demo evidence
+        run: python -m demo.export_web
+
+      - name: Install Demo dependencies
+        working-directory: demo-web
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check Demo
+        working-directory: demo-web
+        run: pnpm typecheck
+
+      - name: Build Demo
+        working-directory: demo-web
+        run: pnpm build

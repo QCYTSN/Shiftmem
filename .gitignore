@@ -234,3 +234,11 @@ paper/*.out
 paper/*.bbl
 paper/*.blg
 paper/*.synctex.gz
+
+# TypeScript Demo build and generated verified view models
+demo-web/node_modules/
+demo-web/dist/
+demo-web/public/evidence/
+demo-web/*.log
+demo-web/edge-*.json
+demo-web/*.tsbuildinfo

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+  <!-- Pointer geometry adapted from Lucide mouse-pointer-2 (ISC). -->
+  <path
+    d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"
+    fill="#102124"
+    stroke="#fcfdfb"
+    stroke-width="1.65"
+    stroke-linejoin="round"
+  />
+  <circle cx="4.45" cy="4.45" r="1.25" fill="#14796e" stroke="#fcfdfb" stroke-width=".65" />
+</svg>

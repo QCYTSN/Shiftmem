@@ -74,16 +74,44 @@ py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[test]"
 python -m pytest -q
-python scripts/finalize_formal_results.py --verify
+python scripts/verify_release_archive.py
 ```
 
 Expected verification status:
 
 - 160/160 formal cells;
 - 70 primary paired units;
+- 11/11 manifest-declared raw sources bound to the release archive;
 - zero unresolved reservations;
 - all source-freeze and SHA-256 checks valid;
 - current closure identity: `v2-formal-results-f4ab41daacf3`.
+
+The archive verifier is the public clean-clone entry point. In the original
+research workspace, where the ignored raw sources remain at their declared
+paths, `python scripts/finalize_formal_results.py --verify` additionally
+reconstructs all aggregate outputs and compares them byte-semantically.
+
+## Explore the evidence Demo
+
+The local **ShiftMem Evidence Lab** replays the frozen experiment without
+provider calls. A Python export step verifies the SHA-256 evidence manifest;
+the TypeScript client then provides a smooth episode timeline, paired method
+comparison, memory-lifecycle audit, and explicit claim boundaries.
+
+```powershell
+.venv\Scripts\python.exe -m demo.export_web
+cd demo-web
+pnpm install
+pnpm dev
+```
+
+Open `http://127.0.0.1:5173`. The browser never reads raw-run directories:
+it receives only deterministic, derived JSON emitted after manifest
+verification. In a clean clone, the exporter verifies and reads the tracked
+release archive, so ignored local raw-run files are not required. The export
+and Demo never modify raw formal results. See the
+[Demo guide](demo-web/README.md), [evidence adapter](demo/README.md), and
+[design specification](docs/demo_design_spec.md).
 
 ## Evidence and outputs
 
@@ -123,6 +151,8 @@ but cannot remove.
 | `configs/` | Experiment, environment, split, validation, and immutable freeze configurations |
 | `scripts/` | Network-free verification plus explicit experiment entry points |
 | `tests/` | Unit and integration tests |
+| `demo/` | Verified Python evidence adapter and deterministic browser exporter |
+| `demo-web/` | Official React and TypeScript evidence-replay Demo |
 | `artifacts/aggregated/` | Tracked machine-readable results |
 | `artifacts/releases/` | Release evidence packages and checksums |
 | `docs/` | Protocol, audits, reports, model card, and implementation history |
