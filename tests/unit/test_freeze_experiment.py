@@ -127,9 +127,13 @@ def test_v2_candidate_package_covers_code_contract_configs_and_raw_evidence() ->
     assert set(candidate["files"]) == {path.as_posix() for path in paths}
 
 
-def test_approved_protocol_v2_package_passes_replacement_freeze_gates() -> None:
+def test_replacement_freeze_gate_remains_pre_test_after_formal_execution() -> None:
     errors = collect_v2_gate_errors(Path.cwd(), git_status="")
-    assert errors == []
+    outcomes = _accidental_test_outcomes(Path.cwd())
+    if outcomes:
+        assert errors == [f"accidental Test outcomes found: {outcomes}"]
+    else:
+        assert errors == []
 
 
 def test_declared_test_evidence_requires_exact_path_and_hash(tmp_path: Path) -> None:

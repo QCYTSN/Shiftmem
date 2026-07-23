@@ -521,6 +521,7 @@ def _main_v2(
                 oracle,
                 provider=provider,
                 run_identity=journal.identity.model_dump(mode="json"),
+                test_outcomes_accessed=manifest.split in {"Test-ID", "Test-OOD"},
             )
         append_completed_cell(raw_path, cell)
         completed[cell.cell_id] = cell

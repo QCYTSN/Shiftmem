@@ -80,9 +80,15 @@ The Phase 4 v1 audit snapshot is `phase4-20260713-b99c0d3e4d27`. It preserves th
 
 The v1 snapshot is verified but was **never authorized for formal Test execution**. A post-freeze audit found a detector-selection/runtime signal mismatch, missing held-out stable and periodic coverage for H3/H4, incomplete formal statistics and result logging, and insufficiently idempotent live-run recovery. Protocol v1.1 engineering corrected those implementation blockers and completed a CNY 3.2184 Validation-only dry-run, but its direct-daily-order matrix was not frozen or run on held-out outcomes.
 
-The project is now migrating to protocol v2. The LLM will no longer emit daily `order_quantity`; it will propose a small bounded strategy vector at five-day reviews or detector events, and a deterministic controller will execute every daily order. The primary experiment is reduced to VectorMemory versus ShiftMem across two core models and ten seeds, while other memory methods move to a smaller secondary tier. See the [v2 experiment protocol](docs/experiment_protocol.md) and [v2 architecture design](docs/superpowers/specs/2026-07-14-hierarchical-strategy-agent-v2-design.md).
+Protocol v2 is implemented and its paid held-out matrix completed on 2026-07-22. The LLM proposes a bounded strategy vector at five-day reviews or detector events, while a deterministic controller executes every daily order. The final Amendment 1 matrix contains VectorMemory versus ShiftMem across two core models, eight held-out scenarios, and five paired seeds: 80 Test-ID plus 80 Test-OOD cells. No paid secondary tier was run.
 
-The v1.1 CNY 1,506.22 projection and proposed CNY 1,810 cap are retired historical estimates, not v2 budgets; the old projection also reported nine scenarios although the held-out manifests contain eight. A new Development/Validation-only v2 Pilot must measure strategy-review frequency and cost before a bounded formal budget can be approved. No Test-ID/Test-OOD environment may be executed or inspected before a clean v2 freeze. The archived v1 package must not be edited. See the historical [v1.1 live Validation report](docs/v1_1_live_validation_report.md).
+The immutable post-Test evidence manifest is `v2-formal-results-bf7b57070da2`. Reproduce and verify the machine-readable evidence, statistics, and reliability outputs without making a provider call:
+
+```powershell
+.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify
+```
+
+The archived v1 package remains immutable. The v1.1 CNY 1,506.22 projection and proposed CNY 1,810 cap are retired historical estimates, not v2 costs. See the [post-Test audit](docs/v2_formal_post_test_audit.md), [v2 protocol](docs/experiment_protocol.md), and historical [v1.1 Validation report](docs/v1_1_live_validation_report.md).
 
 ## License
 

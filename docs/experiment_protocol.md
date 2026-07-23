@@ -84,6 +84,36 @@ cost at CNY 50, preserving approximately CNY 9.4 if the full cap is consumed.
 Conservative failed-attempt ledger ceilings remain audit bounds rather than
 spending authority. No completed cell is reissued.
 
+### Post-Test closure record (not a design amendment)
+
+The 160-cell paid matrix completed on 2026-07-22: 80 Test-ID cells and 80
+Test-OOD cells. This closure record does not change an estimand, endpoint,
+method, model, scenario, seed, controller field, or statistical rule. No new
+provider call is authorized.
+
+All five cell prefixes, four journals, and two final split summaries are kept
+byte-for-byte immutable and bound by the post-Test evidence manifest
+`v2-formal-results-bf7b57070da2`. The pre-Test accidental-outcome gate remains
+strictly valid for constructing a new replacement freeze. A separate post-Test
+closure command verifies the authorized evidence hashes, all four source
+freezes, the exact 160-cell plan, 70 primary paired units, zero unresolved
+reservations, and deterministic derived JSON outputs.
+
+The cell serializer defaulted `test_outcomes_accessed` to false during the paid
+runs, and the earlier Test-ID summary inherited the same false disclosure. The
+final Test-OOD summary correctly discloses Test access. The false source fields
+are provenance metadata defects, not outcome defects: raw bytes are not edited,
+and the derived evidence manifest records all 161 affected source records with
+the corrected interpretation `test_outcomes_accessed=true`. Future held-out
+serialization sets the cell field explicitly.
+
+Across the four journals, successful-response cost estimation totals CNY
+108.4874 and the conservative failed-attempt reservation ledger totals CNY
+93.8759; neither value substitutes for the provider's official bill. The
+numbered balance-continuation amendments authorized the separate continuation
+caps. Final administrative reconciliation must retain the official provider
+statement and explain the difference from both journal quantities.
+
 ## Research questions and hypotheses
 
 - **RQ1:** Does ShiftMem reduce cumulative excess cost after a regime change and shorten recovery?

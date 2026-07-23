@@ -1,0 +1,198 @@
+{
+  "cells": 160,
+  "complete": true,
+  "evidence_freeze_id": "v2-formal-results-bf7b57070da2",
+  "files": [
+    {
+      "bytes": 187566,
+      "kind": "journal",
+      "path": "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_journal.jsonl",
+      "records": 244,
+      "sha256": "06990057eea5cc15ef33cafa2021616224cc51d4a843b1975fb6aa954e2a9136"
+    },
+    {
+      "bytes": 591877,
+      "kind": "cells",
+      "path": "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_test_id_cells.jsonl",
+      "records": 3,
+      "sha256": "5c1fae2a3874c2e595373107e5623d44686515965a259a70568772c5893de599",
+      "split": "Test-ID"
+    },
+    {
+      "bytes": 2927951,
+      "kind": "journal",
+      "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_journal.jsonl",
+      "records": 3862,
+      "sha256": "6087bd02ddbccaa4b0b0a4a1ef0a783bdd288ede6029d6fbb167cee7b90c79a5"
+    },
+    {
+      "bytes": 5381951,
+      "kind": "cells",
+      "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_id_cells.jsonl",
+      "records": 30,
+      "sha256": "738623df6eb2ccc88549d0d4dff2fef110fa649f149e1ef5beabbc18bcbf6285",
+      "split": "Test-ID"
+    },
+    {
+      "bytes": 1296,
+      "kind": "summary",
+      "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_id_summary.json",
+      "sha256": "a0cb7ef956296a87e0d253bc0b7d6814b9550caf9a098a1c79a29952de466e62",
+      "split": "Test-ID"
+    },
+    {
+      "bytes": 4191814,
+      "kind": "cells",
+      "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_ood_cells.jsonl",
+      "records": 23,
+      "sha256": "f0101fc3650ee25061f81a7b542cb9a9a26e04590981e0051b6d321d6dd7c791",
+      "split": "Test-OOD"
+    },
+    {
+      "bytes": 3216308,
+      "kind": "journal",
+      "path": "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_journal.jsonl",
+      "records": 4400,
+      "sha256": "6c19e5c1a359e26d36057c8f624df3e53766bac508be2b06bb87e429f9133226"
+    },
+    {
+      "bytes": 10045291,
+      "kind": "cells",
+      "path": "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_test_ood_cells.jsonl",
+      "records": 57,
+      "sha256": "1fe75ff37e1d0f29a4df781cd8b77be0ffc0a4d31f69bd01e925ab5991bfcdde",
+      "split": "Test-OOD"
+    },
+    {
+      "bytes": 1216,
+      "kind": "summary",
+      "path": "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_test_ood_summary.json",
+      "sha256": "fd219981e3a88f84f1e20e48689350a3d3760eca51469d882940543d16144728",
+      "split": "Test-OOD"
+    },
+    {
+      "bytes": 2768818,
+      "kind": "journal",
+      "path": "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_journal.jsonl",
+      "records": 4020,
+      "sha256": "55325122a8e63764e9d1da05c958160db34919b946caf25592150b26cfa2b31e"
+    },
+    {
+      "bytes": 7465982,
+      "kind": "cells",
+      "path": "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_test_id_cells.jsonl",
+      "records": 47,
+      "sha256": "c1ce9aba615c09e34e64e34592e85af100126ab15d5860e5a00ca740c1fa64db",
+      "split": "Test-ID"
+    },
+    {
+      "bytes": 4402,
+      "kind": "analysis_contract",
+      "path": "configs/experiments/formal_v2.yaml",
+      "sha256": "458ceaf2abb4f93ef3889f788f569cfdbb74d07f0463f9c9f8824276199eea65"
+    },
+    {
+      "bytes": 974,
+      "kind": "analysis_contract",
+      "path": "configs/splits/test_id.yaml",
+      "sha256": "fd815a58f5d71db7902bc16632b77dff1253e63b43264e1705f7a2a04dae38b1"
+    },
+    {
+      "bytes": 1239,
+      "kind": "analysis_contract",
+      "path": "configs/splits/test_ood.yaml",
+      "sha256": "3615d5bdf49cdce445e8b1be24d39fba02044221679bb2cd5b440af4aee27a4a"
+    },
+    {
+      "bytes": 7306,
+      "kind": "analysis_code",
+      "path": "scripts/finalize_formal_results.py",
+      "sha256": "ccc83147c46a982c3e5c3920ea28ab163fd9616b63138a0c4e7552018ea53ef6"
+    },
+    {
+      "bytes": 25905,
+      "kind": "analysis_code",
+      "path": "src/shiftmem/evaluation/post_test.py",
+      "sha256": "2ef6d3d85e75a4ba22925fc80d73938f0280aeca729a214d75e06ad92f6f13b6"
+    },
+    {
+      "bytes": 7050,
+      "kind": "analysis_code",
+      "path": "src/shiftmem/evaluation/statistics.py",
+      "sha256": "3866bc6a9901587b8e07769fb2c7bea1df00138bcfadc263bbde2987f5561943"
+    }
+  ],
+  "freeze_verification": {
+    "v2-formal-50aaafda0d6a": {
+      "errors": [],
+      "valid": true
+    },
+    "v2-formal-5925ef7f1614": {
+      "errors": [],
+      "valid": true
+    },
+    "v2-formal-724421cdbf78": {
+      "errors": [],
+      "valid": true
+    },
+    "v2-formal-da148583e3c5": {
+      "errors": [],
+      "valid": true
+    }
+  },
+  "manifest_sha256": "bf7b57070da22575d53156fd2358a34ef5122d87c9de5ec29cd71ef3ed0128ca",
+  "raw_evidence_mutated": false,
+  "schema": "shiftmem-formal-v2-evidence-manifest-v1",
+  "source_metadata_anomalies": {
+    "affected_records": 161,
+    "cell_flags": [
+      {
+        "affected_cells": 3,
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-cont-20260719-50aaafda0d6a_test_id_cells.jsonl",
+        "type": "cell_test_access_flag_false"
+      },
+      {
+        "affected_cells": 30,
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_id_cells.jsonl",
+        "type": "cell_test_access_flag_false"
+      },
+      {
+        "affected_cells": 23,
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_ood_cells.jsonl",
+        "type": "cell_test_access_flag_false"
+      },
+      {
+        "affected_cells": 57,
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-cont3-20260721-5925ef7f1614_test_ood_cells.jsonl",
+        "type": "cell_test_access_flag_false"
+      },
+      {
+        "affected_cells": 47,
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-test-20260717-da148583e3c5_test_id_cells.jsonl",
+        "type": "cell_test_access_flag_false"
+      }
+    ],
+    "effect_on_numeric_outcomes": "none",
+    "repair_policy": "preserve raw bytes and disclose corrected interpretation only in derived artifacts",
+    "source_entries": 6,
+    "summary_flags": [
+      {
+        "derived_interpretation": true,
+        "observed": false,
+        "path": "artifacts/raw_runs/v2-formal-cont2-20260719-724421cdbf78_test_id_summary.json",
+        "type": "summary_test_access_flag_false"
+      }
+    ]
+  },
+  "test_outcomes_accessed": true
+}

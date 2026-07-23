@@ -99,6 +99,7 @@ def execute_cell(
     *,
     provider: Any,
     run_identity: dict[str, str] | None = None,
+    test_outcomes_accessed: bool = False,
 ) -> FormalV2CellResult:
     """Execute one formal cell with an injected offline or journaled provider."""
 
@@ -161,6 +162,7 @@ def execute_cell(
         daily_decision_log=episode["daily_decision_log"],
         memory_audit=episode.get("memory_audit"),
         run_identity=run_identity,
+        test_outcomes_accessed=test_outcomes_accessed,
     )
 
 

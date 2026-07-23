@@ -1,0 +1,2934 @@
+{
+  "attempt_reconciliation": {
+    "cell_recorded_attempts": 6189,
+    "difference": 74,
+    "interpretation": "journal includes terminalized interrupted or otherwise non-cell-final attempts",
+    "journal_terminal_attempts": 6263
+  },
+  "by_method": {
+    "shiftmem": {
+      "applicable_recovery_cells": 70,
+      "cells": 80,
+      "fallbacks": 334,
+      "fallbacks_per_review": 0.12031700288184438,
+      "input_tokens": 15766733,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 6281,
+        "reused": 4734
+      },
+      "output_tokens": 1124367,
+      "parse_failures": 842,
+      "parse_failures_per_attempt": 0.256394640682095,
+      "provider_attempts_recorded_by_cells": 3284,
+      "recovered_cells": 32,
+      "recovery_rate": 0.45714285714285713,
+      "reviews": 2776
+    },
+    "vector": {
+      "applicable_recovery_cells": 70,
+      "cells": 80,
+      "fallbacks": 333,
+      "fallbacks_per_review": 0.13875,
+      "input_tokens": 12950512,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 4643,
+        "reused": 4875
+      },
+      "output_tokens": 960061,
+      "parse_failures": 838,
+      "parse_failures_per_attempt": 0.2884681583476764,
+      "provider_attempts_recorded_by_cells": 2905,
+      "recovered_cells": 29,
+      "recovery_rate": 0.4142857142857143,
+      "reviews": 2400
+    }
+  },
+  "by_model": {
+    "deepseek": {
+      "applicable_recovery_cells": 70,
+      "cells": 80,
+      "fallbacks": 120,
+      "fallbacks_per_review": 0.04638577502899111,
+      "input_tokens": 16059636,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 7105,
+        "reused": 3825
+      },
+      "output_tokens": 248681,
+      "parse_failures": 267,
+      "parse_failures_per_attempt": 0.09765910753474762,
+      "provider_attempts_recorded_by_cells": 2734,
+      "recovered_cells": 25,
+      "recovery_rate": 0.35714285714285715,
+      "reviews": 2587
+    },
+    "minimax": {
+      "applicable_recovery_cells": 70,
+      "cells": 80,
+      "fallbacks": 547,
+      "fallbacks_per_review": 0.21127848590189263,
+      "input_tokens": 12657609,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 3819,
+        "reused": 5784
+      },
+      "output_tokens": 1835747,
+      "parse_failures": 1413,
+      "parse_failures_per_attempt": 0.408972503617945,
+      "provider_attempts_recorded_by_cells": 3455,
+      "recovered_cells": 36,
+      "recovery_rate": 0.5142857142857142,
+      "reviews": 2589
+    }
+  },
+  "by_split": {
+    "Test-ID": {
+      "applicable_recovery_cells": 60,
+      "cells": 80,
+      "fallbacks": 426,
+      "fallbacks_per_review": 0.16673189823874757,
+      "input_tokens": 13448043,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 5092,
+        "reused": 4592
+      },
+      "output_tokens": 900843,
+      "parse_failures": 1010,
+      "parse_failures_per_attempt": 0.32175852182223635,
+      "provider_attempts_recorded_by_cells": 3139,
+      "recovered_cells": 38,
+      "recovery_rate": 0.6333333333333333,
+      "reviews": 2555
+    },
+    "Test-OOD": {
+      "applicable_recovery_cells": 80,
+      "cells": 80,
+      "fallbacks": 241,
+      "fallbacks_per_review": 0.09194963754292255,
+      "input_tokens": 15269202,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 5832,
+        "reused": 5017
+      },
+      "output_tokens": 1183585,
+      "parse_failures": 670,
+      "parse_failures_per_attempt": 0.21967213114754097,
+      "provider_attempts_recorded_by_cells": 3050,
+      "recovered_cells": 23,
+      "recovery_rate": 0.2875,
+      "reviews": 2621
+    }
+  },
+  "by_split_model_method": [
+    {
+      "applicable_recovery_cells": 15,
+      "cells": 20,
+      "fallbacks": 0,
+      "fallbacks_per_review": 0.0,
+      "input_tokens": 4476701,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1874,
+        "reused": 1090
+      },
+      "method": "shiftmem",
+      "model": "deepseek",
+      "output_tokens": 68232,
+      "parse_failures": 3,
+      "parse_failures_per_attempt": 0.004405286343612335,
+      "provider_attempts_recorded_by_cells": 681,
+      "recovered_cells": 8,
+      "recovery_rate": 0.5333333333333333,
+      "reviews": 678,
+      "split": "Test-ID"
+    },
+    {
+      "applicable_recovery_cells": 15,
+      "cells": 20,
+      "fallbacks": 14,
+      "fallbacks_per_review": 0.023333333333333334,
+      "input_tokens": 3711109,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1654,
+        "reused": 991
+      },
+      "method": "vector",
+      "model": "deepseek",
+      "output_tokens": 60558,
+      "parse_failures": 39,
+      "parse_failures_per_attempt": 0.0624,
+      "provider_attempts_recorded_by_cells": 625,
+      "recovered_cells": 7,
+      "recovery_rate": 0.4666666666666667,
+      "reviews": 600,
+      "split": "Test-ID"
+    },
+    {
+      "applicable_recovery_cells": 15,
+      "cells": 20,
+      "fallbacks": 217,
+      "fallbacks_per_review": 0.3205317577548006,
+      "input_tokens": 2819601,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1026,
+        "reused": 1160
+      },
+      "method": "shiftmem",
+      "model": "minimax",
+      "output_tokens": 412821,
+      "parse_failures": 506,
+      "parse_failures_per_attempt": 0.5238095238095238,
+      "provider_attempts_recorded_by_cells": 966,
+      "recovered_cells": 13,
+      "recovery_rate": 0.8666666666666667,
+      "reviews": 677,
+      "split": "Test-ID"
+    },
+    {
+      "applicable_recovery_cells": 15,
+      "cells": 20,
+      "fallbacks": 195,
+      "fallbacks_per_review": 0.325,
+      "input_tokens": 2440632,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 538,
+        "reused": 1351
+      },
+      "method": "vector",
+      "model": "minimax",
+      "output_tokens": 359232,
+      "parse_failures": 462,
+      "parse_failures_per_attempt": 0.532871972318339,
+      "provider_attempts_recorded_by_cells": 867,
+      "recovered_cells": 10,
+      "recovery_rate": 0.6666666666666666,
+      "reviews": 600,
+      "split": "Test-ID"
+    },
+    {
+      "applicable_recovery_cells": 20,
+      "cells": 20,
+      "fallbacks": 44,
+      "fallbacks_per_review": 0.06205923836389281,
+      "input_tokens": 4421885,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1999,
+        "reused": 896
+      },
+      "method": "shiftmem",
+      "model": "deepseek",
+      "output_tokens": 63979,
+      "parse_failures": 96,
+      "parse_failures_per_attempt": 0.12614980289093297,
+      "provider_attempts_recorded_by_cells": 761,
+      "recovered_cells": 4,
+      "recovery_rate": 0.2,
+      "reviews": 709,
+      "split": "Test-OOD"
+    },
+    {
+      "applicable_recovery_cells": 20,
+      "cells": 20,
+      "fallbacks": 62,
+      "fallbacks_per_review": 0.10333333333333333,
+      "input_tokens": 3449941,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1578,
+        "reused": 848
+      },
+      "method": "vector",
+      "model": "deepseek",
+      "output_tokens": 55912,
+      "parse_failures": 129,
+      "parse_failures_per_attempt": 0.1934032983508246,
+      "provider_attempts_recorded_by_cells": 667,
+      "recovered_cells": 6,
+      "recovery_rate": 0.3,
+      "reviews": 600,
+      "split": "Test-OOD"
+    },
+    {
+      "applicable_recovery_cells": 20,
+      "cells": 20,
+      "fallbacks": 73,
+      "fallbacks_per_review": 0.10252808988764045,
+      "input_tokens": 4048546,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 1382,
+        "reused": 1588
+      },
+      "method": "shiftmem",
+      "model": "minimax",
+      "output_tokens": 579335,
+      "parse_failures": 237,
+      "parse_failures_per_attempt": 0.2705479452054795,
+      "provider_attempts_recorded_by_cells": 876,
+      "recovered_cells": 7,
+      "recovery_rate": 0.35,
+      "reviews": 712,
+      "split": "Test-OOD"
+    },
+    {
+      "applicable_recovery_cells": 20,
+      "cells": 20,
+      "fallbacks": 62,
+      "fallbacks_per_review": 0.10333333333333333,
+      "input_tokens": 3348830,
+      "memory_reuse": {
+        "cited_but_rejected": 0,
+        "retrieved_not_cited": 873,
+        "reused": 1685
+      },
+      "method": "vector",
+      "model": "minimax",
+      "output_tokens": 484359,
+      "parse_failures": 208,
+      "parse_failures_per_attempt": 0.27882037533512066,
+      "provider_attempts_recorded_by_cells": 746,
+      "recovered_cells": 6,
+      "recovery_rate": 0.3,
+      "reviews": 600,
+      "split": "Test-OOD"
+    }
+  ],
+  "evidence_freeze_id": "v2-formal-results-bf7b57070da2",
+  "journal": {
+    "by_cell": {
+      "005cce6a8289af5992d7": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.28448490000000004,
+        "input_tokens": 254940,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 115722.23231379295,
+        "output_tokens": 42098,
+        "successful_cost_cny": 0.6045123,
+        "successful_responses": 29,
+        "terminal_attempts": 33
+      },
+      "014e2602408ead42eda4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181307,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8881.35200330677,
+        "output_tokens": 3016,
+        "successful_cost_cny": 0.743324,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "02c53610ace2da0bbb5b": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.2804067,
+        "input_tokens": 282131,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 20893.28438063873,
+        "output_tokens": 42848,
+        "successful_cost_cny": 0.6719916,
+        "successful_responses": 31,
+        "terminal_attempts": 35
+      },
+      "0348aebc28b97b6a916d": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 231533,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 10844.478752943412,
+        "output_tokens": 3195,
+        "successful_cost_cny": 0.945302,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "05b19e3c6f24aa73cae8": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.5939388,
+        "input_tokens": 376336,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 23642.24985947444,
+        "output_tokens": 65251,
+        "successful_cost_cny": 0.7444752,
+        "successful_responses": 37,
+        "terminal_attempts": 45
+      },
+      "061ff0d0c10da4b2fb24": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.961416,
+        "input_tokens": 371714,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 245760,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "062a02b5a950bf8b5191": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.3123477,
+        "input_tokens": 270111,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 19156.183489999847,
+        "output_tokens": 44587,
+        "successful_cost_cny": 0.6294162,
+        "successful_responses": 30,
+        "terminal_attempts": 34
+      },
+      "09ef2f9f15cca52c4850": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.7544439000000001,
+        "input_tokens": 386957,
+        "latency_observations": 27,
+        "mean_success_latency_ms": 20311.458081464043,
+        "output_tokens": 65058,
+        "successful_cost_cny": 0.604653,
+        "successful_responses": 27,
+        "terminal_attempts": 36
+      },
+      "0a2dd6789c352dfb9ca9": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181566,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7717.471966666623,
+        "output_tokens": 3353,
+        "successful_cost_cny": 0.746382,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "0aae3ef8efb81f620c5e": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 203126,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 10614.469406660646,
+        "output_tokens": 2781,
+        "successful_cost_cny": 0.82919,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "0b28e2a2aa0d9a60ceb3": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.415748,
+        "input_tokens": 304335,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 21164.682281818277,
+        "output_tokens": 19971,
+        "successful_cost_cny": 0.921418,
+        "successful_responses": 33,
+        "terminal_attempts": 37
+      },
+      "0c7387b91c529948918b": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 239451,
+        "latency_observations": 38,
+        "mean_success_latency_ms": 7675.429647368446,
+        "output_tokens": 3528,
+        "successful_cost_cny": 0.978972,
+        "successful_responses": 38,
+        "terminal_attempts": 38
+      },
+      "0ecdd19d461eebff7447": {
+        "failed_attempts": 14,
+        "failed_reservation_ledger_cny": 1.283416,
+        "input_tokens": 417192,
+        "latency_observations": 27,
+        "mean_success_latency_ms": 11064.82089260869,
+        "output_tokens": 45802,
+        "successful_cost_cny": 0.660164,
+        "successful_responses": 27,
+        "terminal_attempts": 41
+      },
+      "10c82c865a36f310fcb8": {
+        "failed_attempts": 32,
+        "failed_reservation_ledger_cny": 1.3760985000000001,
+        "input_tokens": 476835,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 16518.773687876423,
+        "output_tokens": 125889,
+        "successful_cost_cny": 0.6827226000000001,
+        "successful_responses": 33,
+        "terminal_attempts": 65
+      },
+      "17826b9426ed4a0d7ee0": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201261,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 10222.026943333427,
+        "output_tokens": 3744,
+        "successful_cost_cny": 0.827508,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "1a4bb7739c4cfe330872": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 217606,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 8053.928380541038,
+        "output_tokens": 3603,
+        "successful_cost_cny": 0.892042,
+        "successful_responses": 36,
+        "terminal_attempts": 36
+      },
+      "1b88db7bf5cf9ccc75af": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 215996,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 8619.410081264505,
+        "output_tokens": 3250,
+        "successful_cost_cny": 0.883484,
+        "successful_responses": 32,
+        "terminal_attempts": 32
+      },
+      "1c096f632bc3ab91c7f4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181662,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9660.725873333044,
+        "output_tokens": 3075,
+        "successful_cost_cny": 0.745098,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "1cc89cdf0aabef42a085": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.6765927,
+        "input_tokens": 449774,
+        "latency_observations": 46,
+        "mean_success_latency_ms": 15638.880906530412,
+        "output_tokens": 71316,
+        "successful_cost_cny": 0.8669871,
+        "successful_responses": 46,
+        "terminal_attempts": 55
+      },
+      "1f660c6748234261e7a2": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181725,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7940.674779999912,
+        "output_tokens": 3028,
+        "successful_cost_cny": 0.745068,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "20029734da690dac8bae": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181847,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9576.066089972543,
+        "output_tokens": 3178,
+        "successful_cost_cny": 0.746456,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "20e222f04815c3fd37c4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 250021,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 9461.109189197068,
+        "output_tokens": 3812,
+        "successful_cost_cny": 1.022956,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "2137fd4e2493457b0e2a": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181596,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8886.412880003141,
+        "output_tokens": 3119,
+        "successful_cost_cny": 0.745098,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "222b77b7718fe2d14fee": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 236691,
+        "latency_observations": 38,
+        "mean_success_latency_ms": 8384.55414211402,
+        "output_tokens": 3332,
+        "successful_cost_cny": 0.966756,
+        "successful_responses": 38,
+        "terminal_attempts": 38
+      },
+      "223d682b9e9b33fae34e": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.31854060000000006,
+        "input_tokens": 278453,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 20061.825056666687,
+        "output_tokens": 43286,
+        "successful_cost_cny": 0.6298131,
+        "successful_responses": 30,
+        "terminal_attempts": 34
+      },
+      "22ee813349dfed1879cb": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 230750,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 7531.356538235153,
+        "output_tokens": 3224,
+        "successful_cost_cny": 0.942344,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "27a6a67154ade1119cdb": {
+        "failed_attempts": 3,
+        "failed_reservation_ledger_cny": 0.21645750000000002,
+        "input_tokens": 226739,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 15123.27284666244,
+        "output_tokens": 36931,
+        "successful_cost_cny": 0.5699148,
+        "successful_responses": 30,
+        "terminal_attempts": 33
+      },
+      "282440c03c5e692fd735": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.3799383,
+        "input_tokens": 279896,
+        "latency_observations": 28,
+        "mean_success_latency_ms": 18618.11211785708,
+        "output_tokens": 46029,
+        "successful_cost_cny": 0.5944869,
+        "successful_responses": 28,
+        "terminal_attempts": 33
+      },
+      "28c2fb0d94a81c2807f4": {
+        "failed_attempts": 66,
+        "failed_reservation_ledger_cny": 2.5638102000000003,
+        "input_tokens": 409854,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 202752,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 66
+      },
+      "2e64dd45a6b4a35bc33b": {
+        "failed_attempts": 11,
+        "failed_reservation_ledger_cny": 0.826056,
+        "input_tokens": 382484,
+        "latency_observations": 27,
+        "mean_success_latency_ms": 17579.634351845554,
+        "output_tokens": 69902,
+        "successful_cost_cny": 0.5643372,
+        "successful_responses": 27,
+        "terminal_attempts": 38
+      },
+      "307d529460ca2c43ee3f": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181867,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8579.546729971966,
+        "output_tokens": 2778,
+        "successful_cost_cny": 0.744136,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "324fc46d542e4dace729": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 216301,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 16756.04084686347,
+        "output_tokens": 3207,
+        "successful_cost_cny": 0.884446,
+        "successful_responses": 32,
+        "terminal_attempts": 32
+      },
+      "32db2ce891f3acf8aaa9": {
+        "failed_attempts": 11,
+        "failed_reservation_ledger_cny": 0.8669325,
+        "input_tokens": 432140,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 18181.60358572911,
+        "output_tokens": 78281,
+        "successful_cost_cny": 0.6981219000000001,
+        "successful_responses": 35,
+        "terminal_attempts": 46
+      },
+      "334034457e65a90a3592": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 205621,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 9979.263952946947,
+        "output_tokens": 3248,
+        "successful_cost_cny": 0.8419719999999999,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "348a02b926fab98754af": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 208534,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 9108.17005161258,
+        "output_tokens": 2936,
+        "successful_cost_cny": 0.851752,
+        "successful_responses": 31,
+        "terminal_attempts": 31
+      },
+      "34ae4e25f649456c34ae": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.3661266,
+        "input_tokens": 312995,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 18416.55557222238,
+        "output_tokens": 53411,
+        "successful_cost_cny": 0.7398153000000001,
+        "successful_responses": 36,
+        "terminal_attempts": 41
+      },
+      "35579ea997cc5a91ea6d": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 216550,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 11792.985515625332,
+        "output_tokens": 3168,
+        "successful_cost_cny": 0.885208,
+        "successful_responses": 32,
+        "terminal_attempts": 32
+      },
+      "3777d2babbcf37dce7f4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 205563,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 6968.513493333406,
+        "output_tokens": 2625,
+        "successful_cost_cny": 0.838002,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "37ef8d25b86a0ab37225": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 223821,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 12242.901633345436,
+        "output_tokens": 3296,
+        "successful_cost_cny": 0.91506,
+        "successful_responses": 33,
+        "terminal_attempts": 33
+      },
+      "3839d1f1a04b2ac51ab3": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.41543040000000003,
+        "input_tokens": 323279,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 17819.0188156251,
+        "output_tokens": 48496,
+        "successful_cost_cny": 0.6708219000000001,
+        "successful_responses": 32,
+        "terminal_attempts": 37
+      },
+      "3cc1e1e365e27a32a634": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.585186,
+        "input_tokens": 387114,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 21795.713512503426,
+        "output_tokens": 55246,
+        "successful_cost_cny": 0.6918198,
+        "successful_responses": 32,
+        "terminal_attempts": 40
+      },
+      "3d35b34696d714a553ce": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.2889411,
+        "input_tokens": 264073,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 20238.964693333157,
+        "output_tokens": 47535,
+        "successful_cost_cny": 0.6649062,
+        "successful_responses": 30,
+        "terminal_attempts": 34
+      },
+      "3e6dea9133d36878ec08": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 245603,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 9440.286347222253,
+        "output_tokens": 3495,
+        "successful_cost_cny": 1.003382,
+        "successful_responses": 36,
+        "terminal_attempts": 36
+      },
+      "3f2f49a2941aed98dc4f": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 224897,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 8468.22235757568,
+        "output_tokens": 3396,
+        "successful_cost_cny": 0.919964,
+        "successful_responses": 33,
+        "terminal_attempts": 33
+      },
+      "405e6c32ca6d33f7953c": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 244391,
+        "latency_observations": 39,
+        "mean_success_latency_ms": 6982.8712512819775,
+        "output_tokens": 3364,
+        "successful_cost_cny": 0.997748,
+        "successful_responses": 39,
+        "terminal_attempts": 39
+      },
+      "40face11379756552f6d": {
+        "failed_attempts": 2,
+        "failed_reservation_ledger_cny": 0.1429869,
+        "input_tokens": 226760,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 14748.722626666859,
+        "output_tokens": 31208,
+        "successful_cost_cny": 0.5953563000000001,
+        "successful_responses": 30,
+        "terminal_attempts": 32
+      },
+      "414d67e87966fb8198bf": {
+        "failed_attempts": 15,
+        "failed_reservation_ledger_cny": 1.2240039,
+        "input_tokens": 496838,
+        "latency_observations": 26,
+        "mean_success_latency_ms": 19458.707600000045,
+        "output_tokens": 85988,
+        "successful_cost_cny": 0.5416551000000001,
+        "successful_responses": 26,
+        "terminal_attempts": 41
+      },
+      "47428c4f127fea390d7b": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.2614668,
+        "input_tokens": 248495,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 18967.22564001102,
+        "output_tokens": 36573,
+        "successful_cost_cny": 0.5675859,
+        "successful_responses": 30,
+        "terminal_attempts": 34
+      },
+      "49908567ad8618f1fb37": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.6081894,
+        "input_tokens": 350871,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 19916.214456666665,
+        "output_tokens": 59967,
+        "successful_cost_cny": 0.6323625,
+        "successful_responses": 30,
+        "terminal_attempts": 38
+      },
+      "4aa1324ba382539a9b44": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 188426,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 12511.73291290325,
+        "output_tokens": 3334,
+        "successful_cost_cny": 0.773708,
+        "successful_responses": 31,
+        "terminal_attempts": 31
+      },
+      "4b7400d4b106b8e9ddbe": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.3287802,
+        "input_tokens": 353145,
+        "latency_observations": 40,
+        "mean_success_latency_ms": 18126.819947499735,
+        "output_tokens": 50842,
+        "successful_cost_cny": 0.8398971000000001,
+        "successful_responses": 40,
+        "terminal_attempts": 44
+      },
+      "4bbacb3cb32da7f8f943": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201129,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 14390.076459990814,
+        "output_tokens": 2698,
+        "successful_cost_cny": 0.820704,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "4c9aeb72d3b7a0524356": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.5829012,
+        "input_tokens": 358703,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 18431.323037916343,
+        "output_tokens": 50679,
+        "successful_cost_cny": 0.5960787000000001,
+        "successful_responses": 29,
+        "terminal_attempts": 37
+      },
+      "4dad857d41f3a6cb2d09": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181338,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9272.135953332569,
+        "output_tokens": 3122,
+        "successful_cost_cny": 0.744084,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "5039fac1b03a5b96c495": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.42174720000000004,
+        "input_tokens": 314036,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 18485.171550022,
+        "output_tokens": 53774,
+        "successful_cost_cny": 0.68943,
+        "successful_responses": 34,
+        "terminal_attempts": 39
+      },
+      "50a90c3c3486fe90bb6e": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.960784,
+        "input_tokens": 371556,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 245760,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "50b378dcc5fa60f1fd18": {
+        "failed_attempts": 14,
+        "failed_reservation_ledger_cny": 1.1122251,
+        "input_tokens": 467246,
+        "latency_observations": 28,
+        "mean_success_latency_ms": 21842.625217857127,
+        "output_tokens": 85032,
+        "successful_cost_cny": 0.5832603000000001,
+        "successful_responses": 28,
+        "terminal_attempts": 42
+      },
+      "5187485faed000ad300c": {
+        "failed_attempts": 10,
+        "failed_reservation_ledger_cny": 0.7728042,
+        "input_tokens": 376880,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 17806.582165488588,
+        "output_tokens": 67761,
+        "successful_cost_cny": 0.5878362,
+        "successful_responses": 29,
+        "terminal_attempts": 39
+      },
+      "51ba267347c726048bd5": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 228193,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 13674.50892943067,
+        "output_tokens": 3356,
+        "successful_cost_cny": 0.932908,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "52c27ccc8bffb56fa190": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201063,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 10827.178903335394,
+        "output_tokens": 2719,
+        "successful_cost_cny": 0.820566,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "53d3bb867e1d94221ed0": {
+        "failed_attempts": 2,
+        "failed_reservation_ledger_cny": 0.097416,
+        "input_tokens": 208669,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 18763.225479311022,
+        "output_tokens": 11701,
+        "successful_cost_cny": 0.807466,
+        "successful_responses": 29,
+        "terminal_attempts": 31
+      },
+      "54025c731f2fdee32aad": {
+        "failed_attempts": 6,
+        "failed_reservation_ledger_cny": 0.5004993,
+        "input_tokens": 369440,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 18893.924902858478,
+        "output_tokens": 56270,
+        "successful_cost_cny": 0.7479927,
+        "successful_responses": 35,
+        "terminal_attempts": 41
+      },
+      "57e884cb1ce421c64379": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.3547887,
+        "input_tokens": 278757,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 18956.937151696082,
+        "output_tokens": 40221,
+        "successful_cost_cny": 0.5684574,
+        "successful_responses": 29,
+        "terminal_attempts": 34
+      },
+      "58732b8b481e7d443747": {
+        "failed_attempts": 21,
+        "failed_reservation_ledger_cny": 0.951608,
+        "input_tokens": 275599,
+        "latency_observations": 20,
+        "mean_success_latency_ms": 10075.893124996219,
+        "output_tokens": 66810,
+        "successful_cost_cny": 0.551648,
+        "successful_responses": 20,
+        "terminal_attempts": 41
+      },
+      "58a8fc16030003ae5596": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.39451020000000003,
+        "input_tokens": 289152,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 18942.034251724115,
+        "output_tokens": 48672,
+        "successful_cost_cny": 0.6215538,
+        "successful_responses": 29,
+        "terminal_attempts": 34
+      },
+      "5a4984ae9b79d2b74a3a": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 192631,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9231.766799999907,
+        "output_tokens": 2870,
+        "successful_cost_cny": 0.787744,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "5e6b5d59732634943891": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 239501,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 14796.405948558822,
+        "output_tokens": 3517,
+        "successful_cost_cny": 0.979106,
+        "successful_responses": 35,
+        "terminal_attempts": 35
+      },
+      "5ea11f7de4dbaa60db22": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 186101,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 12480.780023344172,
+        "output_tokens": 3963,
+        "successful_cost_cny": 0.768182,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "5f7603f6ecf71163e26e": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201062,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 12222.883553345067,
+        "output_tokens": 3283,
+        "successful_cost_cny": 0.823946,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "5fcef5026fa766570276": {
+        "failed_attempts": 6,
+        "failed_reservation_ledger_cny": 0.4828257,
+        "input_tokens": 323178,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 46642.23742666642,
+        "output_tokens": 49390,
+        "successful_cost_cny": 0.6107241,
+        "successful_responses": 30,
+        "terminal_attempts": 36
+      },
+      "60d3e1a20ac4387b82c2": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 224200,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 10538.837300013807,
+        "output_tokens": 3544,
+        "successful_cost_cny": 0.918064,
+        "successful_responses": 33,
+        "terminal_attempts": 33
+      },
+      "6174938e0deab99cf43e": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 211027,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 9915.18940284316,
+        "output_tokens": 3524,
+        "successful_cost_cny": 0.865252,
+        "successful_responses": 35,
+        "terminal_attempts": 35
+      },
+      "65308ba13f63c0e8fc43": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.3771243,
+        "input_tokens": 282984,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 18225.10165172414,
+        "output_tokens": 49085,
+        "successful_cost_cny": 0.6294561000000001,
+        "successful_responses": 29,
+        "terminal_attempts": 34
+      },
+      "66bdb2cd142c14b5a586": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 216694,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 8175.368493735732,
+        "output_tokens": 3282,
+        "successful_cost_cny": 0.886468,
+        "successful_responses": 32,
+        "terminal_attempts": 32
+      },
+      "6d954ab125104d8719e3": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181392,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8950.755630014464,
+        "output_tokens": 3822,
+        "successful_cost_cny": 0.7484999999999999,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "7103bd1e4b4087f05f90": {
+        "failed_attempts": 2,
+        "failed_reservation_ledger_cny": 0.1621368,
+        "input_tokens": 272955,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 17762.052825714116,
+        "output_tokens": 39929,
+        "successful_cost_cny": 0.7464723,
+        "successful_responses": 35,
+        "terminal_attempts": 37
+      },
+      "7223f50348ff9d83c2d6": {
+        "failed_attempts": 3,
+        "failed_reservation_ledger_cny": 0.24959759999999998,
+        "input_tokens": 268869,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 18152.597735293537,
+        "output_tokens": 43235,
+        "successful_cost_cny": 0.6782013,
+        "successful_responses": 34,
+        "terminal_attempts": 37
+      },
+      "72f7004f690d84c4011a": {
+        "failed_attempts": 2,
+        "failed_reservation_ledger_cny": 0.1668765,
+        "input_tokens": 261773,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 16123.353376498391,
+        "output_tokens": 37107,
+        "successful_cost_cny": 0.6945456,
+        "successful_responses": 34,
+        "terminal_attempts": 36
+      },
+      "7398284bcf351e6e5813": {
+        "failed_attempts": 3,
+        "failed_reservation_ledger_cny": 0.32818400000000003,
+        "input_tokens": 258649,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 22871.18465625008,
+        "output_tokens": 16114,
+        "successful_cost_cny": 0.803096,
+        "successful_responses": 32,
+        "terminal_attempts": 35
+      },
+      "73fe49d84143053df7ed": {
+        "failed_attempts": 3,
+        "failed_reservation_ledger_cny": 0.24285870000000004,
+        "input_tokens": 244051,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 17806.66273997631,
+        "output_tokens": 38481,
+        "successful_cost_cny": 0.5928888,
+        "successful_responses": 30,
+        "terminal_attempts": 33
+      },
+      "7609b2ac86038d34d9bf": {
+        "failed_attempts": 10,
+        "failed_reservation_ledger_cny": 0.7226142,
+        "input_tokens": 364614,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 17021.996046874847,
+        "output_tokens": 69124,
+        "successful_cost_cny": 0.6237168000000001,
+        "successful_responses": 32,
+        "terminal_attempts": 42
+      },
+      "78ec322efb7f437c4160": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.629097,
+        "input_tokens": 323912,
+        "latency_observations": 28,
+        "mean_success_latency_ms": 18550.813603571052,
+        "output_tokens": 60538,
+        "successful_cost_cny": 0.5596374000000001,
+        "successful_responses": 28,
+        "terminal_attempts": 37
+      },
+      "7d5c2ab4b17a625386c9": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.3333603,
+        "input_tokens": 286160,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 17205.700270016678,
+        "output_tokens": 44121,
+        "successful_cost_cny": 0.6381921,
+        "successful_responses": 30,
+        "terminal_attempts": 34
+      },
+      "7f03faf20fe4135a5bd0": {
+        "failed_attempts": 10,
+        "failed_reservation_ledger_cny": 0.7425453,
+        "input_tokens": 350774,
+        "latency_observations": 26,
+        "mean_success_latency_ms": 18102.10178846095,
+        "output_tokens": 61766,
+        "successful_cost_cny": 0.5129145,
+        "successful_responses": 26,
+        "terminal_attempts": 36
+      },
+      "7fe195a1c98d1e6df4cd": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.5108313,
+        "input_tokens": 300804,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 17522.86667667795,
+        "output_tokens": 49240,
+        "successful_cost_cny": 0.5344731,
+        "successful_responses": 30,
+        "terminal_attempts": 38
+      },
+      "80c9e3fc0f1e32d23f12": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 260678,
+        "latency_observations": 38,
+        "mean_success_latency_ms": 8397.267797367884,
+        "output_tokens": 3914,
+        "successful_cost_cny": 1.066196,
+        "successful_responses": 38,
+        "terminal_attempts": 38
+      },
+      "82a8292c05f8dfe32f4a": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.329572,
+        "input_tokens": 372040,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "8330045c38cfcbd54fa0": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 237105,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 8001.120624324357,
+        "output_tokens": 3528,
+        "successful_cost_cny": 0.969588,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "8437c7af9fa0a756612c": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 183482,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8872.90352336131,
+        "output_tokens": 3316,
+        "successful_cost_cny": 0.753824,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "87d7b0b4beeb71587a42": {
+        "failed_attempts": 66,
+        "failed_reservation_ledger_cny": 2.5636338000000003,
+        "input_tokens": 409770,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 202752,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 66
+      },
+      "88675465f67e562ce5b7": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181349,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 13521.293003337147,
+        "output_tokens": 3278,
+        "successful_cost_cny": 0.7450640000000001,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "8cc86d08e1b1d16f0966": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.7533162,
+        "input_tokens": 389370,
+        "latency_observations": 28,
+        "mean_success_latency_ms": 19945.41983570837,
+        "output_tokens": 65817,
+        "successful_cost_cny": 0.6172236,
+        "successful_responses": 28,
+        "terminal_attempts": 37
+      },
+      "8ef1cfeacbc64e9646aa": {
+        "failed_attempts": 2,
+        "failed_reservation_ledger_cny": 0.21773199999999998,
+        "input_tokens": 258622,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 11990.172862500116,
+        "output_tokens": 11363,
+        "successful_cost_cny": 0.884934,
+        "successful_responses": 32,
+        "terminal_attempts": 34
+      },
+      "8f96fed69afb2a41c6ad": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.6057996,
+        "input_tokens": 503273,
+        "latency_observations": 55,
+        "mean_success_latency_ms": 60941.64022181831,
+        "output_tokens": 82104,
+        "successful_cost_cny": 1.1407473000000001,
+        "successful_responses": 55,
+        "terminal_attempts": 63
+      },
+      "90c8c291b802c311d29a": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.7314657000000001,
+        "input_tokens": 423441,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 18996.15620270263,
+        "output_tokens": 71035,
+        "successful_cost_cny": 0.7544544000000001,
+        "successful_responses": 37,
+        "terminal_attempts": 46
+      },
+      "919632274cb81ca91a63": {
+        "failed_attempts": 18,
+        "failed_reservation_ledger_cny": 1.3174098,
+        "input_tokens": 563206,
+        "latency_observations": 26,
+        "mean_success_latency_ms": 18063.283365381023,
+        "output_tokens": 76889,
+        "successful_cost_cny": 0.5111904,
+        "successful_responses": 26,
+        "terminal_attempts": 44
+      },
+      "9862c83aa9a5863de10a": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.4036095,
+        "input_tokens": 317464,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 15660.823656267894,
+        "output_tokens": 47186,
+        "successful_cost_cny": 0.6594273,
+        "successful_responses": 32,
+        "terminal_attempts": 37
+      },
+      "98f59eef770a6fae3091": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 224968,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 8318.421582376366,
+        "output_tokens": 3537,
+        "successful_cost_cny": 0.921094,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "99fbe63ead15827ec4d4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 251358,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 8006.624378378326,
+        "output_tokens": 3604,
+        "successful_cost_cny": 1.027056,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "9df6c3d677ea5d2394e6": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201010,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8411.363909999758,
+        "output_tokens": 2856,
+        "successful_cost_cny": 0.821176,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "9e8d618e1fad3566fe60": {
+        "failed_attempts": 45,
+        "failed_reservation_ledger_cny": 3.3280716,
+        "input_tokens": 1114440,
+        "latency_observations": 15,
+        "mean_success_latency_ms": 17250.38601338553,
+        "output_tokens": 150126,
+        "successful_cost_cny": 0.2733108,
+        "successful_responses": 15,
+        "terminal_attempts": 60
+      },
+      "9ee8623ba8b99f14edf3": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.3299374,
+        "input_tokens": 372214,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "9ff6928f3633acd331ca": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 200731,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 11722.363760004131,
+        "output_tokens": 2663,
+        "successful_cost_cny": 0.818902,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "a0359cced6a13eab2d99": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201350,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8892.075106666683,
+        "output_tokens": 3338,
+        "successful_cost_cny": 0.825428,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "a0752da51803f18087aa": {
+        "failed_attempts": 7,
+        "failed_reservation_ledger_cny": 0.5794635,
+        "input_tokens": 368165,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 20000.43518124971,
+        "output_tokens": 58354,
+        "successful_cost_cny": 0.6838566,
+        "successful_responses": 32,
+        "terminal_attempts": 39
+      },
+      "a49c764f695534dd76f3": {
+        "failed_attempts": 6,
+        "failed_reservation_ledger_cny": 0.4838001,
+        "input_tokens": 315755,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 19180.54212758617,
+        "output_tokens": 51984,
+        "successful_cost_cny": 0.615951,
+        "successful_responses": 29,
+        "terminal_attempts": 35
+      },
+      "a6677ef0c8ca7cd93bd4": {
+        "failed_attempts": 74,
+        "failed_reservation_ledger_cny": 2.87679,
+        "input_tokens": 460588,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 227328,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 74
+      },
+      "a8131d3f8b3f794b446a": {
+        "failed_attempts": 68,
+        "failed_reservation_ledger_cny": 2.6433036000000003,
+        "input_tokens": 423132,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 208896,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 68
+      },
+      "a849c1a5072e1bc4afce": {
+        "failed_attempts": 68,
+        "failed_reservation_ledger_cny": 2.6416572,
+        "input_tokens": 422348,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 208896,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 68
+      },
+      "aa85d52a8d0ba2de921f": {
+        "failed_attempts": 14,
+        "failed_reservation_ledger_cny": 1.1106018,
+        "input_tokens": 513279,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 17520.21300277779,
+        "output_tokens": 89170,
+        "successful_cost_cny": 0.7163121,
+        "successful_responses": 36,
+        "terminal_attempts": 50
+      },
+      "ac1d97567ec4dc8d247d": {
+        "failed_attempts": 16,
+        "failed_reservation_ledger_cny": 1.2539415,
+        "input_tokens": 553219,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 19844.319638235123,
+        "output_tokens": 96847,
+        "successful_cost_cny": 0.7213332,
+        "successful_responses": 34,
+        "terminal_attempts": 50
+      },
+      "b32f2607d5722681797c": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181037,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9867.698689999695,
+        "output_tokens": 3079,
+        "successful_cost_cny": 0.742622,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "b48a5e721b6ec8e28c36": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.6058248,
+        "input_tokens": 332057,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 16552.817234488462,
+        "output_tokens": 57584,
+        "successful_cost_cny": 0.5752005,
+        "successful_responses": 29,
+        "terminal_attempts": 37
+      },
+      "b53a5fec7238e0c89bd4": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.3282154000000004,
+        "input_tokens": 371394,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "b561538d34ef2a79c65a": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.3293578,
+        "input_tokens": 371938,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "b720bc6ce4b74438fb2e": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 207651,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 8537.355614709668,
+        "output_tokens": 3281,
+        "successful_cost_cny": 0.85029,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "b7d68d21b6c49a5b7822": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.28483769999999997,
+        "input_tokens": 308213,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 18850.836702930632,
+        "output_tokens": 42154,
+        "successful_cost_cny": 0.7165032,
+        "successful_responses": 34,
+        "terminal_attempts": 38
+      },
+      "b8176fe2d7692610cd1e": {
+        "failed_attempts": 8,
+        "failed_reservation_ledger_cny": 0.640836,
+        "input_tokens": 373318,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 17872.5382064514,
+        "output_tokens": 57799,
+        "successful_cost_cny": 0.6286434000000001,
+        "successful_responses": 31,
+        "terminal_attempts": 39
+      },
+      "b884b49edc8199ceb8dc": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 186296,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 11191.948003333317,
+        "output_tokens": 2932,
+        "successful_cost_cny": 0.762776,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "b8b331621613ffe57176": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 236463,
+        "latency_observations": 35,
+        "mean_success_latency_ms": 9040.898351428614,
+        "output_tokens": 3279,
+        "successful_cost_cny": 0.965526,
+        "successful_responses": 35,
+        "terminal_attempts": 35
+      },
+      "b93f221367e44942e67f": {
+        "failed_attempts": 14,
+        "failed_reservation_ledger_cny": 1.1238318,
+        "input_tokens": 505650,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 18010.21677941178,
+        "output_tokens": 87131,
+        "successful_cost_cny": 0.6699336,
+        "successful_responses": 34,
+        "terminal_attempts": 48
+      },
+      "bd926be7352216fc9aa7": {
+        "failed_attempts": 4,
+        "failed_reservation_ledger_cny": 0.22222,
+        "input_tokens": 214266,
+        "latency_observations": 29,
+        "mean_success_latency_ms": 10890.934124115276,
+        "output_tokens": 15034,
+        "successful_cost_cny": 0.725048,
+        "successful_responses": 29,
+        "terminal_attempts": 33
+      },
+      "bfa312561901e3a4d379": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 198747,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 8983.896651538089,
+        "output_tokens": 3174,
+        "successful_cost_cny": 0.814032,
+        "successful_responses": 33,
+        "terminal_attempts": 33
+      },
+      "c4b3980208c53d160091": {
+        "failed_attempts": 3,
+        "failed_reservation_ledger_cny": 0.2233665,
+        "input_tokens": 287601,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 18551.999161752654,
+        "output_tokens": 39397,
+        "successful_cost_cny": 0.7115304,
+        "successful_responses": 34,
+        "terminal_attempts": 37
+      },
+      "c561e0fb8812dc00a2e1": {
+        "failed_attempts": 6,
+        "failed_reservation_ledger_cny": 0.4356219,
+        "input_tokens": 342255,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 19727.418954575885,
+        "output_tokens": 50944,
+        "successful_cost_cny": 0.7110432,
+        "successful_responses": 33,
+        "terminal_attempts": 39
+      },
+      "c905c139f87ede374a42": {
+        "failed_attempts": 14,
+        "failed_reservation_ledger_cny": 1.1009187,
+        "input_tokens": 442328,
+        "latency_observations": 26,
+        "mean_success_latency_ms": 18702.81544230777,
+        "output_tokens": 79294,
+        "successful_cost_cny": 0.4940397,
+        "successful_responses": 26,
+        "terminal_attempts": 40
+      },
+      "cbfeb044242dbe9002ae": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 222862,
+        "latency_observations": 33,
+        "mean_success_latency_ms": 12819.289457567997,
+        "output_tokens": 3212,
+        "successful_cost_cny": 0.91072,
+        "successful_responses": 33,
+        "terminal_attempts": 33
+      },
+      "ccebce236d3122d6eb30": {
+        "failed_attempts": 1,
+        "failed_reservation_ledger_cny": 0.117844,
+        "input_tokens": 252238,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 8236.539735294655,
+        "output_tokens": 7400,
+        "successful_cost_cny": 0.935508,
+        "successful_responses": 34,
+        "terminal_attempts": 35
+      },
+      "cdc6a579ade76f33b452": {
+        "failed_attempts": 7,
+        "failed_reservation_ledger_cny": 0.5709753000000001,
+        "input_tokens": 390941,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 19395.01323611118,
+        "output_tokens": 63865,
+        "successful_cost_cny": 0.7864668,
+        "successful_responses": 36,
+        "terminal_attempts": 43
+      },
+      "cf6ac89432fc7ffc0823": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 231881,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 8618.413651351393,
+        "output_tokens": 3246,
+        "successful_cost_cny": 0.9470000000000001,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "cffba6e86ebe67e2fa60": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 274661,
+        "latency_observations": 40,
+        "mean_success_latency_ms": 8882.652927499794,
+        "output_tokens": 4052,
+        "successful_cost_cny": 1.122956,
+        "successful_responses": 40,
+        "terminal_attempts": 40
+      },
+      "d3be2953e814289e49af": {
+        "failed_attempts": 10,
+        "failed_reservation_ledger_cny": 0.8164695000000001,
+        "input_tokens": 430679,
+        "latency_observations": 32,
+        "mean_success_latency_ms": 17946.159556231578,
+        "output_tokens": 69759,
+        "successful_cost_cny": 0.673932,
+        "successful_responses": 32,
+        "terminal_attempts": 42
+      },
+      "d4091099208033b5f8af": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.3282112,
+        "input_tokens": 371392,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "db6ae3c96647ace73de6": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 228530,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 8994.332564700231,
+        "output_tokens": 3450,
+        "successful_cost_cny": 0.93482,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "dd0484375c4a8a81c055": {
+        "failed_attempts": 7,
+        "failed_reservation_ledger_cny": 0.5795769000000001,
+        "input_tokens": 409424,
+        "latency_observations": 38,
+        "mean_success_latency_ms": 20858.479223684182,
+        "output_tokens": 64724,
+        "successful_cost_cny": 0.8238951,
+        "successful_responses": 38,
+        "terminal_attempts": 45
+      },
+      "dd455cff4f977e8a54e4": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 228663,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 9107.821791186272,
+        "output_tokens": 3471,
+        "successful_cost_cny": 0.935478,
+        "successful_responses": 34,
+        "terminal_attempts": 34
+      },
+      "df340f55c0eddc69c2bb": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 201307,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 10386.316896664599,
+        "output_tokens": 3070,
+        "successful_cost_cny": 0.823648,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "df74e49eb3bd9918e156": {
+        "failed_attempts": 12,
+        "failed_reservation_ledger_cny": 0.9109296000000001,
+        "input_tokens": 415666,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 16705.395277409305,
+        "output_tokens": 76751,
+        "successful_cost_cny": 0.6066774,
+        "successful_responses": 31,
+        "terminal_attempts": 43
+      },
+      "df784c964455d791f1c7": {
+        "failed_attempts": 1,
+        "failed_reservation_ledger_cny": 0.108908,
+        "input_tokens": 251796,
+        "latency_observations": 34,
+        "mean_success_latency_ms": 10110.047820619964,
+        "output_tokens": 6487,
+        "successful_cost_cny": 0.937198,
+        "successful_responses": 34,
+        "terminal_attempts": 35
+      },
+      "e0754d7c317d88510896": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.3279928,
+        "input_tokens": 371288,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 184320,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "e1444a38277e6efdf758": {
+        "failed_attempts": 66,
+        "failed_reservation_ledger_cny": 3.262424,
+        "input_tokens": 410102,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 270336,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 66
+      },
+      "e387e14d8b737eef9e92": {
+        "failed_attempts": 34,
+        "failed_reservation_ledger_cny": 2.7874119000000004,
+        "input_tokens": 870396,
+        "latency_observations": 18,
+        "mean_success_latency_ms": 405250.1849222223,
+        "output_tokens": 155904,
+        "successful_cost_cny": 0.3500133,
+        "successful_responses": 18,
+        "terminal_attempts": 52
+      },
+      "e3c90c7ed0a61ef1a0d7": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 185974,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7923.290656666662,
+        "output_tokens": 2876,
+        "successful_cost_cny": 0.761152,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "e49776d95346abacd39a": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 200532,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 8451.368613323817,
+        "output_tokens": 2609,
+        "successful_cost_cny": 0.817782,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "e7ef0d29bcf02bec83a4": {
+        "failed_attempts": 7,
+        "failed_reservation_ledger_cny": 0.5296998,
+        "input_tokens": 329336,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 16453.181940000166,
+        "output_tokens": 53747,
+        "successful_cost_cny": 0.6133806,
+        "successful_responses": 30,
+        "terminal_attempts": 37
+      },
+      "e8637382500fb8d39481": {
+        "failed_attempts": 23,
+        "failed_reservation_ledger_cny": 1.181544,
+        "input_tokens": 315254,
+        "latency_observations": 24,
+        "mean_success_latency_ms": 7352.301258331257,
+        "output_tokens": 96497,
+        "successful_cost_cny": 0.658454,
+        "successful_responses": 24,
+        "terminal_attempts": 47
+      },
+      "eb49032f922940faf900": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.7081662,
+        "input_tokens": 336678,
+        "latency_observations": 26,
+        "mean_success_latency_ms": 16535.94285384623,
+        "output_tokens": 56860,
+        "successful_cost_cny": 0.4764816,
+        "successful_responses": 26,
+        "terminal_attempts": 35
+      },
+      "ed5e98868f864f43c05f": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 189649,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 9873.035106637204,
+        "output_tokens": 3464,
+        "successful_cost_cny": 0.77938,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "edf4083133bb5ca7ae3a": {
+        "failed_attempts": 12,
+        "failed_reservation_ledger_cny": 0.9551955,
+        "input_tokens": 413849,
+        "latency_observations": 27,
+        "mean_success_latency_ms": 16946.723796295395,
+        "output_tokens": 71729,
+        "successful_cost_cny": 0.5164110000000001,
+        "successful_responses": 27,
+        "terminal_attempts": 39
+      },
+      "f12157949188a19af649": {
+        "failed_attempts": 66,
+        "failed_reservation_ledger_cny": 3.1316208000000003,
+        "input_tokens": 409904,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 270336,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 66
+      },
+      "f15916c33d0287f9af68": {
+        "failed_attempts": 60,
+        "failed_reservation_ledger_cny": 2.8446054000000003,
+        "input_tokens": 371534,
+        "latency_observations": 0,
+        "mean_success_latency_ms": null,
+        "output_tokens": 245760,
+        "successful_cost_cny": 0,
+        "successful_responses": 0,
+        "terminal_attempts": 60
+      },
+      "f28eb79d78e29f8166b5": {
+        "failed_attempts": 9,
+        "failed_reservation_ledger_cny": 0.7262661,
+        "input_tokens": 397826,
+        "latency_observations": 31,
+        "mean_success_latency_ms": 17636.72751612842,
+        "output_tokens": 63302,
+        "successful_cost_cny": 0.6409053,
+        "successful_responses": 31,
+        "terminal_attempts": 40
+      },
+      "f36c765118adf2aa2b2c": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181547,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 11810.681426666755,
+        "output_tokens": 3216,
+        "successful_cost_cny": 0.745484,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "f672b7565e147b920820": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 181111,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7626.942386672211,
+        "output_tokens": 2963,
+        "successful_cost_cny": 0.742222,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "f817a5b7e186b49bb9ec": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 206766,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7180.693883371229,
+        "output_tokens": 2513,
+        "successful_cost_cny": 0.842142,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "f96e83861619989a80dc": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 200151,
+        "latency_observations": 30,
+        "mean_success_latency_ms": 7648.435466666827,
+        "output_tokens": 2616,
+        "successful_cost_cny": 0.8163,
+        "successful_responses": 30,
+        "terminal_attempts": 30
+      },
+      "fa1cf2003a4a8684a88c": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 255589,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 11463.32897296855,
+        "output_tokens": 3858,
+        "successful_cost_cny": 1.045504,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "fb627c7685bcf99cccf7": {
+        "failed_attempts": 0,
+        "failed_reservation_ledger_cny": 0,
+        "input_tokens": 251320,
+        "latency_observations": 37,
+        "mean_success_latency_ms": 7468.6558918918645,
+        "output_tokens": 3562,
+        "successful_cost_cny": 1.026652,
+        "successful_responses": 37,
+        "terminal_attempts": 37
+      },
+      "fca2d875df822b1d837e": {
+        "failed_attempts": 36,
+        "failed_reservation_ledger_cny": 2.6808159000000003,
+        "input_tokens": 916645,
+        "latency_observations": 15,
+        "mean_success_latency_ms": 19762.204673296463,
+        "output_tokens": 123064,
+        "successful_cost_cny": 0.2778762,
+        "successful_responses": 15,
+        "terminal_attempts": 51
+      },
+      "fd61c8b5e2062b92fe11": {
+        "failed_attempts": 5,
+        "failed_reservation_ledger_cny": 0.41304480000000005,
+        "input_tokens": 344444,
+        "latency_observations": 36,
+        "mean_success_latency_ms": 18274.76915555568,
+        "output_tokens": 54554,
+        "successful_cost_cny": 0.7685412,
+        "successful_responses": 36,
+        "terminal_attempts": 41
+      }
+    },
+    "by_method": {
+      "shiftmem": {
+        "failed_attempts": 869,
+        "failed_reservation_ledger_cny": 49.0064579,
+        "input_tokens": 26744123,
+        "latency_observations": 2468,
+        "mean_success_latency_ms": 17616.257801420554,
+        "output_tokens": 4213770,
+        "successful_cost_cny": 59.580858400000004,
+        "successful_responses": 2468,
+        "terminal_attempts": 3337
+      },
+      "vector": {
+        "failed_attempts": 836,
+        "failed_reservation_ledger_cny": 44.8694549,
+        "input_tokens": 22141648,
+        "latency_observations": 2090,
+        "mean_success_latency_ms": 15779.499961290358,
+        "output_tokens": 3938888,
+        "successful_cost_cny": 48.906536,
+        "successful_responses": 2090,
+        "terminal_attempts": 2926
+      }
+    },
+    "by_model": {
+      "deepseek": {
+        "failed_attempts": 261,
+        "failed_reservation_ledger_cny": 14.109244,
+        "input_tokens": 18044803,
+        "latency_observations": 2473,
+        "mean_success_latency_ms": 10144.754240518472,
+        "output_tokens": 1276777,
+        "successful_cost_cny": 65.73063,
+        "successful_responses": 2473,
+        "terminal_attempts": 2734
+      },
+      "minimax": {
+        "failed_attempts": 1444,
+        "failed_reservation_ledger_cny": 79.7666688,
+        "input_tokens": 30840968,
+        "latency_observations": 2085,
+        "mean_success_latency_ms": 24636.979345899563,
+        "output_tokens": 6875881,
+        "successful_cost_cny": 42.7567644,
+        "successful_responses": 2085,
+        "terminal_attempts": 3529
+      }
+    },
+    "by_split": {
+      "Test-ID": {
+        "failed_attempts": 1038,
+        "failed_reservation_ledger_cny": 51.036483000000004,
+        "input_tokens": 24358941,
+        "latency_observations": 2150,
+        "mean_success_latency_ms": 13539.187188326207,
+        "output_tokens": 4218614,
+        "successful_cost_cny": 51.3751959,
+        "successful_responses": 2150,
+        "terminal_attempts": 3188
+      },
+      "Test-OOD": {
+        "failed_attempts": 667,
+        "failed_reservation_ledger_cny": 42.8394298,
+        "input_tokens": 24526830,
+        "latency_observations": 2408,
+        "mean_success_latency_ms": 19662.30345436106,
+        "output_tokens": 3934044,
+        "successful_cost_cny": 57.1121985,
+        "successful_responses": 2408,
+        "terminal_attempts": 3075
+      }
+    },
+    "by_split_model_method": [
+      {
+        "failed_attempts": 1,
+        "failed_reservation_ledger_cny": 0.108908,
+        "input_tokens": 4499320,
+        "latency_observations": 680,
+        "mean_success_latency_ms": 10557.694225298132,
+        "method": "shiftmem",
+        "model": "deepseek",
+        "output_tokens": 71304,
+        "split": "Test-ID",
+        "successful_cost_cny": 18.316196,
+        "successful_responses": 680,
+        "terminal_attempts": 681
+      },
+      {
+        "failed_attempts": 39,
+        "failed_reservation_ledger_cny": 2.457244,
+        "input_tokens": 4145708,
+        "latency_observations": 586,
+        "mean_success_latency_ms": 10395.934241122975,
+        "method": "vector",
+        "model": "deepseek",
+        "output_tokens": 180366,
+        "split": "Test-ID",
+        "successful_cost_cny": 15.207784,
+        "successful_responses": 586,
+        "terminal_attempts": 625
+      },
+      {
+        "failed_attempts": 534,
+        "failed_reservation_ledger_cny": 26.761969500000003,
+        "input_tokens": 8764036,
+        "latency_observations": 460,
+        "mean_success_latency_ms": 18018.91598957034,
+        "method": "shiftmem",
+        "model": "minimax",
+        "output_tokens": 2112661,
+        "split": "Test-ID",
+        "successful_cost_cny": 9.3888585,
+        "successful_responses": 460,
+        "terminal_attempts": 994
+      },
+      {
+        "failed_attempts": 464,
+        "failed_reservation_ledger_cny": 21.708361500000002,
+        "input_tokens": 6949877,
+        "latency_observations": 424,
+        "mean_success_latency_ms": 17804.956512259898,
+        "method": "vector",
+        "model": "minimax",
+        "output_tokens": 1854283,
+        "split": "Test-ID",
+        "successful_cost_cny": 8.4623574,
+        "successful_responses": 424,
+        "terminal_attempts": 888
+      },
+      {
+        "failed_attempts": 96,
+        "failed_reservation_ledger_cny": 5.195292,
+        "input_tokens": 5130884,
+        "latency_observations": 665,
+        "mean_success_latency_ms": 9225.063821804923,
+        "method": "shiftmem",
+        "model": "deepseek",
+        "output_tokens": 457195,
+        "split": "Test-OOD",
+        "successful_cost_cny": 18.071414,
+        "successful_responses": 665,
+        "terminal_attempts": 761
+      },
+      {
+        "failed_attempts": 125,
+        "failed_reservation_ledger_cny": 6.3478,
+        "input_tokens": 4268891,
+        "latency_observations": 542,
+        "mean_success_latency_ms": 10483.50600885815,
+        "method": "vector",
+        "model": "deepseek",
+        "output_tokens": 567912,
+        "split": "Test-OOD",
+        "successful_cost_cny": 14.135236,
+        "successful_responses": 542,
+        "terminal_attempts": 667
+      },
+      {
+        "failed_attempts": 238,
+        "failed_reservation_ledger_cny": 16.9402884,
+        "input_tokens": 8349883,
+        "latency_observations": 663,
+        "mean_success_latency_ms": 32992.94628054384,
+        "method": "shiftmem",
+        "model": "minimax",
+        "output_tokens": 1572610,
+        "split": "Test-OOD",
+        "successful_cost_cny": 13.8043899,
+        "successful_responses": 663,
+        "terminal_attempts": 901
+      },
+      {
+        "failed_attempts": 208,
+        "failed_reservation_ledger_cny": 14.3560494,
+        "input_tokens": 6777172,
+        "latency_observations": 538,
+        "mean_success_latency_ms": 25382.482594422807,
+        "method": "vector",
+        "model": "minimax",
+        "output_tokens": 1336327,
+        "split": "Test-OOD",
+        "successful_cost_cny": 11.1011586,
+        "successful_responses": 538,
+        "terminal_attempts": 746
+      }
+    ],
+    "failed_attempts": 1705,
+    "failed_reservation_ledger_cny": 93.87591280000001,
+    "input_tokens": 48885771,
+    "latency_observations": 4558,
+    "mean_success_latency_ms": 16774.041064721976,
+    "official_billing_status": "requires_provider_statement_reconciliation",
+    "official_provider_billing_cny": null,
+    "output_tokens": 8152658,
+    "successful_cost_cny": 108.4873944,
+    "successful_responses": 4558,
+    "terminal_attempts": 6263,
+    "unresolved_reservations": 0
+  },
+  "outcome_impact": {
+    "causal_interpretation_allowed": false,
+    "confirmatory_primary_result_changed": false,
+    "descriptive_pattern": {
+      "all_zero_event_subset_means_unfavorable_to_shiftmem": true,
+      "interpretation": "The unfavorable overall ShiftMem-minus-VectorMemory direction persists in every zero-event sensitivity subset. These subsets are post-hoc and model-imbalanced, so they do not establish robustness, but observed reliability burden does not provide a simple explanation for the primary result.",
+      "zero_event_subset_mean_differences": {
+        "fallback": 91.8875,
+        "parse_failure": 134.52800000000002,
+        "provider_failure": 125.00000000000001
+      }
+    },
+    "metrics": {
+      "fallback": {
+        "by_model": {
+          "deepseek": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": 0.14331531068834955,
+              "spearman_correlation": -0.054332352532264414
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 95.40000000000002,
+                "n": 7
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 110.81428571428572,
+                "n": 28
+              },
+              "threshold": 0.0,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 214.08423359199355,
+              "ci_low": 7.5443378365778955,
+              "effect_size_dz": 0.4161214799239715,
+              "mean_difference": 110.81428571428573,
+              "n": 28,
+              "normality_p_value": 0.01821697858912238,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 266.30272903607937,
+              "severe_outlier": true,
+              "shiftmem_losses": 16,
+              "shiftmem_mean": 311.75,
+              "shiftmem_wins": 8,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "wilcoxon_signed_rank_normal",
+                "p_value": 0.05033067489650343,
+                "statistic": 81.0
+              },
+              "ties": 4,
+              "vector_mean": 200.9357142857143
+            }
+          },
+          "minimax": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": -0.218327748202891,
+              "spearman_correlation": -0.14007170259352544
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 14.95294117647057,
+                "n": 17
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": -46.87777777777777,
+                "n": 18
+              },
+              "threshold": 0.07692307692307693,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 196.46747094484874,
+              "ci_low": -277.66747094484873,
+              "effect_size_dz": -0.2724734850485973,
+              "mean_difference": -40.60000000000001,
+              "n": 4,
+              "normality_p_value": 1.0,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 149.0053242896598,
+              "severe_outlier": false,
+              "shiftmem_losses": 2,
+              "shiftmem_mean": 316.65,
+              "shiftmem_wins": 2,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "paired_t_test",
+                "p_value": 0.6236902452694042,
+                "statistic": -0.5449469700971946
+              },
+              "ties": 0,
+              "vector_mean": 357.25
+            }
+          }
+        },
+        "by_split": {
+          "Test-ID": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 30,
+              "p_values_reported": false,
+              "pearson_correlation": -0.1807140414667983,
+              "spearman_correlation": -0.3429982611371147
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": -18.560000000000002,
+                "n": 15
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 13.213333333333336,
+                "n": 15
+              },
+              "threshold": 0.030330882352941176,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 92.72814223618161,
+              "ci_low": -62.81385652189588,
+              "effect_size_dz": 0.1110249778444299,
+              "mean_difference": 14.957142857142863,
+              "n": 14,
+              "normality_p_value": 0.8558735984569864,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 134.7187195848944,
+              "severe_outlier": false,
+              "shiftmem_losses": 8,
+              "shiftmem_mean": 176.9857142857143,
+              "shiftmem_wins": 4,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "paired_t_test",
+                "p_value": 0.6846112601635557,
+                "statistic": 0.4154174284680243
+              },
+              "ties": 2,
+              "vector_mean": 162.02857142857144
+            }
+          },
+          "Test-OOD": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 40,
+              "p_values_reported": false,
+              "pearson_correlation": 0.04847548131947404,
+              "spearman_correlation": 0.10604376730120837
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 26.58749999999999,
+                "n": 16
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 118.15833333333335,
+                "n": 24
+              },
+              "threshold": 0.03333333333333333,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 307.9888273202888,
+              "ci_low": -4.544382875844377,
+              "effect_size_dz": 0.48286888419291324,
+              "mean_difference": 151.72222222222223,
+              "n": 18,
+              "normality_p_value": 0.406556735133904,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 314.20997953889065,
+              "severe_outlier": false,
+              "shiftmem_losses": 10,
+              "shiftmem_mean": 417.65555555555557,
+              "shiftmem_wins": 6,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "paired_t_test",
+                "p_value": 0.056261623331893516,
+                "statistic": 2.0486391746207437
+              },
+              "ties": 2,
+              "vector_mean": 265.93333333333334
+            }
+          }
+        },
+        "overall": {
+          "burden_difference_association": {
+            "interpretation": "descriptive association, not a causal effect",
+            "n": 70,
+            "p_values_reported": false,
+            "pearson_correlation": -0.0551328642877216,
+            "spearman_correlation": -0.07513479693014957
+          },
+          "empirical_median_burden_strata": {
+            "higher": {
+              "mean_outcome_difference": -6.592592592592598,
+              "n": 27
+            },
+            "lower_or_equal": {
+              "mean_outcome_difference": 78.11627906976746,
+              "n": 43
+            },
+            "threshold": 0.03333333333333333,
+            "threshold_status": "post_hoc_empirical_median"
+          },
+          "zero_event_pair_sensitivity": {
+            "ci_high": 181.23939526876845,
+            "ci_low": 2.535604731231558,
+            "effect_size_dz": 0.3563147075818649,
+            "mean_difference": 91.8875,
+            "n": 32,
+            "normality_p_value": 0.0027982417980706347,
+            "p_value_status": "unadjusted_post_hoc",
+            "sd_difference": 257.8829839037403,
+            "severe_outlier": true,
+            "shiftmem_losses": 18,
+            "shiftmem_mean": 312.3625,
+            "shiftmem_wins": 10,
+            "status": "post_hoc_descriptive",
+            "test": {
+              "method": "wilcoxon_signed_rank_normal",
+              "p_value": 0.08557023115610383,
+              "statistic": 127.0
+            },
+            "ties": 4,
+            "vector_mean": 220.47500000000002
+          }
+        }
+      },
+      "parse_failure": {
+        "by_model": {
+          "deepseek": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": 0.12230647151806258,
+              "spearman_correlation": -0.09293122254436653
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 40.74,
+                "n": 10
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 134.52800000000002,
+                "n": 25
+              },
+              "threshold": 0.0,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 246.82339173179312,
+              "ci_low": 22.232608268206917,
+              "effect_size_dz": 0.49452749167691307,
+              "mean_difference": 134.52800000000002,
+              "n": 25,
+              "normality_p_value": 0.07510375178446078,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 272.03341020298717,
+              "severe_outlier": true,
+              "shiftmem_losses": 16,
+              "shiftmem_mean": 325.288,
+              "shiftmem_wins": 5,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "wilcoxon_signed_rank_normal",
+                "p_value": 0.018102239875109002,
+                "statistic": 47.0
+              },
+              "ties": 4,
+              "vector_mean": 190.76
+            }
+          },
+          "minimax": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": -0.23440997359756494,
+              "spearman_correlation": -0.1959407266578007
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": -16.858823529411772,
+                "n": 17
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": -16.833333333333343,
+                "n": 18
+              },
+              "threshold": 0.2571428571428571,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "n": 0,
+              "status": "insufficient_pairs"
+            }
+          }
+        },
+        "by_split": {
+          "Test-ID": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 30,
+              "p_values_reported": false,
+              "pearson_correlation": -0.2654418481020298,
+              "spearman_correlation": -0.3687981094249402
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": -44.42666666666667,
+                "n": 15
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 39.080000000000005,
+                "n": 15
+              },
+              "threshold": 0.17669172932330826,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 119.47597839258889,
+              "ci_low": -73.47597839258886,
+              "effect_size_dz": 0.16015020110674327,
+              "mean_difference": 23.00000000000001,
+              "n": 11,
+              "normality_p_value": 0.8112178063236158,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 143.61518025612753,
+              "severe_outlier": true,
+              "shiftmem_losses": 7,
+              "shiftmem_mean": 195.4727272727273,
+              "shiftmem_wins": 2,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "wilcoxon_signed_rank_exact",
+                "p_value": 0.359375,
+                "statistic": 14.0
+              },
+              "ties": 2,
+              "vector_mean": 172.47272727272727
+            }
+          },
+          "Test-OOD": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 40,
+              "p_values_reported": false,
+              "pearson_correlation": 0.07787182143082515,
+              "spearman_correlation": 0.09752814796100119
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 10.86315789473683,
+                "n": 19
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 145.46666666666667,
+                "n": 21
+              },
+              "threshold": 0.14705882352941177,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 406.4902088407583,
+              "ci_low": 37.82407687352739,
+              "effect_size_dz": 0.6957396717677644,
+              "mean_difference": 222.15714285714287,
+              "n": 14,
+              "normality_p_value": 0.7297628952647783,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 319.31073053902,
+              "severe_outlier": false,
+              "shiftmem_losses": 9,
+              "shiftmem_mean": 427.2857142857143,
+              "shiftmem_wins": 3,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "paired_t_test",
+                "p_value": 0.021871958767731216,
+                "statistic": 2.6032194821415335
+              },
+              "ties": 2,
+              "vector_mean": 205.12857142857143
+            }
+          }
+        },
+        "overall": {
+          "burden_difference_association": {
+            "interpretation": "descriptive association, not a causal effect",
+            "n": 70,
+            "p_values_reported": false,
+            "pearson_correlation": -0.06998666721567207,
+            "spearman_correlation": -0.1044531809232298
+          },
+          "empirical_median_burden_strata": {
+            "higher": {
+              "mean_outcome_difference": -13.529411764705893,
+              "n": 34
+            },
+            "lower_or_equal": {
+              "mean_outcome_difference": 101.1388888888889,
+              "n": 36
+            },
+            "threshold": 0.14705882352941177,
+            "threshold_status": "post_hoc_empirical_median"
+          },
+          "zero_event_pair_sensitivity": {
+            "ci_high": 246.82339173179312,
+            "ci_low": 22.232608268206917,
+            "effect_size_dz": 0.49452749167691307,
+            "mean_difference": 134.52800000000002,
+            "n": 25,
+            "normality_p_value": 0.07510375178446078,
+            "p_value_status": "unadjusted_post_hoc",
+            "sd_difference": 272.03341020298717,
+            "severe_outlier": true,
+            "shiftmem_losses": 16,
+            "shiftmem_mean": 325.288,
+            "shiftmem_wins": 5,
+            "status": "post_hoc_descriptive",
+            "test": {
+              "method": "wilcoxon_signed_rank_normal",
+              "p_value": 0.018102239875109002,
+              "statistic": 47.0
+            },
+            "ties": 4,
+            "vector_mean": 190.76
+          }
+        }
+      },
+      "provider_failure": {
+        "by_model": {
+          "deepseek": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": 0.10757481433382018,
+              "spearman_correlation": -0.23535242710659857
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 57.84444444444446,
+                "n": 9
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 125.00000000000001,
+                "n": 26
+              },
+              "threshold": 0.0,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 234.45504893540686,
+              "ci_low": 15.54495106459315,
+              "effect_size_dz": 0.4613757454704908,
+              "mean_difference": 125.00000000000001,
+              "n": 26,
+              "normality_p_value": 0.050907737328050214,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 270.9288497004334,
+              "severe_outlier": true,
+              "shiftmem_losses": 16,
+              "shiftmem_mean": 318.38461538461536,
+              "shiftmem_wins": 6,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "wilcoxon_signed_rank_normal",
+                "p_value": 0.02726768905971062,
+                "statistic": 58.0
+              },
+              "ties": 4,
+              "vector_mean": 193.3846153846154
+            }
+          },
+          "minimax": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 35,
+              "p_values_reported": false,
+              "pearson_correlation": -0.23096032070303543,
+              "spearman_correlation": -0.19622164526232802
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": -16.858823529411772,
+                "n": 17
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": -16.833333333333343,
+                "n": 18
+              },
+              "threshold": 0.2571428571428571,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "n": 0,
+              "status": "insufficient_pairs"
+            }
+          }
+        },
+        "by_split": {
+          "Test-ID": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 30,
+              "p_values_reported": false,
+              "pearson_correlation": -0.26586328722731806,
+              "spearman_correlation": -0.37548182920739864
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": -44.42666666666667,
+                "n": 15
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 39.080000000000005,
+                "n": 15
+              },
+              "threshold": 0.16586921850079744,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 119.47597839258889,
+              "ci_low": -73.47597839258886,
+              "effect_size_dz": 0.16015020110674327,
+              "mean_difference": 23.00000000000001,
+              "n": 11,
+              "normality_p_value": 0.8112178063236158,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 143.61518025612753,
+              "severe_outlier": true,
+              "shiftmem_losses": 7,
+              "shiftmem_mean": 195.4727272727273,
+              "shiftmem_wins": 2,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "wilcoxon_signed_rank_exact",
+                "p_value": 0.359375,
+                "statistic": 14.0
+              },
+              "ties": 2,
+              "vector_mean": 172.47272727272727
+            }
+          },
+          "Test-OOD": {
+            "burden_difference_association": {
+              "interpretation": "descriptive association, not a causal effect",
+              "n": 40,
+              "p_values_reported": false,
+              "pearson_correlation": 0.07220637084393167,
+              "spearman_correlation": 0.03498053200049186
+            },
+            "empirical_median_burden_strata": {
+              "higher": {
+                "mean_outcome_difference": 5.129999999999987,
+                "n": 20
+              },
+              "lower_or_equal": {
+                "mean_outcome_difference": 157.93,
+                "n": 20
+              },
+              "threshold": 0.14670014347202295,
+              "threshold_status": "post_hoc_empirical_median"
+            },
+            "zero_event_pair_sensitivity": {
+              "ci_high": 376.83217495020506,
+              "ci_low": 22.767825049794965,
+              "effect_size_dz": 0.6250646607542141,
+              "mean_difference": 199.8,
+              "n": 15,
+              "normality_p_value": 0.6291945112973464,
+              "p_value_status": "unadjusted_post_hoc",
+              "sd_difference": 319.6469302214555,
+              "severe_outlier": false,
+              "shiftmem_losses": 9,
+              "shiftmem_mean": 408.52000000000004,
+              "shiftmem_wins": 4,
+              "status": "post_hoc_descriptive",
+              "test": {
+                "method": "paired_t_test",
+                "p_value": 0.029658524990835138,
+                "statistic": 2.42086502140386
+              },
+              "ties": 2,
+              "vector_mean": 208.72
+            }
+          }
+        },
+        "overall": {
+          "burden_difference_association": {
+            "interpretation": "descriptive association, not a causal effect",
+            "n": 70,
+            "p_values_reported": false,
+            "pearson_correlation": -0.07222528616825953,
+            "spearman_correlation": -0.1339838137812473
+          },
+          "empirical_median_burden_strata": {
+            "higher": {
+              "mean_outcome_difference": -16.10857142857144,
+              "n": 35
+            },
+            "lower_or_equal": {
+              "mean_outcome_difference": 106.99428571428574,
+              "n": 35
+            },
+            "threshold": 0.14670014347202295,
+            "threshold_status": "post_hoc_empirical_median"
+          },
+          "zero_event_pair_sensitivity": {
+            "ci_high": 234.45504893540686,
+            "ci_low": 15.54495106459315,
+            "effect_size_dz": 0.4613757454704908,
+            "mean_difference": 125.00000000000001,
+            "n": 26,
+            "normality_p_value": 0.050907737328050214,
+            "p_value_status": "unadjusted_post_hoc",
+            "sd_difference": 270.9288497004334,
+            "severe_outlier": true,
+            "shiftmem_losses": 16,
+            "shiftmem_mean": 318.38461538461536,
+            "shiftmem_wins": 6,
+            "status": "post_hoc_descriptive",
+            "test": {
+              "method": "wilcoxon_signed_rank_normal",
+              "p_value": 0.02726768905971062,
+              "statistic": 58.0
+            },
+            "ties": 4,
+            "vector_mean": 193.3846153846154
+          }
+        }
+      }
+    },
+    "paired_units": 70,
+    "status": "post_hoc_descriptive_sensitivity"
+  },
+  "overall": {
+    "applicable_recovery_cells": 140,
+    "cells": 160,
+    "fallbacks": 667,
+    "fallbacks_per_review": 0.12886398763523957,
+    "input_tokens": 28717245,
+    "memory_reuse": {
+      "cited_but_rejected": 0,
+      "retrieved_not_cited": 10924,
+      "reused": 9609
+    },
+    "output_tokens": 2084428,
+    "parse_failures": 1680,
+    "parse_failures_per_attempt": 0.2714493456131847,
+    "provider_attempts_recorded_by_cells": 6189,
+    "recovered_cells": 61,
+    "recovery_rate": 0.4357142857142857,
+    "reviews": 5176
+  },
+  "schema": "shiftmem-formal-v2-reliability-audit-v1",
+  "test_outcomes_accessed": true
+}

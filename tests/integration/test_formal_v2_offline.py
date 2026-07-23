@@ -176,11 +176,13 @@ def test_formal_cell_attempts_are_freeze_bound_and_replayed(tmp_path) -> None:
         oracle,
         provider=first,
         run_identity=run_identity,
+        test_outcomes_accessed=True,
     )
     first_calls = delegate.calls
     assert first_calls > 0
     assert first_journal.totals()["reserved_attempts"] == 0
     assert first_result.run_identity == run_identity
+    assert first_result.test_outcomes_accessed is True
 
     resumed_journal = JsonlRunJournal(journal_path, identity, limits)
     resumed = JournaledProvider(
