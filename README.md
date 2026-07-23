@@ -1,192 +1,215 @@
+<div align="center">
+
 # ShiftMem
 
-**Change-aware conditional memory for inventory agents under regime shifts.**
+### Change-aware conditional memory for inventory agents under regime shifts
 
-ShiftMem studies whether an LLM agent should keep treating past strategy
-experience as valid after demand or supply conditions change. The system gives
-the LLM a deliberately narrow role: it reviews three bounded strategy
-parameters at scheduled intervals or detected changes, while a shared
-deterministic controller executes every daily inventory order.
+An evidence-first research system for studying when an LLM agent should keep,
+revise, or retire operational experience after its environment changes.
 
-The Protocol-v2 held-out experiment is complete. Its primary result is a
-carefully preserved negative result: under the tested models, scenarios, and
-provider conditions, ShiftMem did **not** outperform VectorMemory overall.
+[English](README.md) · [简体中文](README.zh-CN.md)
 
-## Headline result
+[![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
+![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
+![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
+![Frozen evidence](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
 
-The formal matrix contains 160 complete cells: two models, two methods, eight
-held-out scenarios, and five paired environment seeds. Stable scenarios are
-descriptive; the declared change-adaptation endpoint contains 70 paired units.
+</div>
 
-| Analysis | ShiftMem − VectorMemory | 95% interval | p-value | Status |
-| --- | ---: | ---: | ---: | --- |
-| Predeclared primary analysis | +45.44 | [-2.72, 93.60] | 0.203 | H1 not supported |
-| Clustered mean sensitivity | +45.44 | [11.26, 79.09] | 0.041 | Post-hoc; unfavorable to ShiftMem |
+---
 
-Positive values mean a higher 30-day **oracle-relative cost gap** for ShiftMem.
-ShiftMem won 25 pairs, tied 11, and lost 34. Test-ID was approximately neutral
-(-2.67), while Test-OOD was unfavorable (+81.53). DeepSeek and MiniMax showed
-opposite method-effect directions, so the evidence supports a conditional,
-model-dependent interpretation rather than a universal memory advantage.
+> ## 🔬 ShiftMem Evidence Lab
+>
+> Replay the frozen 160-cell experiment, compare ShiftMem with VectorMemory,
+> inspect memory lifecycles, and trace every result back to verified evidence.
+>
+> **[Open the Demo guide →](demo-web/README.md)**<br>
+> [Run locally](#run-the-demo) ·
+> [Product and integrity specification](docs/demo_design_spec.md) ·
+> [Formal evidence audit](docs/v2_formal_post_test_audit.md)
 
-The predeclared result remains authoritative. The clustered analysis is a
-mean-aligned sensitivity analysis and is not presented as a replacement
-confirmatory test. See the [formal post-Test audit](docs/v2_formal_post_test_audit.md)
-for the full interpretation and claim boundaries.
+## At a glance
 
-## System design
+| | |
+| --- | --- |
+| **Research question** | Can change-aware memory improve LLM-guided inventory adaptation under demand and supply shifts? |
+| **Agent authority** | Three bounded strategy parameters; daily ordering remains deterministic |
+| **Formal evaluation** | 160 complete cells, 2 models, 2 methods, 8 held-out scenarios, 5 paired seeds |
+| **Primary endpoint** | 70 paired change-adaptation units |
+| **Main finding** | ShiftMem did **not** outperform VectorMemory overall |
+| **Evidence status** | Frozen, checksummed, network-free, and reproducible |
+
+## Why ShiftMem?
+
+Operational experience can become misleading when the environment changes.
+ShiftMem treats memory as conditional rather than permanently valid:
+
+- experiences record the conditions under which they were learned;
+- regime changes can make memories dormant instead of deleting them;
+- later evidence can support, demote, or reactivate a memory;
+- retrieved memories must be cited in bounded strategy proposals;
+- delayed outcomes update the memory lifecycle.
+
+The LLM does **not** place daily orders. It may only propose:
+
+1. a demand forecast window;
+2. a safety-stock multiplier;
+3. a lead-time buffer.
+
+A shared deterministic controller executes the actual inventory policy. The
+agent cannot see future demand, hidden regime labels, or Oracle context.
 
 ```mermaid
 flowchart LR
     A["Public inventory history"] --> B["Change detector"]
     A --> C["Review scheduler"]
     B --> C
-    C --> D["Condition-aware memory retrieval"]
+    C --> D["Conditional memory retrieval"]
     A --> E["Bounded LLM strategy review"]
     D --> E
     E --> F["Schema and bounds validation"]
     F --> G["Deterministic daily controller"]
-    A --> G
     G --> H["Inventory environment"]
     H --> A
-    H --> I["Delayed experience validation"]
+    H --> I["Delayed outcome validation"]
     I --> D
 ```
 
-The LLM may propose only:
+## Run the Demo
 
-- demand forecast window;
-- safety-stock multiplier;
-- lead-time buffer.
+The Demo is a local, read-only evidence application. It makes no provider
+calls and requires no API key.
 
-It cannot emit daily orders, change the controller, see future demand, access
-the hidden regime label, or use Oracle context. Invalid model output receives
-one repair attempt; otherwise the previous valid strategy remains active and
-the failure stays in the business outcome.
-
-## Reproduce the closure
-
-Python 3.12 or newer is required. Evidence verification is network-free and
-does not require provider credentials.
+Requirements: Python 3.12+, Node.js 22+, and pnpm.
 
 ```powershell
+git clone https://github.com/QCYTSN/Shiftmem.git
+cd Shiftmem
+
 py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[test]"
+
+# Verify and export deterministic browser data.
+python -m demo.export_web
+
+# Start the Evidence Lab.
+cd demo-web
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Open **http://127.0.0.1:5173**.
+
+The browser never scans raw-run directories. In a clean clone, Python verifies
+the tracked release archive and each requested source before emitting
+browser-safe view models.
+
+The Evidence Lab contains four connected views:
+
+- **Episode Lab** — synchronized replay of demand, inventory, orders, cost,
+  strategy reviews, fallbacks, and regime changes;
+- **Compare** — strictly paired ShiftMem and VectorMemory evidence;
+- **Memory Audit** — retrieval, citation, support, failure, dormancy, and
+  reactivation histories;
+- **Evidence & Method** — provenance, definitions, aggregate results, and
+  explicit claim boundaries.
+
+## Formal result
+
+The predeclared Protocol-v2 analysis remains authoritative.
+
+| Analysis | ShiftMem − VectorMemory | 95% interval | p-value | Interpretation |
+| --- | ---: | ---: | ---: | --- |
+| Predeclared primary analysis | +45.44 | [-2.72, 93.60] | 0.203 | H1 not supported |
+| Clustered mean sensitivity | +45.44 | [11.26, 79.09] | 0.041 | Post-hoc; unfavorable to ShiftMem |
+
+Positive values indicate a higher 30-day oracle-relative cost gap for
+ShiftMem. Across the 70 primary pairs, ShiftMem won 25, tied 11, and lost 34.
+Test-ID was approximately neutral (-2.67), while Test-OOD was unfavorable
+(+81.53). DeepSeek and MiniMax also showed opposite method-effect directions.
+
+This is a preserved negative result, not a failed project: the evidence rejects
+a universal superiority claim and instead points to model- and
+condition-dependent behavior.
+
+## Verify the evidence
+
+Verification is deterministic, network-free, and credential-free:
+
+```powershell
 python -m pytest -q
 python scripts/verify_release_archive.py
 ```
 
-Expected verification status:
+Expected closure:
 
 - 160/160 formal cells;
 - 70 primary paired units;
-- 11/11 manifest-declared raw sources bound to the release archive;
+- 11/11 raw evidence sources verified;
 - zero unresolved reservations;
-- all source-freeze and SHA-256 checks valid;
-- current closure identity: `v2-formal-results-f4ab41daacf3`.
+- closure identity `v2-formal-results-f4ab41daacf3`.
 
-The archive verifier is the public clean-clone entry point. In the original
-research workspace, where the ignored raw sources remain at their declared
-paths, `python scripts/finalize_formal_results.py --verify` additionally
-reconstructs all aggregate outputs and compares them byte-semantically.
-
-## Explore the evidence Demo
-
-The local **ShiftMem Evidence Lab** replays the frozen experiment without
-provider calls. A Python export step verifies the SHA-256 evidence manifest;
-the TypeScript client then provides a smooth episode timeline, paired method
-comparison, memory-lifecycle audit, and explicit claim boundaries.
+The original research workspace can additionally reconstruct every aggregate
+output:
 
 ```powershell
-.venv\Scripts\python.exe -m demo.export_web
-cd demo-web
-pnpm install
-pnpm dev
+python scripts/finalize_formal_results.py --verify
 ```
 
-Open `http://127.0.0.1:5173`. The browser never reads raw-run directories:
-it receives only deterministic, derived JSON emitted after manifest
-verification. In a clean clone, the exporter verifies and reads the tracked
-release archive, so ignored local raw-run files are not required. The export
-and Demo never modify raw formal results. See the
-[Demo guide](demo-web/README.md), [evidence adapter](demo/README.md), and
-[design specification](docs/demo_design_spec.md).
-
-## Evidence and outputs
+### Primary evidence
 
 - [Evidence manifest](artifacts/aggregated/v2_formal_evidence_manifest.json)
 - [Formal statistical analysis](artifacts/aggregated/v2_formal_statistical_analysis.json)
-- [Reliability and execution-order audit](artifacts/aggregated/v2_formal_reliability_audit.json)
-- [Read-only raw-evidence archive](artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip)
+- [Reliability audit](artifacts/aggregated/v2_formal_reliability_audit.json)
+- [Frozen raw-evidence archive](artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip)
 - [Archive checksum](artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.sha256.json)
 
-The raw formal inputs were not rewritten during post-Test analysis. The closure
-manifest binds five cell files, four journals, two summaries, analysis code,
-contracts, and four source freezes. The release archive is only a convenience
-copy; the per-file manifest remains authoritative.
+## Reliability is part of the result
 
-## Reliability context
+Provider and parsing failures were retained in the evaluated business outcome:
 
-The evaluation intentionally retains provider and parsing failures:
+| Signal | Observed |
+| --- | ---: |
+| Strategy reviews | 5,176 |
+| Cell-recorded attempts | 6,189 |
+| Parse failures | 1,680 (27.1%) |
+| Retained-strategy fallbacks | 667 (12.9% of reviews) |
+| Terminal provider failures | 1,705 |
+| Unresolved reservations | 0 |
 
-- 5,176 strategy reviews;
-- 6,189 cell-recorded attempts;
-- 1,680 parse failures (27.1%);
-- 667 retained-strategy fallbacks (12.9% of reviews);
-- 1,705 terminal provider failures;
-- zero unresolved reservations.
+The experiment therefore estimates the tested systems as deployed, including
+their fallback behavior. It does not isolate a pure memory mechanism from model
+compliance or provider reliability.
 
-These results estimate the tested systems as deployed, including fallback
-behavior. They do not isolate a pure memory mechanism from model compliance or
-provider reliability. All 70 applicable pairs also ran VectorMemory before
-ShiftMem, an execution-order limitation that the post-hoc audit can diagnose
-but cannot remove.
-
-## Repository map
+## Repository guide
 
 | Path | Purpose |
 | --- | --- |
-| `src/shiftmem/` | Environment, agents, memory lifecycle, detection, control, providers, and evaluation |
-| `configs/` | Experiment, environment, split, validation, and immutable freeze configurations |
-| `scripts/` | Network-free verification plus explicit experiment entry points |
-| `tests/` | Unit and integration tests |
-| `demo/` | Verified Python evidence adapter and deterministic browser exporter |
-| `demo-web/` | Official React and TypeScript evidence-replay Demo |
-| `artifacts/aggregated/` | Tracked machine-readable results |
-| `artifacts/releases/` | Release evidence packages and checksums |
-| `docs/` | Protocol, audits, reports, model card, and implementation history |
-| `paper/` | Manuscript workspace; paper claims are not yet finalized |
+| [`demo-web/`](demo-web/README.md) | Official React and TypeScript Evidence Lab |
+| [`demo/`](demo/README.md) | Verified Python evidence adapter and browser exporter |
+| [`src/shiftmem/`](src/shiftmem/) | Environment, agents, memory lifecycle, control, and evaluation |
+| [`configs/`](configs/) | Experiment, split, validation, and immutable freeze configurations |
+| [`scripts/`](scripts/) | Verification, aggregation, and explicit experiment entry points |
+| [`tests/`](tests/) | Unit and integration test suite |
+| [`artifacts/aggregated/`](artifacts/aggregated/) | Machine-readable formal results |
+| [`artifacts/releases/`](artifacts/releases/) | Frozen evidence package and checksum |
+| [`docs/`](docs/README.md) | Protocol, audits, reports, model card, and history |
 
-Start with the [documentation index](docs/README.md). The original
-[implementation specification](ShiftMem_Implementation_Spec.md) is retained as
-historical design context; the amended Protocol-v2 document and post-Test audit
-are authoritative for the completed experiment.
-
-## Scope and limitations
+## Scope
 
 Current evidence covers a synthetic, single-item lost-sales inventory setting,
 two provider-hosted model families, one bounded three-parameter controller, and
-five environment seeds per scenario. It does not establish:
+five seeds per scenario. It does not establish general superiority across all
+memory systems, causal benefit from memory dormancy, or transfer to real
+multi-item enterprise operations.
 
-- general superiority over every memory baseline;
-- equivalence in stable environments;
-- a causal benefit from dormancy/reactivation;
-- superiority of statistical detection over LLM-only detection;
-- transfer to real enterprise, multi-item, or multi-supplier systems.
-
-Those claims require experiments that were not part of the paid 160-cell
-matrix. They are documented as future work rather than inferred from the
-current data.
-
-## Credentials and live calls
-
-No credential is needed for tests or evidence verification. Live provider
-experiments require an explicit provider selection and a local `.env` created
-from `.env.example`. Never commit API keys. Review the configured budget and
-run identity before using any live runner.
+See the [formal post-Test audit](docs/v2_formal_post_test_audit.md) for the full
+interpretation, limitations, and permitted claims.
 
 ## License
 
-No open-source license has been selected yet. Until one is added, the repository
-is publicly visible but does not grant reuse rights beyond applicable law.
+No open-source license has been selected yet. The repository is publicly
+visible, but no reuse rights are granted beyond applicable law until a license
+is added.
