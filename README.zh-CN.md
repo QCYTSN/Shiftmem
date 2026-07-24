@@ -12,9 +12,11 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
 [![在线网页端](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
 [![论文](https://img.shields.io/badge/Manuscript-LaTeX%20source-3D6117?logo=latex&logoColor=white)](paper/README.md)
+[![PDF](https://img.shields.io/badge/Paper-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white)](paper/ShiftMem.pdf)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![冻结证据](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
+[![License: MIT](https://img.shields.io/badge/Code%20License-MIT-F2C94C.svg)](LICENSE)
 
 </div>
 
@@ -41,6 +43,7 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 > 论文图生成脚本。
 >
 > **[打开论文说明 →](paper/README.md)** ·
+> **[下载编译版 PDF](paper/ShiftMem.pdf)** ·
 > [主 TeX 文件](paper/main.tex) ·
 > [论文图](paper/figures/) ·
 > [论文表](paper/tables/)
@@ -64,6 +67,7 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 冻结的 Protocol-v2 输出，不从交互式 Demo 中选择性提取结论。
 
 - [论文结构与编译说明](paper/README.md)
+- [编译版论文 PDF](paper/ShiftMem.pdf)
 - [论文主文件](paper/main.tex)
 - [论文图](paper/figures/)与[源数据表](paper/tables/)
 - [论文图生成脚本](scripts/make_paper_figures.py)
@@ -238,5 +242,8 @@ Provider 和解析失败均被保留在最终业务结果中：
 
 ## 许可证
 
-项目尚未选择开源许可证。在添加许可证之前，仓库虽然公开可见，但除适用
-法律规定外，不自动授予代码或材料的再使用权。
+本仓库的软件源代码采用 [MIT License](LICENSE)。
+
+`paper/` 目录中的论文、编译版 PDF、图、表、参考文献和其他学术内容不属于
+MIT 授权范围；除未来出版方或存档平台另行规定外，其版权归 Fengkai Gao
+所有，保留全部权利。详见[论文专用版权声明](paper/LICENSE)。

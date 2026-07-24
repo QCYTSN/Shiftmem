@@ -12,9 +12,11 @@ revise, or retire operational experience after its environment changes.
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
 [![Web Demo](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
 [![Manuscript](https://img.shields.io/badge/Manuscript-LaTeX%20source-3D6117?logo=latex&logoColor=white)](paper/README.md)
+[![PDF](https://img.shields.io/badge/Paper-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white)](paper/ShiftMem.pdf)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![Frozen evidence](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
+[![License: MIT](https://img.shields.io/badge/Code%20License-MIT-F2C94C.svg)](LICENSE)
 
 </div>
 
@@ -41,6 +43,7 @@ revise, or retire operational experience after its environment changes.
 > and reproducible figure generator are included in the repository.
 >
 > **[Open the manuscript guide →](paper/README.md)** ·
+> **[Download the compiled PDF](paper/ShiftMem.pdf)** ·
 > [Main TeX source](paper/main.tex) ·
 > [Figures](paper/figures/) ·
 > [Tables](paper/tables/)
@@ -66,6 +69,7 @@ Its claims are aligned with the frozen Protocol-v2 outputs rather than selected
 from the interactive Demo.
 
 - [Manuscript and build guide](paper/README.md)
+- [Compiled manuscript PDF](paper/ShiftMem.pdf)
 - [Main manuscript source](paper/main.tex)
 - [Paper figures](paper/figures/) and [source tables](paper/tables/)
 - [Figure generation script](scripts/make_paper_figures.py)
@@ -248,6 +252,11 @@ interpretation, limitations, and permitted claims.
 
 ## License
 
-No open-source license has been selected yet. The repository is publicly
-visible, but no reuse rights are granted beyond applicable law until a license
-is added.
+The software source code in this repository is available under the
+[MIT License](LICENSE).
+
+The manuscript, compiled PDF, figures, tables, bibliography, and other
+scholarly content under [`paper/`](paper/) are excluded from the MIT License
+and remain copyright © 2026 Fengkai Gao, all rights reserved, unless a future
+publisher or archival venue specifies a different license. See the
+[paper-specific license notice](paper/LICENSE).
