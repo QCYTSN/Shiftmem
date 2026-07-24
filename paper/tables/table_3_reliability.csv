@@ -1,0 +1,9 @@
+applicable_recovery_cells,cells,fallbacks,fallbacks_per_review,input_tokens,memory_reuse,method,model,output_tokens,parse_failures,parse_failures_per_attempt,provider_attempts_recorded_by_cells,recovered_cells,recovery_rate,reviews,split
+15,20,0,0.0,4476701,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1874, 'reused': 1090}",shiftmem,deepseek,68232,3,0.004405286343612335,681,8,0.5333333333333333,678,Test-ID
+15,20,14,0.023333333333333334,3711109,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1654, 'reused': 991}",vector,deepseek,60558,39,0.0624,625,7,0.4666666666666667,600,Test-ID
+15,20,217,0.3205317577548006,2819601,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1026, 'reused': 1160}",shiftmem,minimax,412821,506,0.5238095238095238,966,13,0.8666666666666667,677,Test-ID
+15,20,195,0.325,2440632,"{'cited_but_rejected': 0, 'retrieved_not_cited': 538, 'reused': 1351}",vector,minimax,359232,462,0.532871972318339,867,10,0.6666666666666666,600,Test-ID
+20,20,44,0.06205923836389281,4421885,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1999, 'reused': 896}",shiftmem,deepseek,63979,96,0.12614980289093297,761,4,0.2,709,Test-OOD
+20,20,62,0.10333333333333333,3449941,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1578, 'reused': 848}",vector,deepseek,55912,129,0.1934032983508246,667,6,0.3,600,Test-OOD
+20,20,73,0.10252808988764045,4048546,"{'cited_but_rejected': 0, 'retrieved_not_cited': 1382, 'reused': 1588}",shiftmem,minimax,579335,237,0.2705479452054795,876,7,0.35,712,Test-OOD
+20,20,62,0.10333333333333333,3348830,"{'cited_but_rejected': 0, 'retrieved_not_cited': 873, 'reused': 1685}",vector,minimax,484359,208,0.27882037533512066,746,6,0.3,600,Test-OOD

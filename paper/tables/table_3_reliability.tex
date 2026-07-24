@@ -1,0 +1,25 @@
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Reliability, context, and recovery by split, deployment,
+  and method.} Each row aggregates 20 cells. Failed/invalid counts include
+  provider exceptions and invalid structured outputs and use cell-recorded
+  attempts as the denominator. Fallbacks use reviews as the denominator. Token
+  totals are in millions. Recovery is descriptive and excludes stable cells.}
+  \label{tab:reliability}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}lllrrrrrrr@{}}
+    \toprule
+    Split & Deployment & Method & Attempts & Failed/invalid & Reviews & Fallbacks & Input M & Output M & Recovered \\
+    \midrule
+    Test-ID & DeepSeek & ShiftMem & 681 & 3 (0.4\%) & 678 & 0 (0.0\%) & 4.477 & 0.068 & 8/15 \\
+    Test-ID & DeepSeek & Lexical & 625 & 39 (6.2\%) & 600 & 14 (2.3\%) & 3.711 & 0.061 & 7/15 \\
+    Test-ID & MiniMax & ShiftMem & 966 & 506 (52.4\%) & 677 & 217 (32.1\%) & 2.820 & 0.413 & 13/15 \\
+    Test-ID & MiniMax & Lexical & 867 & 462 (53.3\%) & 600 & 195 (32.5\%) & 2.441 & 0.359 & 10/15 \\
+    Test-OOD & DeepSeek & ShiftMem & 761 & 96 (12.6\%) & 709 & 44 (6.2\%) & 4.422 & 0.064 & 4/20 \\
+    Test-OOD & DeepSeek & Lexical & 667 & 129 (19.3\%) & 600 & 62 (10.3\%) & 3.450 & 0.056 & 6/20 \\
+    Test-OOD & MiniMax & ShiftMem & 876 & 237 (27.1\%) & 712 & 73 (10.3\%) & 4.049 & 0.579 & 7/20 \\
+    Test-OOD & MiniMax & Lexical & 746 & 208 (27.9\%) & 600 & 62 (10.3\%) & 3.349 & 0.484 & 6/20 \\
+    \bottomrule
+  \end{tabular}}
+\end{table*}

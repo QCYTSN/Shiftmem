@@ -234,6 +234,25 @@ paper/*.out
 paper/*.bbl
 paper/*.blg
 paper/*.synctex.gz
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.toc
+paper/*.lof
+paper/*.lot
+paper/*.nav
+paper/*.snm
+paper/*.vrb
+paper/*.bcf
+paper/*.run.xml
+paper/*.indent
+paper/*.idx
+paper/*.ilg
+paper/*.ind
+paper/ShiftMem_Overleaf.zip
+paper/*_notes.md
+paper/figure_captions.md
+paper/figure_plan.md
+paper/outline.md
 
 # TypeScript Demo build and generated verified view models
 demo-web/node_modules/

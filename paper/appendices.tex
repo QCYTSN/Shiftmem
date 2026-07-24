@@ -1,0 +1,297 @@
+\section{Protocol and Amendment Chronology}
+\label{app:protocol}
+
+Protocol~2.0 replaced the direct-daily-order design before held-out outcomes
+were generated or read. Numbered amendments changed budget reservation or
+continuation controls; they did not change the 160-cell matrix, primary
+estimand, deployments, methods, scenarios, seeds, controller, endpoint, or
+statistical decision rule.
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Protocol and formal-execution chronology.} Prefix counts
+  denote newly completed immutable cell files.}
+  \label{tab:protocol-chronology}
+  \begin{tabular}{@{}p{0.10\textwidth}p{0.18\textwidth}p{0.66\textwidth}@{}}
+    \toprule
+    Date & Record & Evidence-grounded consequence \\
+    \midrule
+    2026-07-14 & Protocol~2.0 & Replaced the direct-order design with bounded
+    strategy review and deterministic daily control before Test access. \\
+    2026-07-15 & Bounded Pilot & Completed under a separate CNY~6 and
+    350-attempt authorization. Because it used old runtime defaults, it supports
+    only the recorded reliability and cost envelope. \\
+    2026-07-16 & Amendment~1 & Approved eight scenarios, five paired seeds, two
+    deployments, and two methods. Hard limits were 7,000 attempts, 25M input
+    tokens, 3.2M billed output tokens, and CNY~100. \\
+    2026-07-17 & Initial formal source & Freeze
+    \path{v2-formal-da148583e3c5} produced the first 47-cell Test-ID prefix. \\
+    2026-07-19 & Amendment~2 & Freeze \path{v2-formal-50aaafda0d6a} bound the
+    47-cell prefix and added three Test-ID cells without reissuing a completed
+    cell. \\
+    2026-07-19 & Amendment~3 & A 3,207-token response exceeded the 3,072-token
+    reservation and was retained as \texttt{ReservationUnderestimate}. Freeze
+    \path{v2-formal-724421cdbf78} raised the reservation to 4,096 and added 30
+    Test-ID and 23 Test-OOD cells. \\
+    2026-07-21 & Amendment~4 & Freeze \path{v2-formal-5925ef7f1614} bound all
+    prior prefixes and added the final 57 Test-OOD cells. \\
+    2026-07-22 & Post-Test closure & Completed 80 Test-ID and 80 Test-OOD cells,
+    with no exclusion or completed-cell rerun. No further provider call was
+    authorized. \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+The current closure identity is
+\path{v2-formal-results-f4ab41daacf3}. The earlier closure identity remains in
+version history. The cell files, journals, and summaries were unchanged; the
+identity changed because the manifest additionally bound explicitly post-hoc
+sensitivity-analysis code.
+
+\section{Held-Out Scenarios and Frozen Runtime}
+\label{app:scenarios}
+
+All scenarios lasted 150 days and used costs
+$(c_p,c_h,c_s,c_f)=(1,0.2,5,0)$. Unless a shift changed them, quoted lead time
+and fill probability were $(\ell,\rho)=(2,1.0)$. Test-ID used seeds 2000--2004
+and Test-OOD used seeds 3000--3004.
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Exact held-out scenario configurations.} NB$(\mu,r)$ denotes
+  negative-binomial demand with mean $\mu$ and dispersion $r$. The serialized
+  dispersion field in the Poisson scenario is ignored by Poisson sampling.}
+  \label{tab:scenarios}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}lllllll@{}}
+    \toprule
+    Split & Scenario & Demand & $I_0$ & Shift timing & Demand change & Supply change \\
+    \midrule
+    ID & Stable & NB$(21,11)$ & 58 & None & None & None \\
+    ID & Demand jump & NB$(19,11)$ & 58 & $t\geq80$ & $\mu\times1.3$ & None \\
+    ID & Gradual demand & NB$(21,10)$ & 62 & Starts 65; target at 100 & Linear to $\mu\times1.45$ & None \\
+    ID & Supply delay & NB$(20,8)$ & 64 & $t\geq70$ & None & $(\ell,\rho)=(4,0.85)$ \\
+    OOD & Periodic & NB$(20,10)$ & 60 & $t\geq0$ & $\mu[1+0.4\sin(2\pi t/20)]$ & None \\
+    OOD & Poisson jump & Pois$(20)$ & 60 & $t\geq45$ & $\mu\times2.0$ & None \\
+    OOD & Transient excursion & NB$(20,10)$ & 60 & $45\leq t\leq60$ & $\mu\times1.8$ & None \\
+    OOD & Early combined & NB$(20,10)$ & 60 & $t\geq30$ & $\mu\times1.8$ & $(\ell,\rho)=(7,0.7)$ \\
+    \bottomrule
+  \end{tabular}}
+\end{table*}
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Frozen controller and runtime parameters.}}
+  \label{tab:runtime-parameters}
+  \begin{tabular}{@{}p{0.22\textwidth}p{0.72\textwidth}@{}}
+    \toprule
+    Field & Exact setting \\
+    \midrule
+    Strategy $(w,k,b)$ & Default $(14,1.2,1)$; bounds
+    $[1,60]\times[0,5]\times[0,14]$; maximum per-review changes $(7,1.0,1)$. \\
+    Controller & Uses the most recent $\min(w,14)$ demands,
+    $h=\ell+b+1$, and nearest-integer ties-to-even rounding. Empty history uses
+    reset demand zero. \\
+    Scheduler & Review on $t\bmod5=0$, including $t=0$; event cooldown three
+    days; same-day triggers coalesced; one correction retry before retaining the
+    prior strategy. \\
+    Detector (ShiftMem) & Separate two-sided Page--Hinkley detectors for demand,
+    lost sales, and quoted lead time; minimum 10 samples, $\delta=0.1$, and
+    $\lambda=48$. \\
+    Retrieval (ShiftMem) & Top five; lexical-score/confidence/recency/utility
+    weights $0.75/0.5/1.0/0.25$; probation/change penalties $0.25/0.5$; recency
+    half-life 30; changed-variable lookback 14. \\
+    Validation and lifecycle & Three-day service window; dormancy after three
+    mismatching retrieval checks; Beta prior $(1,1)$; activation after two
+    supports with $c\geq0.65$; invalidation after two failures with $c\leq0.35$.
+    \\
+    Generation and reservation & Maximum generated tokens 512; final
+    billed-output reservation 4,096 tokens per attempt. \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\section{Complete Effect Evidence}
+\label{app:effects}
+
+Table~\ref{tab:effects} contains every aggregate effect reported from the formal
+matrix, including the stable-environment endpoint and the post-hoc clustered
+analyses. The frozen overall, split, deployment, and scenario intervals are
+nominal mean intervals. They are distinct from the selected rank tests and are
+not calibrated for the shared environment clusters. The stable row uses 150-day
+total cost rather than the 30-day adaptation endpoint and has no frozen
+non-inferiority margin. The two clustered rows are explicitly post hoc; the
+deployment contrast is also unadjusted.
+
+The authoritative aggregate is
+\path{artifacts/aggregated/v2_formal_statistical_analysis.json}. Cell-level
+values remain in five immutable JSONL prefixes bound by the evidence manifest.
+All 160 planned cells are present. The primary population comprises 70
+model-specific pairs nested in 35 scenario--seed environment clusters.
+
+\section{Reliability, Budget, and Execution-Order Audit}
+\label{app:reliability-audit}
+
+Table~\ref{tab:reliability} gives the eight split--deployment--method groups.
+The aggregate accounting and post-hoc diagnostics are summarized below.
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Aggregate reliability, accounting, and order audit.} Cell
+  and journal token totals have different accounting scopes and are not
+  combined.}
+  \label{tab:audit-summary}
+  \begin{tabular}{@{}p{0.25\textwidth}p{0.69\textwidth}@{}}
+    \toprule
+    Audit item & Verified result \\
+    \midrule
+    Cell accounting & 5,176 reviews; 6,189 attempts; 1,680 failed/invalid
+    attempts; 667 retained-strategy fallbacks; 28,717,245 input and 2,084,428
+    output tokens; recovery in 61/140 applicable cells. \\
+    Journal accounting & 6,263 terminal attempts: 4,558 successful and 1,705
+    failed; 48,885,771 input and 8,152,658 output tokens; zero unresolved
+    reservations at closure. \\
+    Cost & Successful-response estimate CNY~108.4874; failed-attempt reservation
+    ledger CNY~93.8759. The quantities are not additive and neither is the
+    official provider bill, which was unavailable. \\
+    Burden correlations & Pearson/Spearman correlations with the paired endpoint
+    were $-0.0700/-0.1045$ for failed/invalid burden,
+    $-0.0551/-0.0751$ for fallback burden, and $-0.0722/-0.1340$ for
+    journal-recorded provider failures. No inferential $p$-values were reported.
+    \\
+    Zero-event subsets & Mean differences remained unfavorable in the 25
+    zero-failed/invalid, 32 zero-fallback, and 26 zero-provider-failure pairs.
+    These subsets were post hoc and model-imbalanced. \\
+    Method order & The lexical retrieval baseline preceded ShiftMem in all 70
+    primary pairs. Reverse-order pairs: 0. Journals recorded append position but
+    not wall-clock timestamps. \\
+    Execution halves & Early 35 pairs: $\bar\Delta=58.58$; late 35 pairs:
+    $\bar\Delta=32.30$. Pearson/Spearman position associations were 0.159/0.175.
+    These diagnostics do not remove method-order or provider-drift confounding.
+    \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+The machine-readable source is
+\path{artifacts/aggregated/v2_formal_reliability_audit.json}. Its
+\texttt{parse\_failures} field combines provider exceptions and invalid
+structured outputs; it must not be interpreted as a provider-failure count
+alone.
+
+\section{Evidence Manifest and Reproduction}
+\label{app:reproduction}
+
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Reproducibility facts for the formal evidence closure.}}
+  \label{tab:evidence-facts}
+  \begin{tabular}{@{}p{0.21\textwidth}p{0.73\textwidth}@{}}
+    \toprule
+    Field & Frozen fact \\
+    \midrule
+    Closure & \path{v2-formal-results-f4ab41daacf3}; 160 complete cells;
+    manifest SHA-256
+    \texttt{f4ab41daacf380aa\allowbreak1d59c7af6abf4374\allowbreak
+    c282c14547ae3fe4\allowbreak5874c4ae516697c0}.
+    \\
+    Raw evidence & Five cell prefixes (Test-ID $47+3+30=80$; Test-OOD
+    $23+57=80$), four append-only journals, and two split summaries. \\
+    Source freezes & \path{v2-formal-da148583e3c5},
+    \path{v2-formal-50aaafda0d6a}, \path{v2-formal-724421cdbf78}, and
+    \path{v2-formal-5925ef7f1614}; all were valid in the closure manifest. \\
+    Platform & CPython~3.12.7 on Windows~11; local CPU orchestration with remote
+    SiliconFlow inference. \\
+    Dependencies & PyYAML~6.0.3, Matplotlib~3.11.0, NumPy~2.5.1,
+    Pydantic~2.13.4, and pytest~8.4.2. \\
+    Deployments & \path{deepseek-ai/DeepSeek-V3.2} and
+    \path{MiniMaxAI/MiniMax-M2.5} through SiliconFlow. \\
+    Release archive &
+    \path{v2-formal-results-f4ab41daacf3-raw-evidence.zip}; 2,735,947 bytes;
+    SHA-256
+    \texttt{3f462721f6bc0250\allowbreak43ac262c0e06724a\allowbreak
+    c6b1a5479372ddc\allowbreak54a006834fa94e49f}.
+    \\
+    Metadata anomaly & All 160 cells and one earlier Test-ID summary stored an
+    erroneous false Test-access flag. Raw bytes were preserved; the derived
+    manifest records the corrected interpretation and no effect on numeric
+    outcomes. \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+From a clean checkout, extract the tracked evidence archive and then run the
+network-free closure verification:
+\begin{quote}
+\small\ttfamily
+\detokenize{python -m zipfile -e artifacts/releases/}\par
+\detokenize{v2-formal-results-f4ab41daacf3-raw-evidence.zip artifacts/raw_runs}\par
+\detokenize{.venv\Scripts\python.exe scripts/finalize_formal_results.py --verify}
+\end{quote}
+It verifies hashes and compares the three deterministic aggregate outputs. The
+closure manifest records all four source freezes as valid. A fresh local rerun
+also requires the frozen directories to be free of undeclared generated files,
+including ignored Python bytecode caches.
+
+\section{Strategy-Review Prompt and Model Qualification}
+\label{app:prompt}
+
+\paragraph{Model-facing contract.}
+The model acts only as a low-frequency strategy reviewer. At each periodic,
+event, or coalesced review it receives the public observation, retrieved memory,
+current strategy, trigger evidence, and an optional correction message. The
+current strategy contains exactly \texttt{forecast\_window},
+\texttt{safety\_stock\_multiplier}, and \texttt{lead\_time\_buffer}. The prompt
+forbids hidden demand parameters, future demand or fill, shift timing, regime
+identity, Oracle information, and daily orders. The exact frozen prompt and
+deterministic user-message builder are retained in
+\path{src/shiftmem/providers/inventory_prompt.py} within each source freeze.
+
+\paragraph{Required response.}
+The provider must return one JSON object with no additional fields:
+\begin{verbatim}
+{
+  "forecast_window": positive integer,
+  "safety_stock_multiplier": number >= 0,
+  "lead_time_buffer": integer >= 0,
+  "used_memory_ids": array of supplied IDs,
+  "confidence": number in [0,1],
+  "reason": one sentence, at most 200 characters
+}
+\end{verbatim}
+The schema rejects extra fields, unsupplied memory identifiers, and any
+\texttt{order\_quantity}. One correction attempt is permitted. A second failure
+retains the previous valid strategy. Valid proposals are projected first to the
+absolute bounds and then to the per-review change limits in
+Table~\ref{tab:runtime-parameters}.
+
+\paragraph{Qualification.}
+Qualification required exactly 12 results per deployment, no unresolved parse
+failure or fallback, no invalid or inapplicable citation, and all four induced
+monotonicity checks to pass. Run
+\path{v2-qual-live-20260715-739bc99} used 24 provider calls. Both deployments
+returned 12 results in 12 attempts, passed 4/4 checks, and recorded zero
+correction retries, fallbacks, invalid citations, or inapplicable citations.
+Earlier qualification executions remain preserved as
+\texttt{inconclusive\_harness\_invalid} because their harness used the archived
+daily-order prompt and incomplete provenance.
+
+\paragraph{Prompt provenance and decoding limitation.}
+The accepted qualification recorded system-prompt SHA-256
+\texttt{554c30d33d353049\allowbreakdde84fb1d03e5220\allowbreak
+b76768c29433606e\allowbreak1ca84709ae28cb38}.
+The later formal prompt hash was
+\texttt{4140bbb60e6f4d5b\allowbreak704c73513377c1e1\allowbreak
+4a42473a5a73c222\allowbreakae1a22d91ae2a033};
+it added the explicit per-review limits and deterministic projection. Client
+code specified nominal temperature zero, 512 maximum output tokens, disabled
+thinking, and JSON-object response format. However, the formal artifacts did
+not persist the complete resolved provider request configuration or
+provider-side defaults for omitted decoding controls. Exact API-level
+reconstruction is therefore limited to the persisted fields, prompt hashes, and
+raw responses.

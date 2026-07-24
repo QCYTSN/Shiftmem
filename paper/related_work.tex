@@ -1,0 +1,59 @@
+\section{Related Work}
+\label{sec:related-work}
+
+\paragraph{External agent memory and long-term memory evaluation.}
+Language agents externalize experience in several forms: Generative Agents stores
+observations and higher-level reflections \citep{park2023generative}, Reflexion
+reuses verbal feedback from prior trials \citep{shinn2023reflexion}, and ExpeL
+extracts transferable insights from successful and failed trajectories
+\citep{zhao2023expel}. Long-term memory benchmarks complement these systems by
+testing multi-session recall, event summarization, temporal reasoning, knowledge
+updates, and abstention \citep{maharana2024locomo,wu2025longmemeval}. Together,
+this literature establishes that persistent experience can guide later behavior
+and that retrieval and updating require explicit evaluation. Our setting examines
+a complementary operational question: whether a previously validated strategy
+revision should still be reused after public demand or supply conditions have
+changed and outcome feedback arrives only after a delayed window. ShiftMem
+therefore evaluates memory through downstream inventory cost and recovery while
+making suspension, revalidation, and reactivation auditable, rather than treating
+recall accuracy alone as evidence of operational applicability.
+
+\paragraph{Concept drift and nonstationary inventory control.}
+Concept-drift detection and adaptive inventory control address different parts of
+decision making under change. ADWIN statistically compares subwindows
+\citep{bifet2007adwin}, cumulative-sum procedures detect sustained process-level
+departures \citep{page1954continuous}, and broader drift research separates
+detection from the adaptation strategy that follows \citep{gama2014survey}.
+Inventory research instead develops domain-specific control under changing or
+partially observed demand \citep{treharne2002adaptive,bayraktar2010inventory},
+including lost-sales settings with censored demand and replenishment delay
+\citep{zipkin2008old} and online control under unknown changing demand and lead
+times \citep{amiri2026nonstationary}. ShiftMem neither treats a detector as a
+validity oracle nor claims a new optimal inventory policy. A Page--Hinkley signal
+computed from public observations triggers an additional review and, when
+detector and experience variable names match, can return an active memory to
+probation. Stored lead-time conditions gate retrieval, while delayed outcomes
+update lifecycle confidence and state. Holding the bounded deterministic
+controller fixed allows an end-to-end comparison of the two implemented memory
+systems; it does not identify the effect of an individual lifecycle component.
+
+\paragraph{Operational LLM reliability and reproducible evaluation.}
+LLM inventory agents can coordinate or propose supply-chain decisions
+\citep{quan2024invagent}, but their behavior varies across models and uncertain
+inventory settings \citep{zhao2025aimbench}. ShiftMem consequently separates
+language-model reasoning from routine numerical execution: the LLM reviews only
+three bounded strategy parameters, cannot issue daily orders or observe hidden
+regime and Oracle state, and falls back to the previous valid strategy after one
+failed schema-repair attempt. This reliability path remains part of the measured
+system because format restrictions can affect model performance
+\citep{tam2024letmespeak}, while grammar-constrained decoding treats output
+validity as a distinct systems problem \citep{geng2023grammarconstrained}. The
+evaluation also follows work on pre-specification, reproducibility, and transparent
+reporting \citep{nosek2018preregistration,pineau2021reproducibility,
+dodge2019showyourwork}. We use the narrower term \emph{pre-Test-frozen}, not
+formal preregistration, and report the unsupported primary hypothesis with its
+effect estimate, uncertainty, heterogeneity, and post-hoc sensitivity analyses
+rather than reducing the result to a binary $p$-value conclusion
+\citep{wasserstein2016asa}. The resulting contribution is an empirical test of a
+conditional memory lifecycle within a bounded operational review system, not a
+claim of universal memory superiority.

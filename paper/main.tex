@@ -1,9 +1,42 @@
-\documentclass{article}
+\documentclass[10pt,twocolumn]{article}
 
-\title{ShiftMem}
-\author{}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+
+\title{Does Conditional Memory Help an LLM Inventory Agent under Regime Shifts?\\
+A Systems Evaluation Frozen before Test-Outcome Access}
+\author{
+Fengkai Gao\\
+Artificial Intelligence Programme, Faculty of Science and Technology\\
+Beijing Normal-Hong Kong Baptist University\\
+\texttt{t330034007@mail.bnbu.edu.cn}
+}
+\date{}
 
 \begin{document}
 \maketitle
+
+\input{abstract}
+\input{introduction}
+\input{related_work}
+\input{method}
+\input{experiments}
+\input{conclusion}
+\input{availability}
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\clearpage
+\appendix
+\input{appendices}
 
 \end{document}

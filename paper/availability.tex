@@ -1,0 +1,17 @@
+\section*{Code and Data Availability}
+
+Source code, frozen configurations, analysis scripts, aggregate outputs, figure
+source data, and the paper source are maintained at
+\url{https://github.com/QCYTSN/Shiftmem}. The formal evidence closure is
+\texttt{v2-formal-results-f4ab41daacf3}. Its read-only convenience archive is
+stored at
+\path{artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip},
+with SHA-256
+\texttt{3f462721f6bc0250\allowbreak43ac262c0e06724a\allowbreak
+c6b1a5479372ddc\allowbreak54a006834fa94e49f}.
+The manifest's per-file hashes remain authoritative. The network-free command
+\path{.venv/Scripts/python.exe scripts/finalize_formal_results.py --verify}
+recomputes integrity checks and the deterministic aggregate outputs. From a
+clean checkout, first extract the tracked archive into
+\path{artifacts/raw_runs} using
+\path{python -m zipfile -e artifacts/releases/v2-formal-results-f4ab41daacf3-raw-evidence.zip artifacts/raw_runs}.

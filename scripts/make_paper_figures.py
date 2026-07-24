@@ -12,6 +12,7 @@ import matplotlib as mpl
 
 mpl.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 from shiftmem.evaluation.post_test import load_declared_cells, verify_declared_sources
@@ -91,7 +92,15 @@ def add_box(axis: Any, x: float, y: float, width: float, height: float, text: st
     )
 
 
-def add_arrow(axis: Any, start: tuple[float, float], end: tuple[float, float], color: str = NEUTRAL) -> None:
+def add_arrow(
+    axis: Any,
+    start: tuple[float, float],
+    end: tuple[float, float],
+    color: str = NEUTRAL,
+    *,
+    linestyle: str = "-",
+    connectionstyle: str = "arc3",
+) -> None:
     axis.add_patch(
         FancyArrowPatch(
             start,
@@ -100,6 +109,8 @@ def add_arrow(axis: Any, start: tuple[float, float], end: tuple[float, float], c
             mutation_scale=9,
             linewidth=0.8,
             color=color,
+            linestyle=linestyle,
+            connectionstyle=connectionstyle,
             transform=axis.transAxes,
         )
     )
@@ -108,28 +119,29 @@ def add_arrow(axis: Any, start: tuple[float, float], end: tuple[float, float], c
 def make_architecture_figure(output_base: Path) -> None:
     figure, axis = plt.subplots(figsize=(7.2, 3.1))
     axis.set_axis_off()
-    add_box(axis, 0.02, 0.39, 0.15, 0.22, "Public inventory\nhistory", NEUTRAL)
-    add_box(axis, 0.23, 0.62, 0.16, 0.20, "Change\ndetector", NEUTRAL)
-    add_box(axis, 0.23, 0.27, 0.16, 0.20, "Review\nscheduler", NEUTRAL)
-    add_box(axis, 0.45, 0.27, 0.16, 0.20, "Conditional\nmemory retrieval", METHOD_COLORS["ShiftMem"])
-    add_box(axis, 0.45, 0.62, 0.16, 0.20, "Bounded LLM\nstrategy review", ACCENT)
-    add_box(axis, 0.67, 0.62, 0.14, 0.20, "Schema and\nbounds", ACCENT)
-    add_box(axis, 0.84, 0.39, 0.14, 0.22, "Deterministic\ncontroller", NEUTRAL)
-    add_box(axis, 0.84, 0.06, 0.14, 0.17, "Daily order\nand outcome", NEUTRAL)
-    add_box(axis, 0.45, 0.02, 0.16, 0.17, "Delayed validation\nand lifecycle audit", METHOD_COLORS["ShiftMem"])
-    add_arrow(axis, (0.17, 0.50), (0.23, 0.69))
-    add_arrow(axis, (0.17, 0.48), (0.23, 0.37))
-    add_arrow(axis, (0.39, 0.37), (0.45, 0.37))
-    add_arrow(axis, (0.39, 0.69), (0.45, 0.69))
-    add_arrow(axis, (0.53, 0.62), (0.53, 0.47))
-    add_arrow(axis, (0.61, 0.69), (0.67, 0.69))
-    add_arrow(axis, (0.81, 0.69), (0.84, 0.52))
-    add_arrow(axis, (0.91, 0.39), (0.91, 0.23))
-    add_arrow(axis, (0.84, 0.15), (0.61, 0.10))
-    add_arrow(axis, (0.53, 0.19), (0.53, 0.27))
+    add_box(axis, 0.02, 0.54, 0.15, 0.22, "Public inventory\nhistory", NEUTRAL)
+    add_box(axis, 0.22, 0.69, 0.14, 0.17, "Change\ndetector", NEUTRAL)
+    add_box(axis, 0.22, 0.40, 0.14, 0.17, "Review\nscheduler", NEUTRAL)
+    add_box(axis, 0.42, 0.54, 0.16, 0.20, "Conditional\nmemory retrieval", METHOD_COLORS["ShiftMem"])
+    add_box(axis, 0.62, 0.54, 0.15, 0.20, "Bounded LLM\nstrategy review", ACCENT)
+    add_box(axis, 0.81, 0.54, 0.13, 0.20, "Schema and\nbounds", ACCENT)
+    add_box(axis, 0.81, 0.25, 0.13, 0.17, "Deterministic\ndaily controller", NEUTRAL)
+    add_box(axis, 0.62, 0.08, 0.15, 0.17, "Inventory\noutcome", NEUTRAL)
+    add_box(axis, 0.42, 0.08, 0.16, 0.17, "Delayed validation\nand lifecycle audit", METHOD_COLORS["ShiftMem"])
+    add_arrow(axis, (0.17, 0.68), (0.22, 0.77))
+    add_arrow(axis, (0.17, 0.60), (0.22, 0.49))
+    add_arrow(axis, (0.29, 0.69), (0.29, 0.57))
+    add_arrow(axis, (0.36, 0.49), (0.42, 0.64))
+    add_arrow(axis, (0.58, 0.64), (0.62, 0.64))
+    add_arrow(axis, (0.77, 0.64), (0.81, 0.64))
+    add_arrow(axis, (0.875, 0.54), (0.875, 0.42))
+    add_arrow(axis, (0.81, 0.33), (0.77, 0.18))
+    add_arrow(axis, (0.62, 0.17), (0.58, 0.17))
+    add_arrow(axis, (0.50, 0.25), (0.50, 0.54))
+    add_arrow(axis, (0.36, 0.78), (0.47, 0.74), linestyle="--")
     axis.text(
         0.50,
-        0.91,
+        0.94,
         "LLM proposes strategy parameters; it never emits the daily order",
         ha="center",
         va="center",
@@ -140,7 +152,7 @@ def make_architecture_figure(output_base: Path) -> None:
     axis.text(
         0.50,
         -0.03,
-        "All arrows use public observations; hidden regime labels and Oracle context remain outside the agent",
+        "Agent-facing paths use public observations; hidden regime labels and Oracle context remain outside the agent",
         ha="center",
         va="top",
         fontsize=6.5,
@@ -153,9 +165,9 @@ def make_architecture_figure(output_base: Path) -> None:
 def forest_rows(stats: dict[str, Any]) -> list[dict[str, Any]]:
     endpoint = stats["primary_endpoint"]
     rows = [
-        ("Overall", endpoint["overall"], "confirmatory"),
-        ("Test-ID", endpoint["by_split"]["Test-ID"], "predeclared descriptive"),
-        ("Test-OOD", endpoint["by_split"]["Test-OOD"], "predeclared descriptive"),
+        ("Overall", endpoint["overall"], "prespecified confirmatory, dependence-limited"),
+        ("Test-ID", endpoint["by_split"]["Test-ID"], "prespecified descriptive"),
+        ("Test-OOD", endpoint["by_split"]["Test-OOD"], "prespecified descriptive"),
         ("DeepSeek", endpoint["by_model"]["deepseek"], "unadjusted descriptive"),
         ("MiniMax", endpoint["by_model"]["minimax"], "unadjusted descriptive"),
     ]
@@ -166,6 +178,8 @@ def forest_rows(stats: dict[str, Any]) -> list[dict[str, Any]]:
             "ci_low": float(result["ci_low"]),
             "ci_high": float(result["ci_high"]),
             "n": int(result["n"]),
+            "test_method": str(result["test"]["method"]),
+            "p_value": float(result["test"]["p_value"]),
             "status": status,
         }
         for name, result, status in rows
@@ -184,6 +198,8 @@ def make_effect_figure(stats: dict[str, Any], output_base: Path) -> list[dict[st
                 "ci_low": float(result["ci_low"]),
                 "ci_high": float(result["ci_high"]),
                 "n": int(result["n"]),
+                "test_method": str(result["test"]["method"]),
+                "p_value": float(result["test"]["p_value"]),
                 "status": "descriptive subgroup",
             }
         )
@@ -191,7 +207,7 @@ def make_effect_figure(stats: dict[str, Any], output_base: Path) -> list[dict[st
     for axis, panel_rows, title in zip(axes, [rows, scenario_rows], ["Primary and model splits", "Scenario decomposition"]):
         positions = list(range(len(panel_rows)))
         for position, row in zip(positions, panel_rows):
-            color = NEUTRAL if row["status"] == "confirmatory" else ACCENT if row["mean_difference"] > 0 else METHOD_COLORS["ShiftMem"]
+            color = NEUTRAL if row["group"] == "Overall" else ACCENT if row["mean_difference"] > 0 else METHOD_COLORS["ShiftMem"]
             axis.errorbar(
                 row["mean_difference"],
                 position,
@@ -210,6 +226,8 @@ def make_effect_figure(stats: dict[str, Any], output_base: Path) -> list[dict[st
         axis.set_xlabel("ShiftMem - lexical baseline\nnegative favors ShiftMem")
         axis.grid(axis="x", color="#d9dde2", linewidth=0.45)
         axis.set_axisbelow(True)
+    axes[0].text(-0.12, 1.04, "a", transform=axes[0].transAxes, fontsize=9, fontweight="bold")
+    axes[1].text(-0.12, 1.04, "b", transform=axes[1].transAxes, fontsize=9, fontweight="bold")
     figure.tight_layout(w_pad=2.0)
     save_figure(figure, output_base)
     return rows + scenario_rows
@@ -217,24 +235,63 @@ def make_effect_figure(stats: dict[str, Any], output_base: Path) -> list[dict[st
 
 def make_reliability_figure(reliability: dict[str, Any], output_base: Path) -> list[dict[str, Any]]:
     rows = reliability["by_split_model_method"]
-    labels = [f"{row['split']}\n{row['model']}\n{row['method']}" for row in rows]
-    parse_rates = [100 * float(row["parse_failures_per_attempt"]) for row in rows]
-    fallback_rates = [100 * float(row["fallbacks_per_review"]) for row in rows]
-    tokens_per_review = [float(row["input_tokens"]) / float(row["reviews"]) for row in rows]
+    groups = [
+        ("deepseek", "shiftmem", "DeepSeek\nShiftMem"),
+        ("deepseek", "vector", "DeepSeek\nLexical"),
+        ("minimax", "shiftmem", "MiniMax\nShiftMem"),
+        ("minimax", "vector", "MiniMax\nLexical"),
+    ]
+    values_by_split: dict[str, list[dict[str, Any]]] = {}
+    for split in ("Test-ID", "Test-OOD"):
+        split_rows = []
+        for model, method, _ in groups:
+            split_rows.append(
+                next(
+                    row
+                    for row in rows
+                    if row["split"] == split and row["model"] == model and row["method"] == method
+                )
+            )
+        values_by_split[split] = split_rows
     figure, axes = plt.subplots(1, 3, figsize=(7.2, 2.7), sharex=True)
     panels = [
-        (parse_rates, "Parse failures", "% of attempts", "#b45f48"),
-        (fallback_rates, "Retained strategy", "% of reviews", "#8a6a3d"),
-        (tokens_per_review, "Input context", "tokens per review", "#315f86"),
+        (lambda row: 100 * float(row["parse_failures_per_attempt"]), "Failed/invalid attempts", "% of attempts", "#b45f48"),
+        (lambda row: 100 * float(row["fallbacks_per_review"]), "Retained strategy", "% of reviews", "#8a6a3d"),
+        (lambda row: float(row["input_tokens"]) / float(row["reviews"]), "Input context", "tokens per review", "#315f86"),
     ]
-    for axis, (values, title, ylabel, color) in zip(axes, panels):
-        axis.scatter(range(len(values)), values, s=25, color=color, zorder=3)
+    split_style = {
+        "Test-ID": {"marker": "o", "offset": -0.11, "label": "Test-ID"},
+        "Test-OOD": {"marker": "s", "offset": 0.11, "label": "Test-OOD"},
+    }
+    for panel_index, (axis, (metric, title, ylabel, color)) in enumerate(zip(axes, panels)):
+        for split, style in split_style.items():
+            values = [metric(row) for row in values_by_split[split]]
+            positions = [index + style["offset"] for index in range(len(groups))]
+            axis.scatter(
+                positions,
+                values,
+                s=28,
+                marker=style["marker"],
+                facecolor=color if split == "Test-ID" else "white",
+                edgecolor=color,
+                linewidth=1.0,
+                zorder=3,
+            )
         axis.set_title(title, loc="left", fontsize=8, fontweight="bold")
         axis.set_ylabel(ylabel)
-        axis.set_xticks(range(len(labels)))
-        axis.set_xticklabels(labels, rotation=60, ha="right", fontsize=5.5)
+        axis.set_xticks(range(len(groups)))
+        axis.set_xticklabels([label for _, _, label in groups], fontsize=6)
         axis.grid(axis="y", color="#d9dde2", linewidth=0.45)
         axis.set_axisbelow(True)
+        axis.text(-0.15, 1.04, chr(ord("a") + panel_index), transform=axis.transAxes, fontsize=9, fontweight="bold")
+    axes[2].legend(
+        handles=[
+            Line2D([0], [0], marker="o", color="none", markerfacecolor=NEUTRAL, markeredgecolor=NEUTRAL, label="Test-ID"),
+            Line2D([0], [0], marker="s", color="none", markerfacecolor="white", markeredgecolor=NEUTRAL, label="Test-OOD"),
+        ],
+        loc="upper right",
+        fontsize=6,
+    )
     figure.suptitle("Reliability and context burden in the complete 160-cell matrix", x=0.02, ha="left", fontsize=8.5, fontweight="bold")
     figure.tight_layout(rect=(0, 0, 1, 0.91))
     save_figure(figure, output_base)
@@ -258,6 +315,42 @@ def write_markdown_table(path: Path, title: str, rows: list[dict[str, Any]]) -> 
     for row in rows:
         lines.append("| " + " | ".join(str(row[header]) for header in headers) + " |")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def effect_display_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        {
+            "group": row["group"],
+            "difference": f"{row['mean_difference']:.2f}",
+            "nominal 95% CI": f"[{row['ci_low']:.2f}, {row['ci_high']:.2f}]",
+            "n": row["n"],
+            "test": row["test_method"],
+            "p": f"{row['p_value']:.3f}",
+            "status": row["status"],
+        }
+        for row in rows
+    ]
+
+
+def reliability_display_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        {
+            "split": row["split"],
+            "model": "DeepSeek" if row["model"] == "deepseek" else "MiniMax",
+            "method": "ShiftMem" if row["method"] == "shiftmem" else "Lexical baseline",
+            "cells": row["cells"],
+            "attempts": row["provider_attempts_recorded_by_cells"],
+            "failed/invalid attempts": row["parse_failures"],
+            "failed/invalid rate": f"{100 * row['parse_failures_per_attempt']:.1f}%",
+            "reviews": row["reviews"],
+            "fallbacks": row["fallbacks"],
+            "fallback rate": f"{100 * row['fallbacks_per_review']:.1f}%",
+            "input tokens": row["input_tokens"],
+            "output tokens": row["output_tokens"],
+            "recovered": f"{row['recovered_cells']}/{row['applicable_recovery_cells']}",
+        }
+        for row in rows
+    ]
 
 
 def write_protocol_table(path: Path, manifest: dict[str, Any], stats: dict[str, Any]) -> None:
@@ -291,9 +384,17 @@ def main() -> None:
     reliability_rows = make_reliability_figure(reliability, output_dir / "figure_3_reliability")
     make_architecture_figure(output_dir / "figure_1_architecture")
     write_csv(tables_dir / "table_2_effects.csv", effect_rows)
-    write_markdown_table(tables_dir / "table_2_effects.md", "Primary and descriptive effects", effect_rows)
+    write_markdown_table(
+        tables_dir / "table_2_effects.md",
+        "Primary and descriptive effects",
+        effect_display_rows(effect_rows),
+    )
     write_csv(tables_dir / "table_3_reliability.csv", reliability_rows)
-    write_markdown_table(tables_dir / "table_3_reliability.md", "Reliability and context burden", reliability_rows)
+    write_markdown_table(
+        tables_dir / "table_3_reliability.md",
+        "Reliability and context burden",
+        reliability_display_rows(reliability_rows),
+    )
     write_protocol_table(tables_dir / "table_1_protocol", manifest, stats)
 
 

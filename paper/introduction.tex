@@ -1,0 +1,64 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Long-running language-model agents may rely on memories formed under conditions
+that no longer hold. Stored observations and reflections support persistent
+simulated agents \citep{park2023generative}, verbal feedback can guide later
+trials \citep{shinn2023reflexion}, and trajectory-level lessons can transfer
+across tasks \citep{zhao2023expel}. Yet an experience that was useful when
+recorded can become stale as operating conditions change. This risk is
+especially consequential when the memory recommends an operational strategy and
+its outcome is observable only after delayed execution. The resulting question
+is not simply what an agent should remember, but when it should continue to
+trust its past.
+
+Existing research addresses parts of this problem without resolving the
+operational decision studied here. Long-term memory benchmarks test temporal
+reasoning and knowledge updates
+\citep{maharana2024locomo,wu2025longmemeval}. Concept-drift research distinguishes
+change detection from the adaptation that follows \citep{gama2014survey}, while
+nonstationary inventory research develops control under changing or partially
+observed demand \citep{treharne2002adaptive,bayraktar2010inventory}. Together,
+these literatures address persistence, change detection, and adaptive control,
+but do not establish whether an explicit memory lifecycle reduces downstream
+cost under delayed feedback. A detector can indicate that public observations
+changed. It cannot by itself establish that a
+retrieved experience is invalid or that suspending it will reduce downstream
+cost.
+
+We study this question in a synthetic single-item lost-sales inventory system,
+chosen as a controlled testbed rather than a model of enterprise deployment.
+ShiftMem treats a change in public context as a prompt for review rather than
+proof of invalidity, and uses delayed outcomes to update memory confidence and
+state. Page--Hinkley signals provide the change trigger
+\citep{page1954continuous}. The LLM is confined to bounded strategy revisions,
+while a deterministic controller issues daily orders. We compare ShiftMem with
+a lexical retrieval baseline under paired demand and supply streams. This design
+compares the end-to-end systems. It does not isolate the effect of any lifecycle
+component.
+
+The prespecified evaluation covered two provider-hosted model deployments,
+eight held-out scenarios, and 160 completed
+deployment--method--scenario--seed runs. Its dependence-limited primary
+decision rule did not support a ShiftMem advantage, and the mean point estimate
+was unfavorable. Because the 70 model-specific pairs shared 35 environment
+clusters, we also report a post-hoc clustered sensitivity, which retained the
+same unfavorable direction. Point estimates varied descriptively across test
+regimes and deployments without establishing generalizable effect modification.
+The lexical retrieval baseline always ran first, leaving method order and provider
+drift as potential confounders.
+
+\paragraph{Contributions.}
+This study makes three bounded contributions:
+\begin{itemize}
+  \item It develops a controlled architecture that separates bounded LLM
+  strategy review from deterministic daily execution, allowing memory-conditioned
+  revision to be evaluated without changing the inventory controller.
+  \item It provides a content-addressed evidence package with network-free
+  reproducible integrity checks and deterministic post-outcome analyses. The package records
+  provider and structured-output failures, fallback behavior, reservation
+  journals, and source hashes.
+  \item It reports the negative primary result with its uncertainty and
+  dependence-aware sensitivity analyses, together with descriptive deployment
+  heterogeneity and post-hoc reliability analyses.
+\end{itemize}

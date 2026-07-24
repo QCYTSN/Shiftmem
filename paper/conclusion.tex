@@ -1,0 +1,36 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper evaluated whether an explicit lifecycle for stored strategy revisions
+improved an LLM inventory agent's performance after operating conditions
+changed.
+ShiftMem made reuse decisions explicit through conditional retrieval, delayed
+validation, and an auditable lifecycle, while a shared deterministic controller
+retained responsibility for daily orders. In the pre-Test-frozen evaluation, the
+dependence-limited prespecified decision rule did not support a ShiftMem
+advantage over the implemented lexical retrieval baseline. The mean point
+estimate was unfavorable, and the post-hoc clustered sensitivity retained the
+same direction.
+
+The result does not establish equivalence or show that the conditional memory
+lifecycle is intrinsically ineffective. Point estimates varied descriptively
+across the two
+model deployments and test regimes, and provider and structured-output failures
+were retained as part of the observed system behavior. Neither the descriptive
+heterogeneity nor the reliability associations provided mechanism-level
+evidence: the associations were observational, key lifecycle ablations were not
+run, and every pair executed the lexical retrieval baseline first. The evidence
+is therefore limited to the tested synthetic single-item environment, provider
+deployments, lexical retrieval baseline, and fixed execution order.
+
+The main methodological outcome is a documented implementation and evaluation
+architecture for operational memory under delayed feedback: bounded strategy
+review, deterministic execution, retained failures, delayed validation,
+content-addressed evidence, and network-free analysis verification. A stronger
+follow-up should randomize or counterbalance method order, add independent
+LLM-output replications, encode
+demand as an applicability condition, and align the available history with the
+forecast-window range. It should also compare an embedding-based retrieval
+baseline and run the dormancy/reactivation and detector ablations required to
+identify component-level effects. These controls are prerequisites for a broader
+claim about conditional memory efficacy.

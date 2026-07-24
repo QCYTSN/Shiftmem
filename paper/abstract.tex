@@ -1,0 +1,29 @@
+\begin{abstract}
+Long-running language-model agents may reuse experience after operating
+conditions change. Change detection alone, however, cannot determine whether a
+stored strategy revision remains useful when its consequences are observed only
+after execution. We introduce ShiftMem, a conditional memory lifecycle that uses
+public change signals to trigger review, an exact quoted-lead-time condition to
+gate retrieval, and delayed operational outcomes to update confidence and
+lifecycle state. The LLM is restricted to bounded strategy revisions, while a
+shared deterministic controller retains responsibility for daily actions. We
+evaluated ShiftMem against an implemented lexical retrieval baseline in a paired
+study of a synthetic single-item inventory system frozen before access to Test
+outcomes. The evaluation spanned two provider-hosted model deployments, eight
+held-out scenarios, and 160 completed deployment--method--scenario--seed runs.
+Across 70 model-specific pairs nested in 35 shared environment clusters, the
+prespecified but dependence-limited decision rule did
+not support a ShiftMem advantage. The mean cost-gap difference (ShiftMem minus
+baseline) was $+45.44$ (negative values favor ShiftMem; nominal 95\% mean CI
+$[-2.72,93.60]$); the selected two-sided Wilcoxon test, which does not test the
+mean directly, gave $p=0.203$. A post-hoc clustered sensitivity retained the
+same unfavorable mean estimate, with a 95\% cluster-bootstrap CI of
+$[11.26,79.09]$. Variation across deployments and test regimes remained
+descriptive. These findings establish neither equivalence nor the intrinsic
+ineffectiveness of the conditional memory lifecycle. Instead, within this
+testbed, they underscore that conditional memory benefits should be demonstrated rather than
+inferred from architecture alone. The study provides an auditable implementation
+and evaluation record for testing memory reuse under delayed feedback while
+retaining provider and structured-output failures as part of the evaluated
+system.
+\end{abstract}

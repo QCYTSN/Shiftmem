@@ -1,0 +1,33 @@
+\begin{table*}[t]
+  \centering
+  \scriptsize
+  \caption{\textbf{Complete primary, descriptive, and post-hoc effect
+  summaries.} Differences are ShiftMem minus the lexical retrieval baseline;
+  negative values favor ShiftMem. Except for the two post-hoc cluster rows,
+  intervals are nominal mean-difference intervals from the frozen routine and
+  are not calibrated for cluster-level inference. W/T/L denotes ShiftMem wins,
+  ties, and losses.}
+  \label{tab:effects}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}lrrrrllrl@{}}
+    \toprule
+    Analysis & $n$ & $\bar\Delta$ & 95\% CI & $d_z$ & W/T/L & Test & $p$ & Evidence status \\
+    \midrule
+    Overall & 70 & 45.44 & $[-2.72,93.60]$ & .221 & 25/11/34 & Wilcoxon-N & .2034 & Prespecified, dependence-limited \\
+    Test-ID & 30 & -2.67 & $[-60.17,54.82]$ & -.017 & 12/6/12 & Paired $t$ & .9249 & Prespecified descriptive \\
+    Test-OOD & 40 & 81.53 & $[9.50,153.56]$ & .351 & 13/5/22 & Wilcoxon-N & .0932 & Prespecified descriptive \\
+    DeepSeek & 35 & 107.73 & $[23.09,192.37]$ & .422 & 9/6/20 & Wilcoxon-N & .0232 & Unadjusted descriptive \\
+    MiniMax & 35 & -16.85 & $[-53.91,20.22]$ & -.151 & 16/5/14 & Paired $t$ & .3793 & Unadjusted descriptive \\
+    ID: demand jump & 10 & -67.38 & $[-153.83,19.07]$ & -.557 & 6/1/3 & Paired $t$ & .1117 & Descriptive subgroup \\
+    ID: gradual demand & 10 & 50.62 & $[-77.60,178.84]$ & .282 & 2/4/4 & Paired $t$ & .3951 & Descriptive subgroup \\
+    ID: supply delay & 10 & 8.74 & $[-96.67,114.15]$ & .059 & 4/1/5 & Paired $t$ & .8554 & Descriptive subgroup \\
+    OOD: early combined & 10 & 151.24 & $[-107.60,410.08]$ & .418 & 4/0/6 & Paired $t$ & .2189 & Descriptive subgroup \\
+    OOD: transient excursion & 10 & 55.26 & $[-116.55,227.07]$ & .230 & 3/2/5 & Wilcoxon-E & .7422 & Descriptive subgroup \\
+    OOD: periodic & 10 & -12.94 & $[-49.87,23.99]$ & -.251 & 4/2/4 & Wilcoxon-E & .6406 & Descriptive subgroup \\
+    OOD: Poisson jump & 10 & 132.56 & $[22.08,243.04]$ & .858 & 2/1/7 & Paired $t$ & .0238 & Descriptive subgroup \\
+    Stable total cost & 10 & 15.86 & $[-184.37,216.09]$ & .057 & 5/2/3 & Wilcoxon-E & 1.000 & Descriptive, different endpoint \\
+    Clustered overall & 35 & 45.44 & $[11.26,79.09]$ & -- & -- & Sign flip & .0414 & Post-hoc sensitivity \\
+    DeepSeek--MiniMax & 35 & 124.58 & $[38.59,216.05]$ & -- & -- & Sign flip & .0154 & Post-hoc, unadjusted \\
+    \bottomrule
+  \end{tabular}}
+\end{table*}
