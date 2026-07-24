@@ -49,6 +49,12 @@ def _good_proposal():
     )
 
 
+def _set_fake_siliconflow_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Keep provider-construction tests offline and independent of local .env files."""
+    monkeypatch.setenv("SILICONFLOW_API_KEY", "test-key")
+    monkeypatch.setenv("SILICONFLOW_BASE_URL", "https://example.invalid/v1")
+
+
 def test_run_strategy_case_parses_proposal_and_counts_tokens():
     provider = _FakeProvider(_good_proposal())
     case = build_strategy_qualification_cases()[0]
@@ -85,7 +91,10 @@ def test_corrected_case_preserves_failed_and_successful_attempts():
     assert outcome.attempts[1].error is None
 
 
-def test_strategy_factory_uses_strategy_prompt_and_builder():
+def test_strategy_factory_uses_strategy_prompt_and_builder(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    _set_fake_siliconflow_env(monkeypatch)
     provider = _default_strategy_provider_factory(
         "siliconflow", "deepseek-ai/DeepSeek-V3.2"
     )
@@ -93,7 +102,10 @@ def test_strategy_factory_uses_strategy_prompt_and_builder():
     assert provider.build_user_message is build_strategy_review_user_message
 
 
-def test_order_factory_remains_on_archived_order_prompt():
+def test_order_factory_remains_on_archived_order_prompt(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    _set_fake_siliconflow_env(monkeypatch)
     provider = _default_provider_factory("siliconflow", "model")
     assert provider.system_prompt == INVENTORY_DECISION_SYSTEM_PROMPT
     assert provider.build_user_message is build_inventory_user_message
