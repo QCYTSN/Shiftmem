@@ -11,6 +11,7 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
 [![在线网页端](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
+[![论文](https://img.shields.io/badge/Manuscript-LaTeX%20source-3D6117?logo=latex&logoColor=white)](paper/README.md)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![冻结证据](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
@@ -31,6 +32,19 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 > [产品与证据完整性规范](docs/demo_design_spec.md) ·
 > [正式实验审计](docs/v2_formal_post_test_audit.md)
 
+> ## 📄 论文 · 完整源文件
+>
+> **Does Conditional Memory Help an LLM Inventory Agent under Regime Shifts?**<br>
+> **A Systems Evaluation Frozen before Test-Outcome Access**
+>
+> 仓库现已包含完整 LaTeX 论文、参考文献、投稿级图、源数据表，以及可复现的
+> 论文图生成脚本。
+>
+> **[打开论文说明 →](paper/README.md)** ·
+> [主 TeX 文件](paper/main.tex) ·
+> [论文图](paper/figures/) ·
+> [论文表](paper/tables/)
+
 ## 项目概览
 
 | | |
@@ -41,6 +55,19 @@ LLM 智能体应当继续使用、修正，还是停用过去的运营经验。
 | **主要终点** | 70 个配对的变化适应样本 |
 | **主要结论** | ShiftMem 整体上没有优于 VectorMemory |
 | **证据状态** | 已冻结、已校验、可离线验证与复现 |
+| **论文状态** | 已完成 LaTeX 正文、3 幅投稿级图、3 组源数据表、参考文献和附录 |
+
+## 论文
+
+论文完整报告了系统评估，包括主要负结果、考虑依赖结构的敏感性分析、
+描述性子组结果、可靠性审计、局限和证据可用性声明。论文主张严格对应
+冻结的 Protocol-v2 输出，不从交互式 Demo 中选择性提取结论。
+
+- [论文结构与编译说明](paper/README.md)
+- [论文主文件](paper/main.tex)
+- [论文图](paper/figures/)与[源数据表](paper/tables/)
+- [论文图生成脚本](scripts/make_paper_figures.py)
+- [代码与数据可用性声明](paper/availability.tex)
 
 ## 为什么需要 ShiftMem？
 
@@ -188,6 +215,7 @@ Provider 和解析失败均被保留在最终业务结果中：
 
 | 路径 | 内容 |
 | --- | --- |
+| [`paper/`](paper/README.md) | 完整论文源文件、参考文献、图表与编译说明 |
 | [`demo-web/`](demo-web/README.md) | 正式 React + TypeScript Evidence Lab |
 | [`demo/`](demo/README.md) | 经过校验的 Python 证据适配与导出层 |
 | [`src/shiftmem/`](src/shiftmem/) | 环境、智能体、记忆生命周期、控制器与评估 |

@@ -11,6 +11,7 @@ revise, or retire operational experience after its environment changes.
 
 [![CI](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml/badge.svg)](https://github.com/QCYTSN/Shiftmem/actions/workflows/ci.yml)
 [![Web Demo](https://github.com/QCYTSN/Shiftmem/actions/workflows/deploy-pages.yml/badge.svg)](https://qcytsn.github.io/Shiftmem/)
+[![Manuscript](https://img.shields.io/badge/Manuscript-LaTeX%20source-3D6117?logo=latex&logoColor=white)](paper/README.md)
 ![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/Demo-React%20%2B%20TypeScript-149ECA?logo=react&logoColor=white)
 ![Frozen evidence](https://img.shields.io/badge/Evidence-SHA--256%20frozen-147D72)
@@ -31,6 +32,19 @@ revise, or retire operational experience after its environment changes.
 > [Product and integrity specification](docs/demo_design_spec.md) ·
 > [Formal evidence audit](docs/v2_formal_post_test_audit.md)
 
+> ## 📄 Manuscript · Complete source package
+>
+> **Does Conditional Memory Help an LLM Inventory Agent under Regime Shifts?**<br>
+> **A Systems Evaluation Frozen before Test-Outcome Access**
+>
+> The complete LaTeX manuscript, references, publication figures, source tables,
+> and reproducible figure generator are included in the repository.
+>
+> **[Open the manuscript guide →](paper/README.md)** ·
+> [Main TeX source](paper/main.tex) ·
+> [Figures](paper/figures/) ·
+> [Tables](paper/tables/)
+
 ## At a glance
 
 | | |
@@ -41,6 +55,21 @@ revise, or retire operational experience after its environment changes.
 | **Primary endpoint** | 70 paired change-adaptation units |
 | **Main finding** | ShiftMem did **not** outperform VectorMemory overall |
 | **Evidence status** | Frozen, checksummed, network-free, and reproducible |
+| **Manuscript status** | Complete LaTeX source with three publication figures, three source tables, references, and appendices |
+
+## Paper
+
+The manuscript reports the complete systems evaluation, including the negative
+primary result, dependence-aware sensitivity analysis, descriptive subgroup
+results, reliability audit, limitations, and evidence-availability statement.
+Its claims are aligned with the frozen Protocol-v2 outputs rather than selected
+from the interactive Demo.
+
+- [Manuscript and build guide](paper/README.md)
+- [Main manuscript source](paper/main.tex)
+- [Paper figures](paper/figures/) and [source tables](paper/tables/)
+- [Figure generation script](scripts/make_paper_figures.py)
+- [Code and data availability statement](paper/availability.tex)
 
 ## Why ShiftMem?
 
@@ -195,6 +224,7 @@ compliance or provider reliability.
 
 | Path | Purpose |
 | --- | --- |
+| [`paper/`](paper/README.md) | Complete manuscript source, references, figures, tables, and build instructions |
 | [`demo-web/`](demo-web/README.md) | Official React and TypeScript Evidence Lab |
 | [`demo/`](demo/README.md) | Verified Python evidence adapter and browser exporter |
 | [`src/shiftmem/`](src/shiftmem/) | Environment, agents, memory lifecycle, control, and evaluation |

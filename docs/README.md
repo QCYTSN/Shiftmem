@@ -5,17 +5,19 @@ and engineering records.
 
 ## Start here
 
-1. [Formal post-Test audit](v2_formal_post_test_audit.md) — final results,
+1. [Manuscript source and build guide](../paper/README.md) — complete paper,
+   publication figures, source tables, references, and compilation steps.
+2. [Formal post-Test audit](v2_formal_post_test_audit.md) — final results,
    sensitivity analyses, reliability, execution order, and permitted claims.
-2. [Experiment protocol](experiment_protocol.md) — research questions,
+3. [Experiment protocol](experiment_protocol.md) — research questions,
    architecture, frozen estimand, amendments, and analysis rules.
-3. [Model card](model_card.md) — evaluated models, intended use, reliability,
+4. [Model card](model_card.md) — evaluated models, intended use, reliability,
    and limits.
-4. [Evidence manifest](../artifacts/aggregated/v2_formal_evidence_manifest.json)
+5. [Evidence manifest](../artifacts/aggregated/v2_formal_evidence_manifest.json)
    — authoritative source hashes and closure identity.
-5. [Demo design specification](demo_design_spec.md) — evidence-first product
+6. [Demo design specification](demo_design_spec.md) — evidence-first product
    scope, interaction model, visual system, and implementation acceptance
-   criteria for AI Inventory Manager Lab.
+   criteria for ShiftMem Evidence Lab.
 
 ## Current Protocol-v2 reports
 

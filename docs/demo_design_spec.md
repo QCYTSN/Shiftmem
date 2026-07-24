@@ -174,7 +174,7 @@ selection belong to the working context, not to global navigation.
 
 #### Header
 
-- Product name: `AI Inventory Manager Lab`
+- Product name: `ShiftMem Evidence Lab`
 - Evidence chip: `Frozen evidence · v2-formal-results-f4ab41daacf3`
 - Compact link: `About the evidence`
 
